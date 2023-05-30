@@ -46,10 +46,10 @@ jobs:
             docker build -t app .
       - deploy:
           name: Push application Docker image
-          filters:
-            branches:
-              only:
-                - main
+#          filters:
+#            branches:
+#              only:
+#                - main
           command: |
             aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
             docker tag app "${ECR_ENDPOINT}:${APP_VERSION}"
@@ -76,10 +76,10 @@ workflows:
           context:
             - hmpps-common-vars
             - digital-prison-reporting-mi-dev
-          filters:
-            branches:
-              only:
-                - main
+#          filters:
+#            branches:
+#              only:
+#                - main
           requires:
             - validate
             - build_docker
