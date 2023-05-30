@@ -5,7 +5,7 @@ generic-service:
   replicaCount: 4
 
   image:
-    repository: quay.io/hmpps/digital-prison-reporting-mi
+    repository: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/hmpps-digital-prison-reporting/digital-prison-reporting-mi-ecr
     tag: app_version    # override at deployment time
     port: 8080
 
