@@ -67,6 +67,7 @@ workflows:
               ignore: /.*/
       - hmpps/helm_lint:
           name: helm_lint
+      - build_docker
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
