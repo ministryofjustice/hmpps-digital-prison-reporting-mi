@@ -32,30 +32,6 @@ jobs:
           path: build/test-results
       - store_artifacts:
           path: build/reports/tests
-  build_docker:
-    docker:
-      - image: ministryofjustice/cloud-platform-tools
-    steps:
-      - checkout
-      - hmpps/create_app_version
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build application Docker image
-          command: |
-            docker build -t app .
-      - deploy:
-          name: Push application Docker image
-#          filters:
-#            branches:
-#              only:
-#                - main
-          command: |
-            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
-            docker tag app "${ECR_ENDPOINT}:${APP_VERSION}"
-            docker push "${ECR_ENDPOINT}:${APP_VERSION}"
-            docker tag app "${ECR_ENDPOINT}:latest"
-            docker push "${ECR_ENDPOINT}:latest"
 
 workflows:
   version: 2
@@ -67,7 +43,13 @@ workflows:
               ignore: /.*/
       - hmpps/helm_lint:
           name: helm_lint
-      - build_docker
+      - hmpps/build_multiplatform_docker:
+          name: build_docker
+          image_name: "${ECR_REGISTRY}/${CIRCLE_PROJECT_REPONAME}"
+#          filters:
+#            branches:
+#              only:
+#                - main
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
