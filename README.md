@@ -1,8 +1,8 @@
-# digital-prison-reporting-mi
-[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fdigital-prison-reporting-mi)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#digital-prison-reporting-mi "Link to report")
-[![CircleCI](https://circleci.com/gh/ministryofjustice/digital-prison-reporting-mi/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/digital-prison-reporting-mi)
-[![Docker Repository on Quay](https://quay.io/repository/hmpps/digital-prison-reporting-mi/status "Docker Repository on Quay")](https://quay.io/repository/hmpps/digital-prison-reporting-mi)
-[![API docs](https://img.shields.io/badge/API_docs_-view-85EA2D.svg?logo=swagger)](https://digital-prison-reporting-mi-dev.hmpps.service.justice.gov.uk/webjars/swagger-ui/index.html?configUrl=/v3/api-docs)
+# hmpps-digital-prison-reporting-mi
+[![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-digital-prison-reporting-mi)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#hmpps-digital-prison-reporting-mi "Link to report")
+[![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-digital-prison-reporting-mi/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-digital-prison-reporting-mi)
+[![Docker Repository on Quay](https://quay.io/repository/hmpps/hmpps-digital-prison-reporting-mi/status "Docker Repository on Quay")](https://quay.io/repository/hmpps/hmpps-digital-prison-reporting-mi)
+[![API docs](https://img.shields.io/badge/API_docs_-view-85EA2D.svg?logo=swagger)](https://hmpps-digital-prison-reporting-mi-dev.hmpps.service.justice.gov.uk/webjars/swagger-ui/index.html?configUrl=/v3/api-docs)
 
 This project is generated from ministryofjustice/hmpps-template-kotlin
 

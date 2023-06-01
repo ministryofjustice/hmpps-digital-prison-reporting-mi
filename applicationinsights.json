@@ -1,6 +1,6 @@
 {
   "role": {
-    "name": "digital-prison-reporting-mi"
+    "name": "hmpps-digital-prison-reporting-mi"
   },
   "customDimensions": {
     "service.version": "${BUILD_NUMBER}"

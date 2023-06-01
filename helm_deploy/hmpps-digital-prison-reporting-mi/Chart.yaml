@@ -1,7 +1,7 @@
 apiVersion: v2
 appVersion: '1.0'
 description: A Helm chart for Kubernetes
-name: digital-prison-reporting-mi
+name: hmpps-digital-prison-reporting-mi
 version: 0.2.0
 dependencies:
   - name: generic-service

@@ -1,11 +1,11 @@
 ---
-# Per environment values which override defaults in digital-prison-reporting-mi/values.yaml
+# Per environment values which override defaults in hmpps-digital-prison-reporting-mi/values.yaml
 
 generic-service:
   ingress:
-    host: digital-prison-reporting-mi.hmpps.service.justice.gov.uk
+    host: hmpps-digital-prison-reporting-mi.hmpps.service.justice.gov.uk
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
 generic-prometheus-alerts:
-  alertSeverity: digital-prison-reporting-prod
+  alertSeverity: hmpps-digital-prison-reporting-prod
