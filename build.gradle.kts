@@ -1,7 +1,10 @@
 plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.1.4"
   kotlin("plugin.spring") version "1.8.21"
+  id("org.springframework.boot") version "3.1.0"
 }
+
+apply(plugin = "org.springframework.boot")
 
 configurations {
   testImplementation { exclude(group = "org.junit.vintage") }
@@ -21,4 +24,10 @@ tasks {
       jvmTarget = "19"
     }
   }
+}
+repositories {
+  mavenCentral()
+}
+kotlin {
+  jvmToolchain(19)
 }
