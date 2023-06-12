@@ -11,5 +11,4 @@ class ExternalMovementsController {
   fun stubbedCount(): Map<String, Int> {
     return singletonMap("count", 501)
   }
-
 }
