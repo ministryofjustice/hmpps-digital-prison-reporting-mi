@@ -6,5 +6,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class JdbcProperties(
   url: String,
   user: String,
-  password: String
+  password: String,
 )
