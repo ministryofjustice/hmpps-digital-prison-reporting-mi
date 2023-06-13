@@ -49,3 +49,9 @@ management:
     info:
       cache:
         time-to-live: 2000ms
+
+redshift:
+  jdbc:
+    url: ${REDSHIFT_JDBC_URL}
+    user: ${REDSHIFT_JDBC_USER}
+    password: ${REDSHIFT_JDBC_PASSWORD}

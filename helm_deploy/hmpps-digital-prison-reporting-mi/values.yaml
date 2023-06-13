@@ -30,6 +30,9 @@ generic-service:
   namespace_secrets:
     hmpps-digital-prison-reporting-mi:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
+    redshift-jdbc:
+      REDSHIFT_JDBC_USER: "user"
+      REDSHIFT_JDBC_PASSWORD: "password"
 
   allowlist:
     office: "217.33.148.210/32"

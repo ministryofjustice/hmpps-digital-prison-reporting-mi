@@ -78,7 +78,24 @@ project.
 - Reference or link any relevant JIRA tickets in the pull request notes
 - At least one approval is required before a PR can be merged
 
-## TODO
+## Deployment
 
-- Modify the Dependabot file to suit the [dependency manager](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#package-ecosystem) you plan to use and for [automated pull requests for package updates](https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/enabling-and-disabling-dependabot-version-updates#enabling-dependabot-version-updates). Dependabot is enabled in the settings by default.
-- Ensure as many of the [GitHub Standards](https://github.com/ministryofjustice/github-repository-standards) rules are maintained as possibly can.
+The app is deployed to the namespace: `hmpps-digital-prison-reporting-mi-<env>`.
+
+Config for the dev environment can be found here: https://github.com/ministryofjustice/cloud-platform-environments/tree/main/namespaces/live.cloud-platform.service.justice.gov.uk/hmpps-digital-prison-reporting-mi-dev
+
+Additionally, the RedShift credentials need to be manually deployed to each environment. The file `redshift-jdbc-secret.yaml` should be updated with the base64 encoded values and applied to the environment.
+
+_NB: Please do not commit these changes to `redshift-jdbc-secret.yaml`._
+
+Example of base64 encoding a secret value:
+
+```
+echo -n 'placeholder' | base64
+```
+
+Example of applying the secret to an environment:
+
+```
+kubectl -n hmpps-digital-prison-reporting-mi-dev apply -f redshift-jdbc-secret.yaml
+```
