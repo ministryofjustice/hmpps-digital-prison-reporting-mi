@@ -18,6 +18,12 @@ spring:
       test:
         - "stdout"
 
+  datasource:
+    url: ${REDSHIFT_JDBC_URL}
+    username: ${REDSHIFT_JDBC_USER}
+    password: ${REDSHIFT_JDBC_PASSWORD}
+    driver-class-name: com.amazon.redshift.jdbc.Driver
+
 server:
   port: 8080
   servlet:
@@ -49,9 +55,3 @@ management:
     info:
       cache:
         time-to-live: 2000ms
-
-redshift:
-  jdbc:
-    url: ${REDSHIFT_JDBC_URL}
-    user: ${REDSHIFT_JDBC_USER}
-    password: ${REDSHIFT_JDBC_PASSWORD}
