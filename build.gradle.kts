@@ -2,9 +2,11 @@ plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.1.4"
   kotlin("plugin.spring") version "1.8.21"
   id("org.springframework.boot") version "3.1.0"
+  kotlin("plugin.jpa") version "1.7.21"
 }
 
 apply(plugin = "org.springframework.boot")
+apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
 
 configurations {
   testImplementation { exclude(group = "org.junit.vintage") }
@@ -12,6 +14,7 @@ configurations {
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 }
 
 java {
