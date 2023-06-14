@@ -16,6 +16,8 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
+  //This might need to be placed as it shows a vulnerability warning
+  testImplementation("com.h2database:h2:1.3.148")
 }
 
 java {
