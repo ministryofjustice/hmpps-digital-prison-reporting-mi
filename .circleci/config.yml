@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@7
+  slack: circleci/slack@4.12.1
 
 parameters:
   alerts-slack-channel:
@@ -104,7 +105,7 @@ workflows:
   security:
     triggers:
       - schedule:
-          cron: "55 7 * * 1-5"
+          cron: "00 5 * * 1-5"
           filters:
             branches:
               only:
@@ -126,7 +127,7 @@ workflows:
   security-weekly:
     triggers:
       - schedule:
-          cron: "15 7 * * 1"
+          cron: "00 5 * * 1"
           filters:
             branches:
               only:
