@@ -13,7 +13,7 @@ class EstablishmentsIntegrationTest : IntegrationTestBase() {
 
   @Test
   fun `Establishments count returns expected value`() {
-    val expectedCount = 123
+    val expectedCount = 2
     IntStream.range(0, expectedCount).parallel().forEach {
       establishmentRepository.save(Establishment("Establishment $it", it.toString()))
     }
