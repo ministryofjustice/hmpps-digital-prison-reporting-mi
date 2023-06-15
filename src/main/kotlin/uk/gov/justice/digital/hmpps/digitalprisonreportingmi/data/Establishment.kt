@@ -5,7 +5,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name ="establishment_establishment", schema = "domain")
+@Table(name = "establishment_establishment", schema = "domain")
 class Establishment(
   @Id
   val id: String,

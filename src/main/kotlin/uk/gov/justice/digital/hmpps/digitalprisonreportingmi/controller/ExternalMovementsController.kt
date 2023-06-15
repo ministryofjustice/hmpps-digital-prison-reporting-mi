@@ -12,6 +12,7 @@ class ExternalMovementsController(val establishmentsService: EstablishmentsServi
   fun stubbedCount(): Map<String, Int> {
     return singletonMap("count", 501)
   }
+
   @GetMapping("/establishments/count")
   fun establishmentsCount(): Map<String, Long> {
     return singletonMap("count", establishmentsService.establishmentsCount())

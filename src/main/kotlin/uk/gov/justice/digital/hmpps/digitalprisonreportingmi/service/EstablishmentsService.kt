@@ -9,6 +9,4 @@ data class EstablishmentsService(val establishmentRepository: EstablishmentRepos
   fun establishmentsCount(): Long {
     return establishmentRepository.count()
   }
-
-
 }
