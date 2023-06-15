@@ -8,6 +8,6 @@ import java.util.*
 class EstablishmentController(val establishmentService: EstablishmentService) {
   @GetMapping("/establishments/count")
   fun establishmentsCount(): Map<String, Long> {
-    return Collections.singletonMap("count", establishmentService.establishmentsCount())
+    return mapOf("count" to establishmentService.establishmentsCount())
   }
 }
