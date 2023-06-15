@@ -1,10 +1,10 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.EstablishmentRepositoryRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.EstablishmentRepository
 
 @Service
-data class EstablishmentsService(val establishmentRepository: EstablishmentRepositoryRepository) {
+data class EstablishmentsService(val establishmentRepository: EstablishmentRepository) {
 
   fun establishmentsCount(): Long {
     return establishmentRepository.count()

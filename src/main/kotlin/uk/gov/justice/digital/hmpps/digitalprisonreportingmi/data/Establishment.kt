@@ -7,7 +7,8 @@ import jakarta.persistence.Table
 @Entity
 @Table(name ="establishment_establishment", schema = "domain")
 class Establishment(
-  val name: String,
   @Id
   val id: String,
+
+  val name: String,
 )
