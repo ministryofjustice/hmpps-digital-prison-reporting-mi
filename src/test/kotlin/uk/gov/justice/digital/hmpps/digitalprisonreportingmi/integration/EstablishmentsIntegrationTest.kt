@@ -13,7 +13,7 @@ class EstablishmentsIntegrationTest : IntegrationTestBase() {
   lateinit var establishmentRepository: EstablishmentRepository
 
   @BeforeEach
-  fun setup(){
+  fun setup() {
     establishmentRepository.deleteAll()
   }
 
