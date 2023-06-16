@@ -10,6 +10,7 @@ generic-service:
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
     REDSHIFT_JDBC_URL: jdbc:redshift://dpr-redshift-development.ctf9dwuxkfvc.eu-west-2.redshift.amazonaws.com:5439/datamart
+    HMPPS_AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts

@@ -33,6 +33,9 @@ generic-service:
     redshift-jdbc:
       REDSHIFT_JDBC_USER: "user"
       REDSHIFT_JDBC_PASSWORD: "password"
+    hmpps-auth:
+      SYSTEM_CLIENT_ID: "system_client_id"
+      SYSTEM_CLIENT_SECRET: "system_client_secret"
 
   allowlist:
     office: "217.33.148.210/32"

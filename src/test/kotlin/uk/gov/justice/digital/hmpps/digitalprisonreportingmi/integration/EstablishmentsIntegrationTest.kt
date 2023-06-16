@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.Establishment
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.EstablishmentRepository
 import java.util.stream.IntStream
-
 class EstablishmentsIntegrationTest : IntegrationTestBase() {
 
   @Autowired
