@@ -1,3 +1,7 @@
+hmpps:
+  auth:
+    url: http://localhost:8090
+
 server:
   shutdown: immediate
 

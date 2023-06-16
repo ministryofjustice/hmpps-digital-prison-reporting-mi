@@ -25,7 +25,11 @@ class ResourceServerConfiguration {
         ).forEach { authorize(it, permitAll) }
         authorize(anyRequest, authenticated)
       }
-      oauth2ResourceServer { jwt { jwtAuthenticationConverter = AuthAwareTokenConverter() } }
+      oauth2ResourceServer {
+        jwt {
+          jwtAuthenticationConverter = AuthAwareTokenConverter()
+        }
+      }
     }
     return http.build()
   }
