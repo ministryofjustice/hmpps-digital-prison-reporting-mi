@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
@@ -10,6 +11,9 @@ import org.springframework.security.web.SecurityFilterChain
 @Profile("!test")
 @Configuration
 class ResourceServerConfiguration {
+
+//  @Value("${spring.security.user.roles}")
+//  private val authorisedRole: String? = null
   @Bean
   @Throws(Exception::class)
   fun filterChain(http: HttpSecurity): SecurityFilterChain? {
@@ -24,6 +28,7 @@ class ResourceServerConfiguration {
           "/info",
         ).forEach { authorize(it, permitAll) }
         authorize(anyRequest, authenticated)
+        authorize(anyRequest, hasRole("PRISONS_REPORTING_USER"))
       }
       oauth2ResourceServer {
         jwt {

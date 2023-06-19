@@ -40,6 +40,8 @@ spring:
         provider:
           hmpps-auth:
             token-uri: ${hmpps.auth.url}/oauth/token
+    user:
+      roles: ${AUTHORISED_ROLES}
 
 server:
   port: 8080

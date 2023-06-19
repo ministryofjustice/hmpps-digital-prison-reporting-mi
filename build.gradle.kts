@@ -20,6 +20,8 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
   testImplementation("com.h2database:h2:2.1.212")
+//  testImplementation("com.github.tomakehurst:wiremock-standalone:2.7.1")
+  testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.0")
 }
 
 java {
