@@ -14,7 +14,7 @@ class ExternalMovementsController() {
   @GetMapping("/external-movements/count")
   @Operation(
     description = "Gets a count of external movements (mocked)",
-    security = [ SecurityRequirement(name = "bearer-jwt") ]
+    security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
   fun stubbedCount(): Count {
     return Count(501)

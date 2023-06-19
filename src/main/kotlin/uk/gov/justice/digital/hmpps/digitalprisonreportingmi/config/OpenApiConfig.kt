@@ -14,7 +14,7 @@ class OpenApiConfig {
     return OpenAPI()
       .info(
         Info().title("Digital Prison Reporting MI API")
-          .version("v1.0.0")
+          .version("v1.0.0"),
       )
       .components(
         Components()
@@ -23,8 +23,8 @@ class OpenApiConfig {
             SecurityScheme()
               .type(SecurityScheme.Type.HTTP)
               .scheme("bearer")
-              .bearerFormat("JWT")
-          )
+              .bearerFormat("JWT"),
+          ),
       )
   }
 }
