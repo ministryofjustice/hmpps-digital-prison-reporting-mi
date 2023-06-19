@@ -8,6 +8,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
   fun `External movements count returns stubbed value`() {
     webTestClient.get()
       .uri("/external-movements/count")
+      .headers(setAuthorisation(roles = listOf(USER_AUTHORITY)))
       .exchange()
       .expectStatus()
       .isOk

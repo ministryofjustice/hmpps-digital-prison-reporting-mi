@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
-@Profile("!test")
+//@Profile("!test")
 @Configuration
 class ResourceServerConfiguration {
 
@@ -27,8 +27,8 @@ class ResourceServerConfiguration {
           "/health/**",
           "/info",
         ).forEach { authorize(it, permitAll) }
+        authorize(anyRequest, hasAuthority("PRISONS_REPORTING_USER"))
         authorize(anyRequest, authenticated)
-        authorize(anyRequest, hasRole("PRISONS_REPORTING_USER"))
       }
       oauth2ResourceServer {
         jwt {

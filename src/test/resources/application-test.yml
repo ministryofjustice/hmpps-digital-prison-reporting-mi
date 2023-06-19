@@ -24,8 +24,8 @@ spring:
         registration:
           hmpps-apis:
             provider: hmpps-auth
-            client-id: ${system.client.id}
-            client-secret: ${system.client.secret}
+            client-id: client_id
+            client-secret: client_secret
             authorization-grant-type: client_credentials
             scope: read
         provider:
