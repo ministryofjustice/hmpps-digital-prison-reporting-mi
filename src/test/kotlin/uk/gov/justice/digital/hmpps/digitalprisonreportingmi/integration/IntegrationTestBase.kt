@@ -17,11 +17,12 @@ abstract class IntegrationTestBase {
 //  @Suppress("SpringJavaInjectionPointsAutowiringInspection")
   @Autowired
   lateinit var webTestClient: WebTestClient
+
   @Autowired
   lateinit var jwtAuthHelper: JwtAuthHelper
   internal fun setAuthorisation(
     user: String = "AUTH_ADM",
     roles: List<String> = listOf(),
     scopes: List<String> = listOf(),
-  ):(HttpHeaders) -> Unit = jwtAuthHelper.setAuthorisation(user, roles, scopes)
+  ): (HttpHeaders) -> Unit = jwtAuthHelper.setAuthorisation(user, roles, scopes)
 }

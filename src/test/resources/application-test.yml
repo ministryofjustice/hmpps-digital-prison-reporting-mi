@@ -1,6 +1,6 @@
-hmpps:
-  auth:
-    url: http://localhost:8090
+#hmpps:
+#  auth:
+#    url: http://localhost:8090
 
 server:
   shutdown: immediate
@@ -15,22 +15,23 @@ spring:
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
-      client:
-        registration:
-          hmpps-apis:
-            provider: hmpps-auth
-            client-id: client_id
-            client-secret: client_secret
-            authorization-grant-type: client_credentials
-            scope: read
-        provider:
-          hmpps-auth:
-            token-uri: ${hmpps.auth.url}/oauth/token
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: ${hmpps.auth.url}
+#          jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
+#      client:
+#        registration:
+#          hmpps-apis:
+#            provider: hmpps-auth
+#            client-id: client_id
+#            client-secret: client_secret
+#            authorization-grant-type: client_credentials
+#            scope: read
+#        provider:
+#          hmpps-auth:
+#            token-uri: ${hmpps.auth.url}/oauth/token
 
 management.endpoint:
   health.cache.time-to-live: 0

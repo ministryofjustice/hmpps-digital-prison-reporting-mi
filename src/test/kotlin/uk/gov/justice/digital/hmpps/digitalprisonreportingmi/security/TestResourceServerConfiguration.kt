@@ -1,13 +1,8 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security
 
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.invoke
-import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.web.SecurityFilterChain
-//@Configuration
-//class TestResourceServerConfiguration {
+// @Configuration
+// class TestResourceServerConfiguration {
 //
 //  @Bean
 //  @Throws(Exception::class)
@@ -23,4 +18,4 @@ import org.springframework.security.web.SecurityFilterChain
 //    }
 //    return http.build()
 //  }
-//}
+// }

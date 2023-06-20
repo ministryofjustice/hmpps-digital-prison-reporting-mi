@@ -1,14 +1,12 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security
 
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
-//@Profile("!test")
+// @Profile("!test")
 @Configuration
 class ResourceServerConfiguration {
 
@@ -28,7 +26,7 @@ class ResourceServerConfiguration {
           "/info",
         ).forEach { authorize(it, permitAll) }
         authorize(anyRequest, hasAuthority("PRISONS_REPORTING_USER"))
-        authorize(anyRequest, authenticated)
+//        authorize(anyRequest, authenticated)
       }
       oauth2ResourceServer {
         jwt {

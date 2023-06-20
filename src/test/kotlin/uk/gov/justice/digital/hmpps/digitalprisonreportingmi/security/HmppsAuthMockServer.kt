@@ -1,16 +1,10 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock.*
-import com.github.tomakehurst.wiremock.http.HttpHeader
-import com.github.tomakehurst.wiremock.http.HttpHeaders
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 
 class HmppsAuthExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
 
