@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class DigitalPrisonReportingMiExceptionHandler {
   @ExceptionHandler(ValidationException::class)
+  @ResponseStatus(BAD_REQUEST)
   fun handleValidationException(e: Exception): ResponseEntity<ErrorResponse> {
     log.info("Validation exception: {}", e.message)
     return ResponseEntity
@@ -26,6 +28,7 @@ class DigitalPrisonReportingMiExceptionHandler {
   }
 
   @ExceptionHandler(java.lang.Exception::class)
+  @ResponseStatus(INTERNAL_SERVER_ERROR)
   fun handleException(e: java.lang.Exception): ResponseEntity<ErrorResponse?>? {
     log.error("Unexpected exception", e)
     return ResponseEntity
