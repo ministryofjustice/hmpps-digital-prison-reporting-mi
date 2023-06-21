@@ -24,25 +24,14 @@ spring:
     password: ${REDSHIFT_JDBC_PASSWORD}
     driver-class-name: com.amazon.redshift.jdbc.Driver
 
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: ${hmpps.auth.url}
-#          jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
-#      client:
-#        registration:
-#          hmpps-apis:
-#            provider: hmpps-auth
-#            client-id: ${system.client.id}
-#            client-secret: ${system.client.secret}
-#            authorization-grant-type: client_credentials
-#            scope: read
-#        provider:
-#          hmpps-auth:
-#            token-uri: ${hmpps.auth.url}/oauth/token
-#    user:
-#      roles: ${AUTHORISED_ROLES}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${hmpps.auth.url}
+          jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
+    user:
+      roles: ${AUTHORISED_ROLES}
 
 server:
   port: 8080
