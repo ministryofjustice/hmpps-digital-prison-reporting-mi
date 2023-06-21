@@ -36,7 +36,6 @@ class ResourceServerConfiguration {
           "/swagger-resources/configuration/security",
         ).forEach { authorize(it, permitAll) }
         authorize(anyRequest, hasAuthority(authorisedRole))
-        authorize(anyRequest, authenticated)
       }
       oauth2ResourceServer {
         jwt {

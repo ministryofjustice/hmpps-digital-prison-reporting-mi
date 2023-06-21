@@ -37,9 +37,9 @@
     <appender-ref ref="consoleAppender"/>
   </logger>
 
-<!--  <logger name="org.springframework.security" additivity="false" level="DEBUG">-->
-<!--    <appender-ref ref="consoleAppender"/>-->
-<!--  </logger>-->
+  <logger name="org.springframework.security" additivity="false" level="INFO">
+    <appender-ref ref="consoleAppender"/>
+  </logger>
 
   <root level="INFO">
     <appender-ref ref="consoleAppender"/>
