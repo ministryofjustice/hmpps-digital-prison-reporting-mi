@@ -68,10 +68,4 @@ class EstablishmentsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .isEmpty
   }
-//  @WithMockUser(authorities=[USER_AUTHORITY])
-//  @Test
-//  fun endpointWhenUserAuthorityThenAuthorized() {
-//    webTestClient.get().uri("/endpoint")
-//      .exchange().expectStatus().isOk
-//  }
 }

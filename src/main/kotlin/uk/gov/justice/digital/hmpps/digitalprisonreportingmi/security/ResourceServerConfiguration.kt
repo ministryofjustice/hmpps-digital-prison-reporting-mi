@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
-// @Profile("!test")
 @Configuration
 class ResourceServerConfiguration {
 
