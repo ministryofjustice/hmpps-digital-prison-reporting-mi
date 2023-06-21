@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.http.HttpHeaders
@@ -13,6 +14,9 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security.HmppsAuthE
 @ExtendWith(HmppsAuthExtension::class)
 @ActiveProfiles("test")
 abstract class IntegrationTestBase {
+
+  @Value("\${spring.security.user.roles}")
+  lateinit var authorisedRole: String
 
 //  @Suppress("SpringJavaInjectionPointsAutowiringInspection")
   @Autowired

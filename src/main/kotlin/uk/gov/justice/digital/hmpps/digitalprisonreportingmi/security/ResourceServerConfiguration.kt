@@ -1,17 +1,20 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+
 // @Profile("!test")
 @Configuration
 class ResourceServerConfiguration {
 
-//  @Value("${spring.security.user.roles}")
-//  private val authorisedRole: String? = null
+  @Value("\${spring.security.user.roles}")
+  private lateinit var authorisedRole: String
+
   @Bean
   @Throws(Exception::class)
   fun filterChain(http: HttpSecurity): SecurityFilterChain? {
@@ -25,8 +28,7 @@ class ResourceServerConfiguration {
           "/health/**",
           "/info",
         ).forEach { authorize(it, permitAll) }
-        authorize(anyRequest, hasAuthority("PRISONS_REPORTING_USER"))
-//        authorize(anyRequest, authenticated)
+        authorize(anyRequest, hasAuthority(authorisedRole))
       }
       oauth2ResourceServer {
         jwt {

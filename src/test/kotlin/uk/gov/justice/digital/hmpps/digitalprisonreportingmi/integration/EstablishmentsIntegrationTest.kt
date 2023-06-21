@@ -7,7 +7,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.Establishment
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.EstablishmentRepository
 import java.util.stream.IntStream
 
-const val USER_AUTHORITY = "PRISONS_REPORTING_USER"
 class EstablishmentsIntegrationTest : IntegrationTestBase() {
 
   @Autowired
@@ -27,7 +26,7 @@ class EstablishmentsIntegrationTest : IntegrationTestBase() {
 
     webTestClient.get()
       .uri("/establishments/count")
-      .headers(setAuthorisation(roles = listOf(USER_AUTHORITY)))
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
       .exchange()
       .expectStatus()
       .isOk
@@ -39,7 +38,7 @@ class EstablishmentsIntegrationTest : IntegrationTestBase() {
   fun `Establishments count returns 200 with count zero when the table is empty`() {
     webTestClient.get()
       .uri("/establishments/count")
-      .headers(setAuthorisation(roles = listOf(USER_AUTHORITY)))
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
       .exchange()
       .expectStatus()
       .isOk
