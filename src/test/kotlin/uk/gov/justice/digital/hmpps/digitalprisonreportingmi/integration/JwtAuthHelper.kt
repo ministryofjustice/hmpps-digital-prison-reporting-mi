@@ -42,17 +42,18 @@ class JwtAuthHelper {
   }
 
   internal fun createJwt(
-    subject: String?,
-    scope: List<String>? = listOf(),
-    roles: List<String>? = listOf(),
+    subject: String,
+    scope: List<String> = listOf(),
+    roles: List<String> = listOf(),
     expiryTime: Duration = Duration.ofHours(1),
     jwtId: String = UUID.randomUUID().toString(),
   ): String =
-    mutableMapOf<String, Any>()
-      .also { subject?.let { subject -> it["user_name"] = subject } }
-      .also { it["client_id"] = "prison-reporting-mi-client" }
-      .also { roles?.let { roles -> it["authorities"] = roles } }
-      .also { scope?.let { scope -> it["scope"] = scope } }
+    mapOf(
+      "user_name" to subject,
+      "client_id" to "prison-reporting-mi-client",
+      "authorities" to roles,
+      "scope" to scope,
+    )
       .let {
         Jwts.builder()
           .setId(jwtId)
