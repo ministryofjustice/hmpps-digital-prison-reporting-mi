@@ -15,7 +15,6 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${hmpps.auth.url}
           jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
     user:
       roles: ROLE_PRISONS_REPORTING_USER
