@@ -26,7 +26,23 @@ of
 - [lombok](https://projectlombok.org/) - to reduce boilerplate when creating data classes
 - [jacoco](https://docs.gradle.org/current/userguide/jacoco_plugin.html) - for test coverage reports
 
-
+## Running Locally against Dev
+1. Add implementation("com.h2database:h2:2.1.214") to build.gradle
+2. Change the existing datasource config in the application.yml file to the following:
+```
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:h2:mem:datamart;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS domain\;
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+```
+3. Change the ```jwk-set-uri``` to https://sign-in-dev.hmpps.service.justice.gov.uk/auth/.well-known/jwks.json in the application.yml
+4. Change the ```user.roles``` to ```ROLE_PRISONS_REPORTING_USER``` in the application.yml
+5. Optional: Change the org.springframework.security level to DEBUG in logback-spring.xml 
 
 ## Testing
 
