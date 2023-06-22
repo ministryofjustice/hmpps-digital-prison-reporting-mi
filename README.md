@@ -42,7 +42,8 @@ of
 ```
 3. Change the ```jwk-set-uri``` to https://sign-in-dev.hmpps.service.justice.gov.uk/auth/.well-known/jwks.json in the application.yml
 4. Change the ```user.roles``` to ```ROLE_PRISONS_REPORTING_USER``` in the application.yml
-5. Optional: Change the org.springframework.security level to DEBUG in logback-spring.xml 
+5. Optional: Change the org.springframework.security level to DEBUG in logback-spring.xml
+6. Run main from DigitalPrisonReportingMi
 
 ## Testing
 
