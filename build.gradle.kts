@@ -25,7 +25,6 @@ dependencies {
   // Overrides to fix security vulnerabilities
   implementation("io.netty:netty-handler:4.1.94.Final")
 
-
   // Testing
   testImplementation("com.h2database:h2")
   testImplementation("io.jsonwebtoken:jjwt:0.9.1")
