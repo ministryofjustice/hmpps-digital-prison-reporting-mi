@@ -4,12 +4,15 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
 
 @RestController
 @Tag(name = "External Movements API")
-class ExternalMovementsController() {
+class ExternalMovementsController(val externalMovementService: ExternalMovementService) {
 
   @GetMapping("/external-movements/count")
   @Operation(
@@ -18,5 +21,18 @@ class ExternalMovementsController() {
   )
   fun stubbedCount(): Count {
     return Count(501)
+  }
+
+  @GetMapping("/external-movements")
+  @Operation(
+    description = "Gets a count of external movements (mocked)",
+    security = [ SecurityRequirement(name = "bearer-jwt") ],
+  )
+  fun stubbedExternalMovements(@RequestParam("selectedPage") selectedPage: Int,
+                               @RequestParam("pageSize") pageSize: Int,
+                               @RequestParam("sortColumn") sortColumn: String,
+                               @RequestParam("sortedAsc") sortedAsc: Boolean,
+                               ): List<ExternalMovement> {
+    return externalMovementService.externalMovements(selectedPage, pageSize, sortColumn, sortedAsc)
   }
 }
