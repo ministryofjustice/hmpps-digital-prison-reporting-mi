@@ -29,7 +29,7 @@ dependencies {
   // Overrides to fix security vulnerabilities
   implementation("com.google.guava:guava:32.0.1-jre")
   implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
-  implementation ("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
   // Testing
   testImplementation("com.h2database:h2:2.1.214")

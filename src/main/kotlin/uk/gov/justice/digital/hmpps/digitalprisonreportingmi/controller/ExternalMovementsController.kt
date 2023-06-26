@@ -28,11 +28,12 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     description = "Gets a count of external movements (mocked)",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
-  fun stubbedExternalMovements(@RequestParam("selectedPage") selectedPage: Long,
-                               @RequestParam("pageSize") pageSize: Long,
-                               @RequestParam("sortColumn") sortColumn: String,
-                               @RequestParam("sortedAsc") sortedAsc: Boolean,
-                               ): List<ExternalMovement> {
+  fun stubbedExternalMovements(
+    @RequestParam("selectedPage") selectedPage: Long,
+    @RequestParam("pageSize") pageSize: Long,
+    @RequestParam("sortColumn") sortColumn: String,
+    @RequestParam("sortedAsc") sortedAsc: Boolean,
+  ): List<ExternalMovement> {
     return externalMovementService.externalMovements(selectedPage, pageSize, sortColumn, sortedAsc)
   }
 }
