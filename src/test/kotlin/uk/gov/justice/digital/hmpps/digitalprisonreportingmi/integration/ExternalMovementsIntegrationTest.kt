@@ -16,6 +16,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .jsonPath("count").isEqualTo("501")
   }
+
   @Test
   fun `External movements returns stubbed value`() {
     webTestClient.get()
@@ -33,12 +34,14 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectStatus()
       .isOk()
       .expectBody()
-      .json("""[
+      .json(
+        """[
         {"prisonNumber":"J0840YP","date":"2023-06-05","time":"12:56:00","from":"Elmley","to":"Altcourse","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
         {"prisonNumber":"R2320PI","date":"2023-06-05","time":"04:27:00","from":"Northumberland","to":"Usk","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
         {"prisonNumber":"B0030SC","date":"2023-06-05","time":"07:07:00","from":"Usk","to":"Thameside","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
       ]       
-      """)
+      """,
+      )
   }
 
   @Test
@@ -54,7 +57,8 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectStatus()
       .isOk
       .expectBody()
-      .json("""
+      .json(
+        """
       [
         {"prisonNumber":"J0840YP","date":"2023-06-05","time":"12:56:00","from":"Elmley","to":"Altcourse","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
         {"prisonNumber":"R2320PI","date":"2023-06-05","time":"04:27:00","from":"Northumberland","to":"Usk","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
@@ -67,7 +71,40 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
         {"prisonNumber":"Q9660WX","date":"2023-04-25","time":"12:19:00","from":"Elmley","to":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
         {"prisonNumber":"E0550PS","date":"2023-04-17","time":"23:48:00","from":"Lancaster Farms","to":"Garth","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
       ]
-      """)
+      """,
+      )
   }
 
+  @Test
+  fun `External movements returns 400 for invalid selectedPage query param`() {
+    requestWithQueryAndAssert400("selectedPage", 0)
+  }
+
+  @Test
+  fun `External movements returns 400 for invalid pageSize query param`() {
+    requestWithQueryAndAssert400("pageSize", 0)
+  }
+
+  @Test
+  fun `External movements returns 400 for invalid sortColumn query param`() {
+    requestWithQueryAndAssert400("sortColumn", "nonExistentColumn")
+  }
+
+  @Test
+  fun `External movements returns 400 for invalid sortedAsc query param`() {
+    requestWithQueryAndAssert400("sortedAsc", "abc")
+  }
+  private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any) {
+    webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/external-movements")
+          .queryParam(paramName, paramValue)
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isBadRequest
+  }
 }
