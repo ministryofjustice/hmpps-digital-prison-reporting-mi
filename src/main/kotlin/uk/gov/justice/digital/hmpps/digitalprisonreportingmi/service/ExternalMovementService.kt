@@ -12,21 +12,26 @@ data class ExternalMovementService(val externalMovementRepository: ExternalMovem
     val allExternalMovements = externalMovementRepository
       .externalMovements()
 //      .sortedWith( Comparator.comparing { em -> em.javaClass.getField(sortColumn).get(em)})
-    val allExternalMovementsSorted = when (sortColumn) {
-      "date" -> allExternalMovements.sortedBy { it.date }
-      "time" -> allExternalMovements.sortedBy { it.time }
-      "from" -> allExternalMovements.sortedBy { it.from }
-      "to" -> allExternalMovements.sortedBy { it.to }
-      "type" -> allExternalMovements.sortedBy { it.type }
-      else -> throw ValidationException("Invalid sort column $sortColumn")
-    }
-    if (!sortedAsc) {
-      allExternalMovementsSorted.asReversed()
-    }
-    return allExternalMovementsSorted
+    return sort(sortColumn, allExternalMovements, sortedAsc)
       .stream()
       .skip((selectedPage - 1) * pageSize)
       .limit(pageSize)
       .toList()
+  }
+
+  private fun sort(sortColumn: String, allExternalMovements: List<ExternalMovement>, sortedAsc: Boolean): List<ExternalMovement> {
+    val allExternalMovementsSorted =
+    when (sortColumn) {
+      "date" -> allExternalMovements.sortedBy { it.date }
+      "time" -> allExternalMovements.sortedBy { it.time }
+      "prisonNumber" -> allExternalMovements.sortedBy { it.prisonNumber }
+      "direction" -> allExternalMovements.sortedBy { it.direction }
+      "from" -> allExternalMovements.sortedBy { it.from }
+      "to" -> allExternalMovements.sortedBy { it.to }
+      "type" -> allExternalMovements.sortedBy { it.type }
+      "reason" -> allExternalMovements.sortedBy { it.reason }
+      else -> throw ValidationException("Invalid sort column $sortColumn")
+    }
+    return if (!sortedAsc) allExternalMovementsSorted.reversed() else allExternalMovementsSorted
   }
 }

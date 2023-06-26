@@ -11,5 +11,5 @@ data class ExternalMovement(
   val to: String,
   val direction: String,
   val type: String,
-  val reson: String,
+  val reason: String,
 )
