@@ -2,7 +2,10 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
+import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -66,134 +69,53 @@ class ExternalMovementServiceTest {
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by date in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "date", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement1), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by date when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "date", expectedForAscending = externalMovement1, expectedForDescending = externalMovement5)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by date in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "date", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement5), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by time when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "time", expectedForAscending = externalMovement1, expectedForDescending = externalMovement4)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by time in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "time", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement1), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by prisonNumber when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "prisonNumber", expectedForAscending = externalMovement3, expectedForDescending = externalMovement4)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by time in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "time", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement4), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by 'from' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "from", expectedForAscending = externalMovement4, expectedForDescending = externalMovement3)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by prisonNumber in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "prisonNumber", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement3), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by 'to' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "to", expectedForAscending = externalMovement3, expectedForDescending = externalMovement2)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by prisonNumber in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "prisonNumber", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement4), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by 'direction' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "direction", expectedForAscending = externalMovement1, expectedForDescending = externalMovement4)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by 'from' in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "from", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement4), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by 'type' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "type", expectedForAscending = externalMovement1, expectedForDescending = externalMovement5)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by 'from' in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "from", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement3), actual)
-    assertEquals(1, actual.size)
-  }
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by 'reason' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "reason", expectedForAscending = externalMovement2, expectedForDescending = externalMovement1)
 
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by 'to' in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "to", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement3), actual)
-    assertEquals(1, actual.size)
+  private fun assertExternalMovements(sortColumn: String, expectedForAscending: ExternalMovement, expectedForDescending: ExternalMovement): List<DynamicTest> {
+    return listOf(
+      true to listOf(expectedForAscending),
+      false to listOf(expectedForDescending),
+    )
+      .map { (sortedAsc, expected) ->
+        DynamicTest.dynamicTest("When sorting by $sortColumn and sortedAsc is $sortedAsc the result is $expected") {
+          val actual = externalMovementService.externalMovements(1, 1, sortColumn, sortedAsc)
+          verify(externalMovementRepository, times(1)).externalMovements()
+          Mockito.clearInvocations(externalMovementRepository)
+          assertEquals(expected, actual)
+          assertEquals(1, actual.size)
+        }
+      }
   }
-
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by 'to' in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "to", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement2), actual)
-    assertEquals(1, actual.size)
-  }
-
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by direction in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "direction", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement1), actual)
-    assertEquals(1, actual.size)
-  }
-
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by direction in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "direction", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement4), actual)
-    assertEquals(1, actual.size)
-  }
-
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by type in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "type", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement1), actual)
-    assertEquals(1, actual.size)
-  }
-
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by type in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "type", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement5), actual)
-    assertEquals(1, actual.size)
-  }
-
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by reason in ascending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "reason", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement2), actual)
-    assertEquals(1, actual.size)
-  }
-
-  @Test
-  fun `should return all external movements for the selected page and pageSize sorted by reason in descending order`() {
-    val actual = externalMovementService.externalMovements(1, 1, "reason", false)
-    verify(externalMovementRepository, times(1)).externalMovements()
-    assertEquals(listOf(externalMovement1), actual)
-    assertEquals(1, actual.size)
-  }
-
   private object AllMovements {
     val externalMovement1 = ExternalMovement(
       "N9980PJ",
