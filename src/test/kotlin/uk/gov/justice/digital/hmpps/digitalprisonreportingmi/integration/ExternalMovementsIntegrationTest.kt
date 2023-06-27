@@ -36,9 +36,9 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-        {"prisonNumber":"J0840YP","date":"2023-06-05","time":"12:56:00","from":"Elmley","to":"Altcourse","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"R2320PI","date":"2023-06-05","time":"04:27:00","from":"Northumberland","to":"Usk","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"B0030SC","date":"2023-06-05","time":"07:07:00","from":"Usk","to":"Thameside","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
+        {"prisonNumber":"Q966ABC","date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"Z966YYY","date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"prisonNumber":"A966ZZZ","date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
       ]       
       """,
       )
@@ -60,16 +60,11 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .json(
         """
       [
-        {"prisonNumber":"J0840YP","date":"2023-06-05","time":"12:56:00","from":"Elmley","to":"Altcourse","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"R2320PI","date":"2023-06-05","time":"04:27:00","from":"Northumberland","to":"Usk","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"B0030SC","date":"2023-06-05","time":"07:07:00","from":"Usk","to":"Thameside","direction":"In","type":"Admission","reason":"Unconvicted Remand"},
-        {"prisonNumber":"F3220GG","date":"2023-06-03","time":"21:43:00","from":"Kirkham","to":"Elmley","direction":"In","type":"Admission","reason":"Unconvicted Remand"},
-        {"prisonNumber":"Q3430VX","date":"2023-06-02","time":"04:06:00","from":"Usk","to":"Send","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"F4010GF","date":"2023-06-01","time":"00:14:00","from":"Wakefield","to":"Garth","direction":"Out","type":"Transfer","reason":"Other"},
-        {"prisonNumber":"J2800XP","date":"2023-04-28","time":"02:16:00","from":"Pentonville","to":"Featherstone","direction":"Out","type":"Transfer","reason":"Other"},
-        {"prisonNumber":"J4650MC","date":"2023-04-27","time":"17:16:00","from":"Thameside","to":"Thameside","direction":"Out","type":"Transfer","reason":"Other"},
-        {"prisonNumber":"Q9660WX","date":"2023-04-25","time":"12:19:00","from":"Elmley","to":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"E0550PS","date":"2023-04-17","time":"23:48:00","from":"Lancaster Farms","to":"Garth","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
+        {"prisonNumber":"Q966ABC","date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"Z966YYY","date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"prisonNumber":"A966ZZZ","date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"Q9660WX","date": "2023-04-25","time":"12:19:00","from":"Elmley","to":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"N9980PJ","date": "2023-01-31","time":"03:01:00","from":"Ranby","to":"Kirkham","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
       ]
       """,
       )
