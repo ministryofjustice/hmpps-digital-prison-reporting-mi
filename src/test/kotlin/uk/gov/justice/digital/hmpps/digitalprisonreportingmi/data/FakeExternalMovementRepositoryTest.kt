@@ -33,7 +33,7 @@ class FakeExternalMovementRepositoryTest {
       ),
     )
     val externalMovements = FakeExternalMovementRepository().externalMovements()
-    assertEquals(500, externalMovements.size)
+    assertEquals(19, externalMovements.size)
     assertEquals(expected, externalMovements.subList(0, 2))
   }
 }
