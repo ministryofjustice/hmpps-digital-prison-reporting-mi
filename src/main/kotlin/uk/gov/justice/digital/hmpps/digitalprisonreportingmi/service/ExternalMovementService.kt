@@ -2,14 +2,14 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 
 @Service
-data class ExternalMovementService(val externalMovementRepository: ExternalMovementRepository) {
+data class ExternalMovementService(val fakeExternalMovementRepository: FakeExternalMovementRepository) {
 
   fun externalMovements(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean): List<ExternalMovement> {
-    val allExternalMovements = externalMovementRepository
+    val allExternalMovements = fakeExternalMovementRepository
       .externalMovements()
     return sort(sortColumn, allExternalMovements, sortedAsc)
       .stream()

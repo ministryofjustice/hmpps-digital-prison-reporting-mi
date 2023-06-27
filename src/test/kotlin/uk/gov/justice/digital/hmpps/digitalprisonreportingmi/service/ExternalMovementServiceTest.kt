@@ -10,7 +10,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementServiceTest.AllMovements.allExternalMovements
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementServiceTest.AllMovements.externalMovement1
@@ -23,18 +23,18 @@ import java.time.LocalTime
 
 class ExternalMovementServiceTest {
 
-  private val externalMovementRepository: ExternalMovementRepository = mock<ExternalMovementRepository>()
-  private val externalMovementService = ExternalMovementService(externalMovementRepository)
+  private val fakeExternalMovementRepository: FakeExternalMovementRepository = mock<FakeExternalMovementRepository>()
+  private val externalMovementService = ExternalMovementService(fakeExternalMovementRepository)
 
   @BeforeEach
   fun setup() {
-    whenever(externalMovementRepository.externalMovements()).thenReturn(allExternalMovements)
+    whenever(fakeExternalMovementRepository.externalMovements()).thenReturn(allExternalMovements)
   }
 
   @Test
   fun `should return 2 external movements for the selected page 2 and pageSize 2 sorted by date in ascending order`() {
     val actual = externalMovementService.externalMovements(2, 2, "date", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
+    verify(fakeExternalMovementRepository, times(1)).externalMovements()
     assertEquals(listOf(externalMovement3, externalMovement4), actual)
     assertEquals(2, actual.size)
   }
@@ -42,7 +42,7 @@ class ExternalMovementServiceTest {
   @Test
   fun `should return 1 external movement for the selected page 3 and pageSize 2 sorted by date in ascending order`() {
     val actual = externalMovementService.externalMovements(3, 2, "date", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
+    verify(fakeExternalMovementRepository, times(1)).externalMovements()
     assertEquals(listOf(externalMovement5), actual)
     assertEquals(1, actual.size)
   }
@@ -50,7 +50,7 @@ class ExternalMovementServiceTest {
   @Test
   fun `should return 5 external movements for the selected page 1 and pageSize 5 sorted by date in ascending order`() {
     val actual = externalMovementService.externalMovements(1, 5, "date", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
+    verify(fakeExternalMovementRepository, times(1)).externalMovements()
     assertEquals(listOf(externalMovement1, externalMovement2, externalMovement3, externalMovement4, externalMovement5), actual)
     assertEquals(5, actual.size)
   }
@@ -58,14 +58,14 @@ class ExternalMovementServiceTest {
   @Test
   fun `should return an empty list for the selected page 2 and pageSize 5 sorted by date in ascending order`() {
     val actual = externalMovementService.externalMovements(2, 5, "date", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
+    verify(fakeExternalMovementRepository, times(1)).externalMovements()
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
   @Test
   fun `should return an empty list for the selected page 6 and pageSize 1 sorted by date in ascending order`() {
     val actual = externalMovementService.externalMovements(6, 1, "date", true)
-    verify(externalMovementRepository, times(1)).externalMovements()
+    verify(fakeExternalMovementRepository, times(1)).externalMovements()
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
@@ -109,8 +109,8 @@ class ExternalMovementServiceTest {
       .map { (sortedAsc, expected) ->
         DynamicTest.dynamicTest("When sorting by $sortColumn and sortedAsc is $sortedAsc the result is $expected") {
           val actual = externalMovementService.externalMovements(1, 1, sortColumn, sortedAsc)
-          verify(externalMovementRepository, times(1)).externalMovements()
-          Mockito.clearInvocations(externalMovementRepository)
+          verify(fakeExternalMovementRepository, times(1)).externalMovements()
+          Mockito.clearInvocations(fakeExternalMovementRepository)
           assertEquals(expected, actual)
           assertEquals(1, actual.size)
         }

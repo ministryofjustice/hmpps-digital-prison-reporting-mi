@@ -14,7 +14,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectStatus()
       .isOk
       .expectBody()
-      .jsonPath("count").isEqualTo("501")
+      .jsonPath("count").isEqualTo("500")
   }
 
   @Test
@@ -83,6 +83,11 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
   @Test
   fun `External movements returns 400 for invalid pageSize query param`() {
     requestWithQueryAndAssert400("pageSize", 0)
+  }
+
+  @Test
+  fun `External movements returns 400 for invalid (wrong type) pageSize query param`() {
+    requestWithQueryAndAssert400("pageSize", "a")
   }
 
   @Test

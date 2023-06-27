@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 
 @Service
-class ExternalMovementRepository {
+class FakeExternalMovementRepository {
 
   fun externalMovements(): List<ExternalMovement> {
     val mapper = jacksonObjectMapper()

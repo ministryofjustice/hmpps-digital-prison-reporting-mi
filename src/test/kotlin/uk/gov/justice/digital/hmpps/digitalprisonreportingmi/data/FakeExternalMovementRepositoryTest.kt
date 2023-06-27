@@ -6,7 +6,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovem
 import java.time.LocalDate
 import java.time.LocalTime
 
-class ExternalMovementRepositoryTest {
+class FakeExternalMovementRepositoryTest {
 
   @Test
   fun `the repository returns all the external movements`() {
@@ -32,7 +32,7 @@ class ExternalMovementRepositoryTest {
         "Transfer In from Other Establishment",
       ),
     )
-    val externalMovements = ExternalMovementRepository().externalMovements()
+    val externalMovements = FakeExternalMovementRepository().externalMovements()
     assertEquals(500, externalMovements.size)
     assertEquals(expected, externalMovements.subList(0, 2))
   }

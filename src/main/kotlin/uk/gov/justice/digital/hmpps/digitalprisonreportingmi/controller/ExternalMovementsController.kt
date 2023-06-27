@@ -23,7 +23,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
   fun stubbedCount(): Count {
-    return Count(501)
+    return Count(500)
   }
 
   @GetMapping("/external-movements")
