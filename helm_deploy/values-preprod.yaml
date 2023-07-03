@@ -9,7 +9,7 @@ generic-service:
 
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
-    REDSHIFT_JDBC_URL: jdbc:redshift://dpr-redshift-development.ctf9dwuxkfvc.eu-west-2.redshift.amazonaws.com:5439/datamart
+    REDSHIFT_JDBC_URL: jdbc:redshift://dpr-redshift-preproduction.c1q5ypu1uv3q.eu-west-2.redshift.amazonaws.com:5439/datamart
     HMPPS_AUTH_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
 
