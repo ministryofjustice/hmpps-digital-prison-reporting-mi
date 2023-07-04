@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.2.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.+"
   kotlin("jvm") version "1.8.21"
   kotlin("plugin.spring") version "1.8.21"
   kotlin("plugin.jpa") version "1.8.21"
@@ -21,10 +21,6 @@ dependencies {
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
-
-  // Overrides to fix security vulnerabilities
-  implementation("io.netty:netty-handler:4.1.94.Final")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
 
   // Testing
   testImplementation("com.h2database:h2")
