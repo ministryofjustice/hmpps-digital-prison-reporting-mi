@@ -6,11 +6,13 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
 
 @Service
 class FakeExternalMovementRepository {
 
-  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<String, String>): List<ExternalMovement> {
+  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, String>): List<ExternalMovement> {
     return readExternalMovementsFromFile()
       .filter { matchesFilters(it, filters) }
       .let {
@@ -38,7 +40,7 @@ class FakeExternalMovementRepository {
     return if (!sortedAsc) allExternalMovementsSorted.reversed() else allExternalMovementsSorted
   }
 
-  fun count(filters: Map<String, String>): Long {
+  fun count(filters: Map<ExternalMovementFilter, String>): Long {
     return readExternalMovementsFromFile().count { matchesFilters(it, filters) }.toLong()
   }
 
@@ -50,6 +52,6 @@ class FakeExternalMovementRepository {
       .let { mapper.readValue<List<ExternalMovement>>(it) }
   }
 
-  private fun matchesFilters(it: ExternalMovement, filters: Map<String, String>): Boolean =
-    filters["direction"]?.equals(it.direction.lowercase()) ?: true
+  private fun matchesFilters(it: ExternalMovement, filters: Map<ExternalMovementFilter, String>): Boolean =
+    filters[DIRECTION]?.equals(it.direction.lowercase()) ?: true
 }

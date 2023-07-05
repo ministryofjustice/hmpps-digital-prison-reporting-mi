@@ -10,6 +10,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepositoryTest.AllMovements.allExternalMovements
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
 import java.util.Collections.singletonMap
 
 class ExternalMovementServiceTest {
@@ -25,8 +26,8 @@ class ExternalMovementServiceTest {
   @Test
   fun `should call the repository with the corresponding arguments and get the list of movements`() {
     val sortColumn = "date"
-    val actual = externalMovementService.list(2, 2, sortColumn, true, singletonMap("direction", "in"))
-    verify(fakeExternalMovementRepository, times(1)).list(2, 2, sortColumn, true, singletonMap("direction", "in"))
+    val actual = externalMovementService.list(2, 2, sortColumn, true, singletonMap(DIRECTION, "in"))
+    verify(fakeExternalMovementRepository, times(1)).list(2, 2, sortColumn, true, singletonMap(DIRECTION, "in"))
     assertEquals(allExternalMovements, actual)
   }
 }

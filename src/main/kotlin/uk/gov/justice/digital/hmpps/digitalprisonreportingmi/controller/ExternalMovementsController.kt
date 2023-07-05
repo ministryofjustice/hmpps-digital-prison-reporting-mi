@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
 
 private const val FILTER_PARAM_PREFIX = "filter."
@@ -55,10 +56,12 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     )
   }
 
-  private fun extractFilters(allParams: Map<String, String>): Map<String, String> {
+  private fun extractFilters(allParams: Map<String, String>): Map<ExternalMovementFilter, String> {
     return allParams
       .filterKeys { it.startsWith(FILTER_PARAM_PREFIX) }
       .filterValues { it.isNotBlank() }
-      .mapKeys { it.key.replace(FILTER_PARAM_PREFIX, "") }
+      .mapKeys { it.key.replace(FILTER_PARAM_PREFIX, "").uppercase() }
+      .filterKeys { key -> ExternalMovementFilter.values().map { it.toString() }.contains(key) }
+      .mapKeys { ExternalMovementFilter.valueOf(it.key) }
   }
 }

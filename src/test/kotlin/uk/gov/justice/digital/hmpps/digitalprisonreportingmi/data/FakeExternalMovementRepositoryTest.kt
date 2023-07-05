@@ -10,6 +10,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMo
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepositoryTest.AllMovements.externalMovement4
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepositoryTest.AllMovements.externalMovement5
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Collections.singletonMap
@@ -91,13 +92,13 @@ class FakeExternalMovementRepositoryTest {
 
   @Test
   fun `should return a count of inwards movements with an in direction filter`() {
-    val actual = externalMovementRepository.count(singletonMap("direction", "in"))
+    val actual = externalMovementRepository.count(singletonMap(DIRECTION, "in"))
     assertEquals(4L, actual)
   }
 
   @Test
   fun `should return a count of outwards movements with an out direction filter`() {
-    val actual = externalMovementRepository.count(singletonMap("direction", "out"))
+    val actual = externalMovementRepository.count(singletonMap(DIRECTION, "out"))
     assertEquals(1L, actual)
   }
 
