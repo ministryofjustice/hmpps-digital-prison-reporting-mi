@@ -84,6 +84,25 @@ class FakeExternalMovementRepositoryTest {
   fun `should return all external movements for the selected page and pageSize sorted by 'reason' when sortedAsc is true and when it is false`() =
     assertExternalMovements(sortColumn = "reason", expectedForAscending = externalMovement2, expectedForDescending = externalMovement1)
 
+
+  @Test
+  fun `should return a list of all results with no filters`() {
+    val actual = externalMovementRepository.list(1, 20, "date", true, emptyMap())
+    assertEquals(5, actual.size)
+  }
+
+  @Test
+  fun `should return a list of inwards movements with an in direction filter`() {
+    val actual = externalMovementRepository.list(1, 20, "date", true, singletonMap(DIRECTION, "in"))
+    assertEquals(4, actual.size)
+  }
+
+  @Test
+  fun `should return a list of outwards movements with an out direction filter`() {
+    val actual = externalMovementRepository.list(1, 20, "date", true, singletonMap(DIRECTION, "out"))
+    assertEquals(1, actual.size)
+  }
+
   @Test
   fun `should return a count of all results with no filters`() {
     val actual = externalMovementRepository.count(emptyMap())
