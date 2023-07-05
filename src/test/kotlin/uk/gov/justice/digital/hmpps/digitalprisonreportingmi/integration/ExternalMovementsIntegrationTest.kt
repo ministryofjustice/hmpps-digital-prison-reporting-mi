@@ -1,7 +1,12 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.web.util.UriBuilder
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 
 class ExternalMovementsIntegrationTest : IntegrationTestBase() {
 
@@ -68,6 +73,35 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       ]
       """,
       )
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    "In,  4",
+    "Out, 1",
+    ",    5"
+  )
+  fun `External movements returns filtered values`(direction: String?, numberOfResults: Int) {
+    val results = webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/external-movements")
+          .queryParam("filter.direction", direction?.lowercase())
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBodyList<ExternalMovement>()
+      .hasSize(numberOfResults)
+      .returnResult()
+      .responseBody
+
+    if (direction != null)
+      results?.forEach {
+        assertThat(it.direction).isEqualTo(direction)
+      }
   }
 
   @Test
