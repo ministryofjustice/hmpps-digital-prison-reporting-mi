@@ -12,6 +12,8 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
 
+private const val FILTER_PARAM_PREFIX = "filter."
+
 @Validated
 @RestController
 @Tag(name = "External Movements API")
@@ -22,8 +24,10 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     description = "Gets a count of external movements (mocked)",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
-  fun stubbedCount(): Count {
-    return Count(500)
+  fun stubbedCount(
+    @RequestParam allParams: Map<String, String>,
+  ): Count {
+    return externalMovementService.count(extractFilters(allParams))
   }
 
   @GetMapping("/external-movements")
@@ -40,7 +44,21 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     pageSize: Long?,
     @RequestParam("sortColumn") sortColumn: String?,
     @RequestParam("sortedAsc") sortedAsc: Boolean?,
+    @RequestParam allParams: Map<String, String>,
   ): List<ExternalMovement> {
-    return externalMovementService.externalMovements(selectedPage ?: 1, pageSize ?: 10, sortColumn ?: "date", sortedAsc ?: false)
+    return externalMovementService.list(
+      selectedPage = selectedPage ?: 1,
+      pageSize = pageSize ?: 10,
+      sortColumn = sortColumn ?: "date",
+      sortedAsc = sortedAsc ?: false,
+      filters = extractFilters(allParams)
+    )
+  }
+
+  private fun extractFilters(allParams: Map<String, String>): Map<String, String> {
+    return allParams
+      .filterKeys { it.startsWith(FILTER_PARAM_PREFIX) }
+      .filterValues { it.isNotBlank() }
+      .mapKeys { it.key.replace(FILTER_PARAM_PREFIX, "") }
   }
 }

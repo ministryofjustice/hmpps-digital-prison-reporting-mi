@@ -19,7 +19,29 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectStatus()
       .isOk
       .expectBody()
-      .jsonPath("count").isEqualTo("500")
+      .jsonPath("count").isEqualTo("5")
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    "In,  4",
+    "Out, 1",
+    ",    5"
+  )
+  fun `External movements count returns filtered value`(direction: String?, numberOfResults: Int) {
+    webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/external-movements/count")
+          .queryParam("filter.direction", direction?.lowercase())
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .jsonPath("count").isEqualTo(numberOfResults.toString())
   }
 
   @Test

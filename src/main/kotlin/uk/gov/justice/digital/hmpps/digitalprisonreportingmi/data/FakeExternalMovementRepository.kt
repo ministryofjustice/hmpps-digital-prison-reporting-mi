@@ -10,16 +10,16 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovem
 @Service
 class FakeExternalMovementRepository {
 
-  fun externalMovements(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean): List<ExternalMovement> {
-    val mapper = jacksonObjectMapper()
-    mapper.registerModule(JavaTimeModule())
-    return this::class.java.classLoader.getResource("fakeExternalMovementsData.json")?.readText()?.let {
-      sort(sortColumn, mapper.readValue<List<ExternalMovement>>(it), sortedAsc)
-        .stream()
-        .skip((selectedPage - 1) * pageSize)
-        .limit(pageSize)
-        .toList()
-    } ?: emptyList()
+  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<String, String>): List<ExternalMovement> {
+    return readExternalMovementsFromFile()
+      .filter { matchesFilters(it, filters) }
+      .let {
+        sort(sortColumn, it, sortedAsc)
+          .stream()
+          .skip((selectedPage - 1) * pageSize)
+          .limit(pageSize)
+          .toList()
+      } ?: emptyList()
   }
 
   private fun sort(sortColumn: String, allExternalMovements: List<ExternalMovement>, sortedAsc: Boolean): List<ExternalMovement> {
@@ -37,4 +37,19 @@ class FakeExternalMovementRepository {
       }
     return if (!sortedAsc) allExternalMovementsSorted.reversed() else allExternalMovementsSorted
   }
+
+  fun count(filters: Map<String, String>): Long {
+    return readExternalMovementsFromFile().count { matchesFilters(it, filters) }.toLong()
+  }
+
+  private fun readExternalMovementsFromFile(): List<ExternalMovement> {
+    val mapper = jacksonObjectMapper()
+    mapper.registerModule(JavaTimeModule())
+    return this::class.java.classLoader.getResource("fakeExternalMovementsData.json")!!
+      .readText()
+      .let { mapper.readValue<List<ExternalMovement>>(it) }
+  }
+
+  private fun matchesFilters(it: ExternalMovement, filters: Map<String, String>): Boolean =
+    filters["direction"]?.equals(it.direction.lowercase()) ?: true
 }

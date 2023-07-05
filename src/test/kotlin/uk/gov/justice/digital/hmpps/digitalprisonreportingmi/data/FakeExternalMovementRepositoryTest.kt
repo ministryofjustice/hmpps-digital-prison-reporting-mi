@@ -12,6 +12,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMo
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Collections.singletonMap
 
 class FakeExternalMovementRepositoryTest {
 
@@ -19,34 +20,34 @@ class FakeExternalMovementRepositoryTest {
 
   @Test
   fun `should return 2 external movements for the selected page 2 and pageSize 2 sorted by date in ascending order`() {
-    val actual = externalMovementRepository.externalMovements(2, 2, "date", true)
+    val actual = externalMovementRepository.list(2, 2, "date", true, emptyMap())
     assertEquals(listOf(externalMovement3, externalMovement4), actual)
     assertEquals(2, actual.size)
   }
 
   @Test
   fun `should return 1 external movement for the selected page 3 and pageSize 2 sorted by date in ascending order`() {
-    val actual = externalMovementRepository.externalMovements(3, 2, "date", true)
+    val actual = externalMovementRepository.list(3, 2, "date", true, emptyMap())
     assertEquals(listOf(externalMovement5), actual)
     assertEquals(1, actual.size)
   }
 
   @Test
   fun `should return 5 external movements for the selected page 1 and pageSize 5 sorted by date in ascending order`() {
-    val actual = externalMovementRepository.externalMovements(1, 5, "date", true)
+    val actual = externalMovementRepository.list(1, 5, "date", true, emptyMap())
     assertEquals(listOf(externalMovement1, externalMovement2, externalMovement3, externalMovement4, externalMovement5), actual)
     assertEquals(5, actual.size)
   }
 
   @Test
   fun `should return an empty list for the selected page 2 and pageSize 5 sorted by date in ascending order`() {
-    val actual = externalMovementRepository.externalMovements(2, 5, "date", true)
+    val actual = externalMovementRepository.list(2, 5, "date", true, emptyMap())
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
   @Test
   fun `should return an empty list for the selected page 6 and pageSize 1 sorted by date in ascending order`() {
-    val actual = externalMovementRepository.externalMovements(6, 1, "date", true)
+    val actual = externalMovementRepository.list(6, 1, "date", true, emptyMap())
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
@@ -82,6 +83,24 @@ class FakeExternalMovementRepositoryTest {
   fun `should return all external movements for the selected page and pageSize sorted by 'reason' when sortedAsc is true and when it is false`() =
     assertExternalMovements(sortColumn = "reason", expectedForAscending = externalMovement2, expectedForDescending = externalMovement1)
 
+  @Test
+  fun `should return a count of all results with no filters`() {
+    val actual = externalMovementRepository.count(emptyMap())
+    assertEquals(5L, actual)
+  }
+
+  @Test
+  fun `should return a count of inwards movements with an in direction filter`() {
+    val actual = externalMovementRepository.count(singletonMap("direction", "in"))
+    assertEquals(4L, actual)
+  }
+
+  @Test
+  fun `should return a count of outwards movements with an out direction filter`() {
+    val actual = externalMovementRepository.count(singletonMap("direction", "out"))
+    assertEquals(1L, actual)
+  }
+
   private fun assertExternalMovements(sortColumn: String, expectedForAscending: ExternalMovement, expectedForDescending: ExternalMovement): List<DynamicTest> {
     return listOf(
       true to listOf(expectedForAscending),
@@ -89,7 +108,7 @@ class FakeExternalMovementRepositoryTest {
     )
       .map { (sortedAsc, expected) ->
         DynamicTest.dynamicTest("When sorting by $sortColumn and sortedAsc is $sortedAsc the result is $expected") {
-          val actual = externalMovementRepository.externalMovements(1, 1, sortColumn, sortedAsc)
+          val actual = externalMovementRepository.list(1, 1, sortColumn, sortedAsc, emptyMap())
           assertEquals(expected, actual)
           assertEquals(1, actual.size)
         }
