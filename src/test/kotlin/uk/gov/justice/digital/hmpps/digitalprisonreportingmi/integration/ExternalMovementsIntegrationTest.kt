@@ -26,7 +26,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
   @CsvSource(
     "In,  4",
     "Out, 1",
-    ",    5"
+    ",    5",
   )
   fun `External movements count returns filtered value`(direction: String?, numberOfResults: Int) {
     webTestClient.get()
@@ -101,7 +101,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
   @CsvSource(
     "In,  4",
     "Out, 1",
-    ",    5"
+    ",    5",
   )
   fun `External movements returns filtered values`(direction: String?, numberOfResults: Int) {
     val results = webTestClient.get()
@@ -120,10 +120,11 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .returnResult()
       .responseBody
 
-    if (direction != null)
+    if (direction != null) {
       results?.forEach {
         assertThat(it.direction).isEqualTo(direction)
       }
+    }
   }
 
   @Test

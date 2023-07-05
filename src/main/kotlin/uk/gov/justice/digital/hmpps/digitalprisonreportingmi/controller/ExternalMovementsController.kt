@@ -52,7 +52,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
       pageSize = pageSize ?: 10,
       sortColumn = sortColumn ?: "date",
       sortedAsc = sortedAsc ?: false,
-      filters = extractFilters(allParams)
+      filters = extractFilters(allParams),
     )
   }
 
