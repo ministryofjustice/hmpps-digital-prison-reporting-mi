@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model
 enum class ExternalMovementFilter(private val paramName: String) {
-  DIRECTION("filter.direction");
+  DIRECTION("filter.direction"), ;
 
   companion object {
     fun paramNameMatches(paramName: String): Boolean =

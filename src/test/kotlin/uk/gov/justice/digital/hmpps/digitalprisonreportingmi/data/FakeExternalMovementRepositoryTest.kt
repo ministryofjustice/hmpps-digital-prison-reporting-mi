@@ -84,7 +84,6 @@ class FakeExternalMovementRepositoryTest {
   fun `should return all external movements for the selected page and pageSize sorted by 'reason' when sortedAsc is true and when it is false`() =
     assertExternalMovements(sortColumn = "reason", expectedForAscending = externalMovement2, expectedForDescending = externalMovement1)
 
-
   @Test
   fun `should return a list of all results with no filters`() {
     val actual = externalMovementRepository.list(1, 20, "date", true, emptyMap())
