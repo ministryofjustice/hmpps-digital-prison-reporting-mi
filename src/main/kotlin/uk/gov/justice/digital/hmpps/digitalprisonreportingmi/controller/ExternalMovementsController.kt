@@ -13,8 +13,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovem
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
 
-private const val FILTER_PARAM_PREFIX = "filter."
-
 @Validated
 @RestController
 @Tag(name = "External Movements API")
@@ -58,10 +56,8 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
 
   private fun extractFilters(allParams: Map<String, String>): Map<ExternalMovementFilter, String> {
     return allParams
-      .filterKeys { it.startsWith(FILTER_PARAM_PREFIX) }
       .filterValues { it.isNotBlank() }
-      .mapKeys { it.key.replace(FILTER_PARAM_PREFIX, "").uppercase() }
-      .filterKeys { key -> ExternalMovementFilter.values().map { it.toString() }.contains(key) }
-      .mapKeys { ExternalMovementFilter.valueOf(it.key) }
+      .filterKeys { ExternalMovementFilter.paramNameMatches(it) }
+      .mapKeys { ExternalMovementFilter.getFromParamName(it.key) }
   }
 }
