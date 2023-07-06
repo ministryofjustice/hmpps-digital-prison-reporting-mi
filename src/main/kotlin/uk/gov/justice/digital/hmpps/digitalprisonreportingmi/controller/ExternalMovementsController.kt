@@ -57,7 +57,8 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
 
   private fun createFilterMap(direction: String?): Map<ExternalMovementFilter, String> =
     buildMap {
-      if (!direction.isNullOrBlank())
+      if (!direction.isNullOrBlank()) {
         put(DIRECTION, direction)
+      }
     }
 }
