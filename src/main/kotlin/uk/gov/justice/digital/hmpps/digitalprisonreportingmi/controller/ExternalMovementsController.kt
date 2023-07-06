@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
 
 @Validated
@@ -24,9 +25,9 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
   fun stubbedCount(
-    @RequestParam allParams: Map<String, String>,
+    @RequestParam direction: String?,
   ): Count {
-    return externalMovementService.count(extractFilters(allParams))
+    return externalMovementService.count(createFilterMap(direction))
   }
 
   @GetMapping("/external-movements")
@@ -43,21 +44,20 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     pageSize: Long?,
     @RequestParam("sortColumn") sortColumn: String?,
     @RequestParam("sortedAsc") sortedAsc: Boolean?,
-    @RequestParam allParams: Map<String, String>,
+    @RequestParam direction: String?,
   ): List<ExternalMovement> {
     return externalMovementService.list(
       selectedPage = selectedPage ?: 1,
       pageSize = pageSize ?: 10,
       sortColumn = sortColumn ?: "date",
       sortedAsc = sortedAsc ?: false,
-      filters = extractFilters(allParams),
+      filters = createFilterMap(direction),
     )
   }
 
-  private fun extractFilters(allParams: Map<String, String>): Map<ExternalMovementFilter, String> {
-    return allParams
-      .filterValues { it.isNotBlank() }
-      .filterKeys { ExternalMovementFilter.paramNameMatches(it) }
-      .mapKeys { ExternalMovementFilter.getFromParamName(it.key) }
-  }
+  private fun createFilterMap(direction: String?): Map<ExternalMovementFilter, String> =
+    buildMap {
+      if (!direction.isNullOrBlank())
+        put(DIRECTION, direction)
+    }
 }

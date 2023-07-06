@@ -33,7 +33,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/external-movements/count")
-          .queryParam("filter.direction", direction?.lowercase())
+          .queryParam("direction", direction?.lowercase())
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
@@ -108,7 +108,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/external-movements")
-          .queryParam("filter.direction", direction?.lowercase())
+          .queryParam("direction", direction?.lowercase())
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
