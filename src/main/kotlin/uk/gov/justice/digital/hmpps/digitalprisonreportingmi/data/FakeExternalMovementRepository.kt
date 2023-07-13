@@ -57,6 +57,6 @@ class FakeExternalMovementRepository {
 
   private fun matchesFilters(externalMovement: ExternalMovement, filters: Map<ExternalMovementFilter, String>): Boolean =
     filters[DIRECTION]?.equals(externalMovement.direction.lowercase()) ?: true &&
-      filters[START_DATE]?.let { LocalDate.parse(it).isBefore(externalMovement.date) } ?: true &&
-      filters[END_DATE]?.let { LocalDate.parse(it).isAfter(externalMovement.date) } ?: true
+      filters[START_DATE]?.let { LocalDate.parse(it) }?.let { it.isEqual(externalMovement.date) || it.isBefore(externalMovement.date) } ?: true &&
+      filters[END_DATE]?.let { LocalDate.parse(it) }?.let { it.isEqual(externalMovement.date) || it.isAfter(externalMovement.date) } ?: true
 }

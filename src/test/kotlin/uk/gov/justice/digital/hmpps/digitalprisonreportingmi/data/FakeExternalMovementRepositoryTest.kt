@@ -123,37 +123,37 @@ class FakeExternalMovementRepositoryTest {
   }
 
   @Test
-  fun `should return all the movements after the provided start date`() {
+  fun `should return all the movements on or after the provided start date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(START_DATE, "2023-04-30"))
-    assertEquals(listOf(externalMovement5, externalMovement4), actual)
+    assertEquals(listOf(externalMovement5, externalMovement4, externalMovement3), actual)
   }
 
   @Test
-  fun `should return all the movements before the provided end date`() {
+  fun `should return all the movements on or before the provided end date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(END_DATE, "2023-04-25"))
-    assertEquals(listOf(externalMovement1), actual)
+    assertEquals(listOf(externalMovement2, externalMovement1), actual)
   }
 
   @Test
   fun `should return all the movements between the provided start and end dates`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, mapOf(START_DATE to "2023-04-25", END_DATE to "2023-05-20"))
-    assertEquals(listOf(externalMovement4, externalMovement3), actual)
+    assertEquals(listOf(externalMovement5, externalMovement4, externalMovement3, externalMovement2), actual)
   }
 
   @Test
-  fun `should retund no movements if the start date is after the latest movement date`() {
+  fun `should return no movements if the start date is after the latest movement date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(START_DATE, "2025-01-01"))
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
   @Test
-  fun `should retund no movements if the end date is before the earliest movement date`() {
+  fun `should return no movements if the end date is before the earliest movement date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(END_DATE, "2015-01-01"))
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
   @Test
-  fun `should retund no movements if the start date is after the end date`() {
+  fun `should return no movements if the start date is after the end date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, mapOf(START_DATE to "2023-05-01", END_DATE to "2023-04-25"))
     assertEquals(emptyList<ExternalMovement>(), actual)
   }
