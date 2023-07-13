@@ -139,6 +139,7 @@ class FakeExternalMovementRepositoryTest {
     val actual = externalMovementRepository.count(mapOf(START_DATE to "2023-04-30", END_DATE to "2023-05-01"))
     assertEquals(2, actual)
   }
+
   @Test
   fun `should return a count of zero with a startDate greater than the latest movement date`() {
     val actual = externalMovementRepository.count(mapOf(START_DATE to "2025-04-30"))
