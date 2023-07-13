@@ -129,37 +129,47 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
 
   @Test
   fun `External movements returns 400 for invalid selectedPage query param`() {
-    requestWithQueryAndAssert400("selectedPage", 0)
+    requestWithQueryAndAssert400("selectedPage", 0, "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid pageSize query param`() {
-    requestWithQueryAndAssert400("pageSize", 0)
+    requestWithQueryAndAssert400("pageSize", 0, "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid (wrong type) pageSize query param`() {
-    requestWithQueryAndAssert400("pageSize", "a")
+    requestWithQueryAndAssert400("pageSize", "a", "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid sortColumn query param`() {
-    requestWithQueryAndAssert400("sortColumn", "nonExistentColumn")
+    requestWithQueryAndAssert400("sortColumn", "nonExistentColumn", "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid sortedAsc query param`() {
-    requestWithQueryAndAssert400("sortedAsc", "abc")
+    requestWithQueryAndAssert400("sortedAsc", "abc", "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid startDate query param`() {
-    requestWithQueryAndAssert400("startDate", "abc")
+    requestWithQueryAndAssert400("startDate", "abc", "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("endDate", " ")
+    requestWithQueryAndAssert400("endDate", " ", "/external-movements")
+  }
+
+  @Test
+  fun `External movements count returns 400 for invalid startDate query param`() {
+    requestWithQueryAndAssert400("startDate", "a", "/external-movements/count")
+  }
+
+  @Test
+  fun `External movements count returns 400 for invalid endDate query param`() {
+    requestWithQueryAndAssert400("endDate", "17-12-2050", "/external-movements/count")
   }
 
   @Test
@@ -186,11 +196,11 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       )
   }
 
-  private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any) {
+  private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any, path: String) {
     webTestClient.get()
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
-          .path("/external-movements")
+          .path(path)
           .queryParam(paramName, paramValue)
           .build()
       }
