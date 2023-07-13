@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import java.time.format.DateTimeParseException
 
 @RestControllerAdvice
 class DigitalPrisonReportingMiExceptionHandler {
@@ -22,6 +23,11 @@ class DigitalPrisonReportingMiExceptionHandler {
   @Suppress("TYPE_MISMATCH")
   @ExceptionHandler(MethodArgumentTypeMismatchException::class)
   fun handleTypeMismatch(e: Exception): ResponseEntity<ErrorResponse> {
+    return respondWithBadRequest(e)
+  }
+
+  @ExceptionHandler(DateTimeParseException::class)
+  fun handleDateTimeParseException(e: Exception): ResponseEntity<ErrorResponse> {
     return respondWithBadRequest(e)
   }
 

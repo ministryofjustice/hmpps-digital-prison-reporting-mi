@@ -11,6 +11,8 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMo
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepositoryTest.AllMovements.externalMovement5
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.END_DATE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.START_DATE
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Collections.singletonMap
@@ -118,6 +120,42 @@ class FakeExternalMovementRepositoryTest {
   fun `should return a count of outwards movements with an out direction filter`() {
     val actual = externalMovementRepository.count(singletonMap(DIRECTION, "out"))
     assertEquals(1L, actual)
+  }
+
+  @Test
+  fun `should return all the movements after the provided start date`() {
+    val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(START_DATE, "2023-04-30"))
+    assertEquals(listOf(externalMovement5, externalMovement4), actual)
+  }
+
+  @Test
+  fun `should return all the movements before the provided end date`() {
+    val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(END_DATE, "2023-04-25"))
+    assertEquals(listOf(externalMovement1), actual)
+  }
+
+  @Test
+  fun `should return all the movements between the provided start and end dates`() {
+    val actual = externalMovementRepository.list(1, 10, "date", false, mapOf(START_DATE to "2023-04-25", END_DATE to "2023-05-20"))
+    assertEquals(listOf(externalMovement4, externalMovement3), actual)
+  }
+
+  @Test
+  fun `should retund no movements if the start date is after the latest movement date`() {
+    val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(START_DATE, "2025-01-01"))
+    assertEquals(emptyList<ExternalMovement>(), actual)
+  }
+
+  @Test
+  fun `should retund no movements if the end date is before the earliest movement date`() {
+    val actual = externalMovementRepository.list(1, 10, "date", false, singletonMap(END_DATE, "2015-01-01"))
+    assertEquals(emptyList<ExternalMovement>(), actual)
+  }
+
+  @Test
+  fun `should retund no movements if the start date is after the end date`() {
+    val actual = externalMovementRepository.list(1, 10, "date", false, mapOf(START_DATE to "2023-05-01", END_DATE to "2023-04-25"))
+    assertEquals(emptyList<ExternalMovement>(), actual)
   }
 
   private fun assertExternalMovements(sortColumn: String, expectedForAscending: ExternalMovement, expectedForDescending: ExternalMovement): List<DynamicTest> {

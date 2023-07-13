@@ -151,6 +151,41 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
   fun `External movements returns 400 for invalid sortedAsc query param`() {
     requestWithQueryAndAssert400("sortedAsc", "abc")
   }
+
+  @Test
+  fun `External movements returns 400 for invalid startDate query param`() {
+    requestWithQueryAndAssert400("startDate", "abc")
+  }
+
+  @Test
+  fun `External movements returns 400 for invalid endDate query param`() {
+    requestWithQueryAndAssert400("endDate", " ")
+  }
+
+  @Test
+  fun `External movements returns stubbed value matching the filters provided`() {
+    webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/external-movements")
+          .queryParam("startDate", "2023-04-25")
+          .queryParam("endDate", "2023-05-20")
+          .queryParam("direction", "out")
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .json(
+        """[
+         {"prisonNumber": "Z966YYY", "date": "2023-05-01", "time": "15:19:00", "from": "Cardiff", "to": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
+      ]       
+      """,
+      )
+  }
+
   private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any) {
     webTestClient.get()
       .uri { uriBuilder: UriBuilder ->

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.END_DATE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.START_DATE
+import java.time.LocalDate
 
 @Service
 class FakeExternalMovementRepository {
@@ -47,11 +50,13 @@ class FakeExternalMovementRepository {
   private fun readExternalMovementsFromFile(): List<ExternalMovement> {
     val mapper = jacksonObjectMapper()
     mapper.registerModule(JavaTimeModule())
-    return this::class.java.classLoader.getResource("fakeExternalMovementsData.json")!!
-      .readText()
-      .let { mapper.readValue<List<ExternalMovement>>(it) }
+    return this::class.java.classLoader.getResource("fakeExternalMovementsData.json")
+      ?.readText()
+      ?.let { mapper.readValue<List<ExternalMovement>>(it) } ?: emptyList()
   }
 
-  private fun matchesFilters(it: ExternalMovement, filters: Map<ExternalMovementFilter, String>): Boolean =
-    filters[DIRECTION]?.equals(it.direction.lowercase()) ?: true
+  private fun matchesFilters(externalMovement: ExternalMovement, filters: Map<ExternalMovementFilter, String>): Boolean =
+    filters[DIRECTION]?.equals(externalMovement.direction.lowercase()) ?: true &&
+      filters[START_DATE]?.let { LocalDate.parse(it).isBefore(externalMovement.date) } ?: true &&
+      filters[END_DATE]?.let { LocalDate.parse(it).isAfter(externalMovement.date) } ?: true
 }

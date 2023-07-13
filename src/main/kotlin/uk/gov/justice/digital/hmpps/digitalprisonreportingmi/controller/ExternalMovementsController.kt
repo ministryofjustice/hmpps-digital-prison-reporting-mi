@@ -12,6 +12,8 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.END_DATE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.START_DATE
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
 
 @Validated
@@ -26,8 +28,10 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
   )
   fun stubbedCount(
     @RequestParam direction: String?,
+    @RequestParam startDate: String?,
+    @RequestParam endDate: String?,
   ): Count {
-    return externalMovementService.count(createFilterMap(direction))
+    return externalMovementService.count(createFilterMap(direction, startDate, endDate))
   }
 
   @GetMapping("/external-movements")
@@ -45,20 +49,22 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     @RequestParam(defaultValue = "date") sortColumn: String,
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
     @RequestParam direction: String?,
+    @RequestParam startDate: String?,
+    @RequestParam endDate: String?,
   ): List<ExternalMovement> {
     return externalMovementService.list(
       selectedPage = selectedPage,
       pageSize = pageSize,
       sortColumn = sortColumn,
       sortedAsc = sortedAsc,
-      filters = createFilterMap(direction),
+      filters = createFilterMap(direction, startDate, endDate),
     )
   }
 
-  private fun createFilterMap(direction: String?): Map<ExternalMovementFilter, String> =
+  private fun createFilterMap(direction: String?, startDate: String?, endDate: String?): Map<ExternalMovementFilter, String> =
     buildMap {
-      if (!direction.isNullOrBlank()) {
-        put(DIRECTION, direction)
-      }
+      direction?.ifEmpty { null }?.let { put(DIRECTION, it) }
+      startDate?.ifEmpty { null }?.let { put(START_DATE, it) }
+      endDate?.ifEmpty { null }?.let { put(END_DATE, it) }
     }
 }
