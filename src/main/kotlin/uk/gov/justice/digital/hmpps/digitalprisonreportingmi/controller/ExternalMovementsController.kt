@@ -64,7 +64,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
 
   private fun createFilterMap(direction: String?, startDate: LocalDate?, endDate: LocalDate?): Map<ExternalMovementFilter, Any> =
     buildMap {
-      direction?.trim()?.ifEmpty { null }?.let { put(DIRECTION, it) }
+      direction?.trim()?.let { if (it.isNotEmpty()) put(DIRECTION, it) }
       startDate?.let { put(START_DATE, it) }
       endDate?.let { put(END_DATE, it) }
     }
