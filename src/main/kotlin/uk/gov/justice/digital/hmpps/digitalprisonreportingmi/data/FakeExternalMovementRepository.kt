@@ -15,7 +15,7 @@ import java.time.LocalDate
 @Service
 class FakeExternalMovementRepository {
 
-  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, String>): List<ExternalMovement> {
+  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovement> {
     return readExternalMovementsFromFile()
       .filter { matchesFilters(it, filters) }
       .let {
@@ -43,7 +43,7 @@ class FakeExternalMovementRepository {
     return if (!sortedAsc) allExternalMovementsSorted.reversed() else allExternalMovementsSorted
   }
 
-  fun count(filters: Map<ExternalMovementFilter, String>): Long {
+  fun count(filters: Map<ExternalMovementFilter, Any>): Long {
     return readExternalMovementsFromFile().count { matchesFilters(it, filters) }.toLong()
   }
 
@@ -55,8 +55,8 @@ class FakeExternalMovementRepository {
       ?.let { mapper.readValue<List<ExternalMovement>>(it) } ?: emptyList()
   }
 
-  private fun matchesFilters(externalMovement: ExternalMovement, filters: Map<ExternalMovementFilter, String>): Boolean =
+  private fun matchesFilters(externalMovement: ExternalMovement, filters: Map<ExternalMovementFilter, Any>): Boolean =
     filters[DIRECTION]?.equals(externalMovement.direction.lowercase()) ?: true &&
-      filters[START_DATE]?.let { LocalDate.parse(it) }?.let { it.isEqual(externalMovement.date) || it.isBefore(externalMovement.date) } ?: true &&
-      filters[END_DATE]?.let { LocalDate.parse(it) }?.let { it.isEqual(externalMovement.date) || it.isAfter(externalMovement.date) } ?: true
+      filters[START_DATE]?.let { it as LocalDate }?.let { it.isEqual(externalMovement.date) || it.isBefore(externalMovement.date) } ?: true &&
+      filters[END_DATE]?.let { it as LocalDate }?.let { it.isEqual(externalMovement.date) || it.isAfter(externalMovement.date) } ?: true
 }

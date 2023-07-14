@@ -159,7 +159,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
 
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("endDate", " ", "/external-movements")
+    requestWithQueryAndAssert400("endDate", "b", "/external-movements")
   }
 
   @Test

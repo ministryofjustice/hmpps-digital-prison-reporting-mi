@@ -9,11 +9,11 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovem
 @Service
 data class ExternalMovementService(val fakeExternalMovementRepository: FakeExternalMovementRepository) {
 
-  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, String>): List<ExternalMovement> {
+  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovement> {
     return fakeExternalMovementRepository.list(selectedPage, pageSize, sortColumn, sortedAsc, filters)
   }
 
-  fun count(filters: Map<ExternalMovementFilter, String>): Count {
+  fun count(filters: Map<ExternalMovementFilter, Any>): Count {
     return Count(fakeExternalMovementRepository.count(filters))
   }
 }
