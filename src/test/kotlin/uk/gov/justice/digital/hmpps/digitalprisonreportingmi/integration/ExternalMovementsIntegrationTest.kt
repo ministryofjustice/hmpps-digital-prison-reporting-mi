@@ -129,33 +129,78 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
 
   @Test
   fun `External movements returns 400 for invalid selectedPage query param`() {
-    requestWithQueryAndAssert400("selectedPage", 0)
+    requestWithQueryAndAssert400("selectedPage", 0, "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid pageSize query param`() {
-    requestWithQueryAndAssert400("pageSize", 0)
+    requestWithQueryAndAssert400("pageSize", 0, "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid (wrong type) pageSize query param`() {
-    requestWithQueryAndAssert400("pageSize", "a")
+    requestWithQueryAndAssert400("pageSize", "a", "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid sortColumn query param`() {
-    requestWithQueryAndAssert400("sortColumn", "nonExistentColumn")
+    requestWithQueryAndAssert400("sortColumn", "nonExistentColumn", "/external-movements")
   }
 
   @Test
   fun `External movements returns 400 for invalid sortedAsc query param`() {
-    requestWithQueryAndAssert400("sortedAsc", "abc")
+    requestWithQueryAndAssert400("sortedAsc", "abc", "/external-movements")
   }
-  private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any) {
+
+  @Test
+  fun `External movements returns 400 for invalid startDate query param`() {
+    requestWithQueryAndAssert400("startDate", "abc", "/external-movements")
+  }
+
+  @Test
+  fun `External movements returns 400 for invalid endDate query param`() {
+    requestWithQueryAndAssert400("endDate", "b", "/external-movements")
+  }
+
+  @Test
+  fun `External movements count returns 400 for invalid startDate query param`() {
+    requestWithQueryAndAssert400("startDate", "a", "/external-movements/count")
+  }
+
+  @Test
+  fun `External movements count returns 400 for invalid endDate query param`() {
+    requestWithQueryAndAssert400("endDate", "17-12-2050", "/external-movements/count")
+  }
+
+  @Test
+  fun `External movements returns stubbed value matching the filters provided`() {
     webTestClient.get()
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/external-movements")
+          .queryParam("startDate", "2023-04-25")
+          .queryParam("endDate", "2023-05-20")
+          .queryParam("direction", "out")
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .json(
+        """[
+         {"prisonNumber": "Z966YYY", "date": "2023-05-01", "time": "15:19:00", "from": "Cardiff", "to": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
+      ]       
+      """,
+      )
+  }
+
+  private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any, path: String) {
+    webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path(path)
           .queryParam(paramName, paramValue)
           .build()
       }

@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.END_DATE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.START_DATE
+import java.time.LocalDate
 
 @Service
 class FakeExternalMovementRepository {
 
-  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, String>): List<ExternalMovement> {
+  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovement> {
     return readExternalMovementsFromFile()
       .filter { matchesFilters(it, filters) }
       .let {
@@ -40,18 +43,20 @@ class FakeExternalMovementRepository {
     return if (!sortedAsc) allExternalMovementsSorted.reversed() else allExternalMovementsSorted
   }
 
-  fun count(filters: Map<ExternalMovementFilter, String>): Long {
+  fun count(filters: Map<ExternalMovementFilter, Any>): Long {
     return readExternalMovementsFromFile().count { matchesFilters(it, filters) }.toLong()
   }
 
   private fun readExternalMovementsFromFile(): List<ExternalMovement> {
     val mapper = jacksonObjectMapper()
     mapper.registerModule(JavaTimeModule())
-    return this::class.java.classLoader.getResource("fakeExternalMovementsData.json")!!
-      .readText()
-      .let { mapper.readValue<List<ExternalMovement>>(it) }
+    return this::class.java.classLoader.getResource("fakeExternalMovementsData.json")
+      ?.readText()
+      ?.let { mapper.readValue<List<ExternalMovement>>(it) } ?: emptyList()
   }
 
-  private fun matchesFilters(it: ExternalMovement, filters: Map<ExternalMovementFilter, String>): Boolean =
-    filters[DIRECTION]?.equals(it.direction.lowercase()) ?: true
+  private fun matchesFilters(externalMovement: ExternalMovement, filters: Map<ExternalMovementFilter, Any>): Boolean =
+    filters[DIRECTION]?.equals(externalMovement.direction.lowercase()) ?: true &&
+      filters[START_DATE]?.let { it as LocalDate }?.let { it.isEqual(externalMovement.date) || it.isBefore(externalMovement.date) } ?: true &&
+      filters[END_DATE]?.let { it as LocalDate }?.let { it.isEqual(externalMovement.date) || it.isAfter(externalMovement.date) } ?: true
 }

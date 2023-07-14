@@ -12,7 +12,10 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.END_DATE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.START_DATE
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
+import java.time.LocalDate
 
 @Validated
 @RestController
@@ -26,8 +29,10 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
   )
   fun stubbedCount(
     @RequestParam direction: String?,
+    @RequestParam startDate: LocalDate?,
+    @RequestParam endDate: LocalDate?,
   ): Count {
-    return externalMovementService.count(createFilterMap(direction))
+    return externalMovementService.count(createFilterMap(direction, startDate, endDate))
   }
 
   @GetMapping("/external-movements")
@@ -45,20 +50,22 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     @RequestParam(defaultValue = "date") sortColumn: String,
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
     @RequestParam direction: String?,
+    @RequestParam startDate: LocalDate?,
+    @RequestParam endDate: LocalDate?,
   ): List<ExternalMovement> {
     return externalMovementService.list(
       selectedPage = selectedPage,
       pageSize = pageSize,
       sortColumn = sortColumn,
       sortedAsc = sortedAsc,
-      filters = createFilterMap(direction),
+      filters = createFilterMap(direction, startDate, endDate),
     )
   }
 
-  private fun createFilterMap(direction: String?): Map<ExternalMovementFilter, String> =
+  private fun createFilterMap(direction: String?, startDate: LocalDate?, endDate: LocalDate?): Map<ExternalMovementFilter, Any> =
     buildMap {
-      if (!direction.isNullOrBlank()) {
-        put(DIRECTION, direction)
-      }
+      direction?.trim()?.let { if (it.isNotEmpty()) put(DIRECTION, it) }
+      startDate?.let { put(START_DATE, it) }
+      endDate?.let { put(END_DATE, it) }
     }
 }
