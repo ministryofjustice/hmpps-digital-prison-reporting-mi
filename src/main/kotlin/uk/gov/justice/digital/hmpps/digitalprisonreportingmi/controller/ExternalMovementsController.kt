@@ -31,9 +31,11 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
   fun stubbedCount(
     @RequestParam direction: String?,
     @Parameter(description = "The start date (inclusive) from which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
-    @RequestParam startDate: LocalDate?,
+    @RequestParam
+    startDate: LocalDate?,
     @Parameter(description = "The end date (inclusive) up to which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
-    @RequestParam endDate: LocalDate?,
+    @RequestParam
+    endDate: LocalDate?,
   ): Count {
     return externalMovementService.count(createFilterMap(direction, startDate, endDate))
   }
@@ -54,9 +56,11 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
     @RequestParam direction: String?,
     @Parameter(description = "The start date (inclusive) from which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
-    @RequestParam startDate: LocalDate?,
+    @RequestParam
+    startDate: LocalDate?,
     @Parameter(description = "The end date (inclusive) up to which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
-    @RequestParam endDate: LocalDate?,
+    @RequestParam
+    endDate: LocalDate?,
   ): List<ExternalMovement> {
     return externalMovementService.list(
       selectedPage = selectedPage,
