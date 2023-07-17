@@ -153,23 +153,23 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
   }
 
   @Test
-  fun `External movements returns 400 for invalid startDate query param`() {
-    requestWithQueryAndAssert400("startDate", "abc", "/external-movements")
+  fun `External movements returns 400 for invalid start date query param`() {
+    requestWithQueryAndAssert400("date.start", "abc", "/external-movements")
   }
 
   @Test
-  fun `External movements returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("endDate", "b", "/external-movements")
+  fun `External movements returns 400 for invalid end date query param`() {
+    requestWithQueryAndAssert400("date.end", "b", "/external-movements")
   }
 
   @Test
-  fun `External movements count returns 400 for invalid startDate query param`() {
-    requestWithQueryAndAssert400("startDate", "a", "/external-movements/count")
+  fun `External movements count returns 400 for invalid start date query param`() {
+    requestWithQueryAndAssert400("date.start", "a", "/external-movements/count")
   }
 
   @Test
-  fun `External movements count returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("endDate", "17-12-2050", "/external-movements/count")
+  fun `External movements count returns 400 for invalid end date query param`() {
+    requestWithQueryAndAssert400("date.end", "17-12-2050", "/external-movements/count")
   }
 
   @Test
@@ -178,8 +178,8 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/external-movements")
-          .queryParam("startDate", "2023-04-25")
-          .queryParam("endDate", "2023-05-20")
+          .queryParam("date.start", "2023-04-25")
+          .queryParam("date.end", "2023-05-20")
           .queryParam("direction", "out")
           .build()
       }
