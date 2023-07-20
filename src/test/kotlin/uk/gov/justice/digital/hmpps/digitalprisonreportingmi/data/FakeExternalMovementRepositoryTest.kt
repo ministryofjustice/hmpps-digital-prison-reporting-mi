@@ -99,8 +99,20 @@ class FakeExternalMovementRepositoryTest {
   }
 
   @Test
+  fun `should return a list of inwards movements with an in direction filter regardless of the casing`() {
+    val actual = externalMovementRepository.list(1, 20, "date", true, singletonMap(DIRECTION, "In"))
+    assertEquals(4, actual.size)
+  }
+
+  @Test
   fun `should return a list of outwards movements with an out direction filter`() {
     val actual = externalMovementRepository.list(1, 20, "date", true, singletonMap(DIRECTION, "out"))
+    assertEquals(1, actual.size)
+  }
+
+  @Test
+  fun `should return a list of outwards movements with an out direction filter regardless of the casing`() {
+    val actual = externalMovementRepository.list(1, 20, "date", true, singletonMap(DIRECTION, "Out"))
     assertEquals(1, actual.size)
   }
 
