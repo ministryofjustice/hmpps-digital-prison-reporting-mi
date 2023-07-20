@@ -55,7 +55,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     @RequestParam(defaultValue = "date") sortColumn: String,
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
     @RequestParam
-    @Parameter(description = "The direction to filter. It can be either In or Out" , example = "In")
+    @Parameter(description = "The direction to filter. It can be either In or Out", example = "In")
     direction: String?,
     @Parameter(description = "The start date (inclusive) from which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
     @RequestParam
