@@ -4,6 +4,11 @@
 generic-service:
   ingress:
     host: digital-prison-reporting-mi.hmpps.service.justice.gov.uk
+  env:
+    APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
+    REDSHIFT_JDBC_URL: jdbc:redshift://
+    HMPPS_AUTH_URL: https://sign-in.hmpps.service.justice.gov.uk/auth
+    AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
