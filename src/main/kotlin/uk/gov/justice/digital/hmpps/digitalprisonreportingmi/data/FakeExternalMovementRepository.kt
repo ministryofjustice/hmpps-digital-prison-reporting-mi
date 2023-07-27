@@ -34,8 +34,8 @@ class FakeExternalMovementRepository {
         "time" -> allExternalMovements.sortedBy { it.time }
         "prisonNumber" -> allExternalMovements.sortedBy { it.prisonNumber }
         "direction" -> allExternalMovements.sortedBy { it.direction }
-        "from" -> allExternalMovements.sortedBy { it.from }
-        "to" -> allExternalMovements.sortedBy { it.to }
+        "origin" -> allExternalMovements.sortedBy { it.origin }
+        "destination" -> allExternalMovements.sortedBy { it.destination }
         "type" -> allExternalMovements.sortedBy { it.type }
         "reason" -> allExternalMovements.sortedBy { it.reason }
         else -> throw ValidationException("Invalid sort column $sortColumn")

@@ -8,6 +8,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.FakeExternalMovementRepositoryTest.AllMovements.allExternalMovements
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
@@ -16,7 +17,8 @@ import java.util.Collections.singletonMap
 class ExternalMovementServiceTest {
 
   private val fakeExternalMovementRepository: FakeExternalMovementRepository = mock<FakeExternalMovementRepository>()
-  private val externalMovementService = ExternalMovementService(fakeExternalMovementRepository)
+  private val externalMovementRepository: ExternalMovementRepository = mock<ExternalMovementRepository>()
+  private val externalMovementService = ExternalMovementService(fakeExternalMovementRepository, externalMovementRepository)
 
   @BeforeEach
   fun setup() {

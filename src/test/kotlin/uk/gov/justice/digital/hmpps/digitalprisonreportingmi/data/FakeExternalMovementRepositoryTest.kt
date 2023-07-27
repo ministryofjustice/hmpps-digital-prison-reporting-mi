@@ -68,11 +68,11 @@ class FakeExternalMovementRepositoryTest {
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'from' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "from", expectedForAscending = externalMovement4, expectedForDescending = externalMovement3)
+    assertExternalMovements(sortColumn = "origin", expectedForAscending = externalMovement4, expectedForDescending = externalMovement3)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'to' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "to", expectedForAscending = externalMovement3, expectedForDescending = externalMovement2)
+    assertExternalMovements(sortColumn = "destination", expectedForAscending = externalMovement3, expectedForDescending = externalMovement2)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'direction' when sortedAsc is true and when it is false`() =
@@ -221,6 +221,7 @@ class FakeExternalMovementRepositoryTest {
   }
   object AllMovements {
     val externalMovement1 = ExternalMovement(
+      1,
       "N9980PJ",
       LocalDate.of(2023, 1, 31),
       LocalTime.of(3, 1),
@@ -231,6 +232,7 @@ class FakeExternalMovementRepositoryTest {
       "Unconvicted Remand",
     )
     val externalMovement2 = ExternalMovement(
+      2,
       "Q9660WX",
       LocalDate.of(2023, 4, 25),
       LocalTime.of(12, 19),
@@ -241,6 +243,7 @@ class FakeExternalMovementRepositoryTest {
       "Transfer In from Other Establishment",
     )
     val externalMovement3 = ExternalMovement(
+      3,
       "A966ZZZ",
       LocalDate.of(2023, 4, 30),
       LocalTime.of(13, 19),
@@ -251,6 +254,7 @@ class FakeExternalMovementRepositoryTest {
       "Transfer In from Other Establishment",
     )
     val externalMovement4 = ExternalMovement(
+      4,
       "Z966YYY",
       LocalDate.of(2023, 5, 1),
       LocalTime.of(15, 19),
@@ -261,6 +265,7 @@ class FakeExternalMovementRepositoryTest {
       "Transfer Out to Other Establishment",
     )
     val externalMovement5 = ExternalMovement(
+      5,
       "Q966ABC",
       LocalDate.of(2023, 5, 20),
       LocalTime.of(14, 0),
