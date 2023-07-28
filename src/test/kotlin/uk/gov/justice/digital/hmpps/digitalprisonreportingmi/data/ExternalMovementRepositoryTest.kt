@@ -35,7 +35,7 @@ class ExternalMovementRepositoryTest {
   object AllMovements {
     val externalMovement1 = ExternalMovement(
       1,
-      "N9980PJ",
+      8894,
       LocalDate.of(2023, 1, 31),
       LocalTime.of(3, 1),
       "Ranby",
@@ -46,7 +46,7 @@ class ExternalMovementRepositoryTest {
     )
     val externalMovement2 = ExternalMovement(
       2,
-      "Q9660WX",
+      5207,
       LocalDate.of(2023, 4, 25),
       LocalTime.of(12, 19),
       "Elmley",
@@ -57,7 +57,7 @@ class ExternalMovementRepositoryTest {
     )
     val externalMovement3 = ExternalMovement(
       3,
-      "A966ZZZ",
+      4800,
       LocalDate.of(2023, 4, 30),
       LocalTime.of(13, 19),
       "Wakefield",
@@ -68,7 +68,7 @@ class ExternalMovementRepositoryTest {
     )
     val externalMovement4 = ExternalMovement(
       4,
-      "Z966YYY",
+      7849,
       LocalDate.of(2023, 5, 1),
       LocalTime.of(15, 19),
       "Cardiff",
@@ -79,7 +79,7 @@ class ExternalMovementRepositoryTest {
     )
     val externalMovement5 = ExternalMovement(
       5,
-      "Q966ABC",
+      6851,
       LocalDate.of(2023, 5, 20),
       LocalTime.of(14, 0),
       "Isle of Wight",

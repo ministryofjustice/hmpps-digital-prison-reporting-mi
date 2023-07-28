@@ -9,7 +9,7 @@ import java.time.LocalTime
 @Table(name = "movement_movements", schema = "domain")
 data class ExternalMovement(
   @Id val id: Long,
-  val prisonNumber: String,
+  val prisoner: Long,
   val date: LocalDate,
   val time: LocalTime,
   val origin: String,

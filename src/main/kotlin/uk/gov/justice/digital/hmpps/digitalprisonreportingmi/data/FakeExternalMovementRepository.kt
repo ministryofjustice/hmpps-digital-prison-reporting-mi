@@ -32,7 +32,7 @@ class FakeExternalMovementRepository {
       when (sortColumn) {
         "date" -> allExternalMovements.sortedBy { it.date }
         "time" -> allExternalMovements.sortedBy { it.time }
-        "prisonNumber" -> allExternalMovements.sortedBy { it.prisonNumber }
+        "prisoner" -> allExternalMovements.sortedBy { it.prisoner }
         "direction" -> allExternalMovements.sortedBy { it.direction }
         "origin" -> allExternalMovements.sortedBy { it.origin }
         "destination" -> allExternalMovements.sortedBy { it.destination }

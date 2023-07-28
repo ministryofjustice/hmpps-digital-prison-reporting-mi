@@ -63,9 +63,9 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-        {"prisonNumber":"Q966ABC","date":"2023-05-20","time":"14:00:00","origin":"Isle of Wight","destination":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"Z966YYY","date":"2023-05-01","time":"15:19:00","origin":"Cardiff","destination":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"A966ZZZ","date":"2023-04-30","time":"13:19:00","origin":"Wakefield","destination":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
+        {"prisoner":6851,"date":"2023-05-20","time":"14:00:00","origin":"Isle of Wight","destination":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisoner":7849,"date":"2023-05-01","time":"15:19:00","origin":"Cardiff","destination":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"prisoner":4800,"date":"2023-04-30","time":"13:19:00","origin":"Wakefield","destination":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
       ]       
       """,
       )
@@ -87,11 +87,11 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .json(
         """
       [
-        {"prisonNumber":"Q966ABC","date":"2023-05-20","time":"14:00:00","origin":"Isle of Wight","destination":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"Z966YYY","date":"2023-05-01","time":"15:19:00","origin":"Cardiff","destination":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"A966ZZZ","date":"2023-04-30","time":"13:19:00","origin":"Wakefield","destination":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"Q9660WX","date": "2023-04-25","time":"12:19:00","origin":"Elmley","destination":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"N9980PJ","date": "2023-01-31","time":"03:01:00","origin":"Ranby","destination":"Kirkham","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
+        {"prisoner":6851,"date":"2023-05-20","time":"14:00:00","origin":"Isle of Wight","destination":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisoner":7849,"date":"2023-05-01","time":"15:19:00","origin":"Cardiff","destination":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"prisoner":4800,"date":"2023-04-30","time":"13:19:00","origin":"Wakefield","destination":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisoner":5207,"date": "2023-04-25","time":"12:19:00","origin":"Elmley","destination":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisoner":8894,"date": "2023-01-31","time":"03:01:00","origin":"Ranby","destination":"Kirkham","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
       ]
       """,
       )
@@ -190,7 +190,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-         {"prisonNumber": "Z966YYY", "date": "2023-05-01", "time": "15:19:00", "origin": "Cardiff", "destination": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
+         {"prisoner": 7849, "date": "2023-05-01", "time": "15:19:00", "origin": "Cardiff", "destination": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
       ]       
       """,
       )
