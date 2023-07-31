@@ -26,7 +26,7 @@ data class ExternalMovementService(val externalMovementRepository: ExternalMovem
   private fun validateAndMapSortColumn(sortColumn: String): String {
     return when (sortColumn) {
       "date" -> "date"
-      "time" -> "time"
+      "time" -> "timeOnly"
       "prisonNumber" -> "prisoner"
       "direction" -> "direction"
       "from" -> "origin"

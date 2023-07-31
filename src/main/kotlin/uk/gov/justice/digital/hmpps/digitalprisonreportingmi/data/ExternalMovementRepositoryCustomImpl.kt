@@ -17,9 +17,11 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
     val (preparedStatementNamedParams, whereClause) = constructWhereClause(filters)
     val sortingDirection = if (sortedAsc) "asc" else "desc"
 
-    val sql = """ SELECT * FROM datamart.domain.movements_movements
-                  $whereClause 
-                  ORDER BY $sortColumn $sortingDirection limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
+    val sql = """ SELECT id, prisoner, movements.date, movements.time, to_char(movements.time, 'HH24:MI:SS') as timeOnly, direction, type, origin, destination, reason 
+                    FROM datamart.domain.movements_movements as movements
+                    $whereClause 
+                    ORDER BY $sortColumn $sortingDirection 
+                    limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
     return jdbcTemplate.queryForList(
       sql,
       preparedStatementNamedParams,

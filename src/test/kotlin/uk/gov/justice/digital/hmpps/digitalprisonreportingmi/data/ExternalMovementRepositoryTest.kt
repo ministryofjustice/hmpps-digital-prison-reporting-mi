@@ -65,11 +65,9 @@ class ExternalMovementRepositoryTest {
   fun `should return all external movements for the selected page and pageSize sorted by date when sortedAsc is true and when it is false`() =
     assertExternalMovements(sortColumn = "date", expectedForAscending = AllMovements.externalMovement1, expectedForDescending = AllMovements.externalMovement5)
 
-  // TODO: Need to clarify this use case. Time now is a dateTime and sorting will be different than when sorting only
-  // by time. e.g time=2023-05-01T15:19 and time=2023-05-20T14:00 will be sorted differently based on time only
-//  @TestFactory
-//  fun `should return all external movements for the selected page and pageSize sorted by time when sortedAsc is true and when it is false`() =
-//    assertExternalMovements(sortColumn = "time", expectedForAscending = AllMovements.externalMovement1, expectedForDescending = AllMovements.externalMovement4)
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by time when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "timeOnly", expectedForAscending = AllMovements.externalMovement1, expectedForDescending = AllMovements.externalMovement4)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by prisoner when sortedAsc is true and when it is false`() =

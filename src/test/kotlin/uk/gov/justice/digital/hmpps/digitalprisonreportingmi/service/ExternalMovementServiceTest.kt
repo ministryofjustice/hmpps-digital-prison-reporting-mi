@@ -44,7 +44,7 @@ class ExternalMovementServiceTest {
   @ParameterizedTest
   @CsvSource(
     "date, date",
-    "time, time",
+    "time, timeOnly",
     "prisonNumber, prisoner",
     "direction, direction",
     "from, origin",
