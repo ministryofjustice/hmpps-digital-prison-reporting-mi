@@ -73,15 +73,15 @@ class ExternalMovementRepositoryTest {
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by prisoner when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "prisonNumber", expectedForAscending = AllMovements.externalMovement3, expectedForDescending = AllMovements.externalMovement1)
+    assertExternalMovements(sortColumn = "prisoner", expectedForAscending = AllMovements.externalMovement3, expectedForDescending = AllMovements.externalMovement1)
 
   @TestFactory
-  fun `should return all external movements for the selected page and pageSize sorted by 'from' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "from", expectedForAscending = AllMovements.externalMovement4, expectedForDescending = AllMovements.externalMovement3)
+  fun `should return all external movements for the selected page and pageSize sorted by 'origin' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "origin", expectedForAscending = AllMovements.externalMovement4, expectedForDescending = AllMovements.externalMovement3)
 
   @TestFactory
-  fun `should return all external movements for the selected page and pageSize sorted by 'to' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "to", expectedForAscending = AllMovements.externalMovement3, expectedForDescending = AllMovements.externalMovement2)
+  fun `should return all external movements for the selected page and pageSize sorted by 'destination' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = "destination", expectedForAscending = AllMovements.externalMovement3, expectedForDescending = AllMovements.externalMovement2)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'direction' when sortedAsc is true and when it is false`() =

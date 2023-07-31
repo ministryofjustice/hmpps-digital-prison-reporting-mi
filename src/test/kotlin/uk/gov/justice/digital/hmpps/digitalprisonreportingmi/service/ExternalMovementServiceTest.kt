@@ -1,8 +1,12 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
+import jakarta.validation.ValidationException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
@@ -35,6 +39,28 @@ class ExternalMovementServiceTest {
     val actual = externalMovementService.list(2, 2, sortColumn, true, singletonMap(DIRECTION, "in"))
     verify(externalMovementRepository, times(1)).list(2, 2, sortColumn, true, singletonMap(DIRECTION, "in"))
     assertEquals(allExternalMovementModels, actual)
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    "date, date",
+    "time, time",
+    "prisonNumber, prisoner",
+    "direction, direction",
+    "from, origin",
+    "to, destination",
+    "type, type",
+    "reason, reason",
+  )
+  fun `should call the repository with the correctly mapped sort column`(domainColumn: String, dataColumn: String) {
+    externalMovementService.list(2, 2, domainColumn, true, singletonMap(DIRECTION, "Out"))
+    verify(externalMovementRepository, times(1)).list(2, 2, dataColumn, true, singletonMap(DIRECTION, "Out"))
+  }
+
+  @Test
+  fun `should throw an exception for unknown column name and not call the repository`() {
+    assertThrows<ValidationException> { externalMovementService.list(2, 2, "randomColumn", true, singletonMap(DIRECTION, "in")) }
+    verify(externalMovementRepository, times(0)).list(any(), any(), any(), any(), any())
   }
 
   object AllModels {

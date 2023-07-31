@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
-import jakarta.validation.ValidationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -20,7 +19,7 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
 
     val sql = """ SELECT * FROM datamart.domain.movements_movements
                   $whereClause 
-                  ORDER BY ${validateAndBuildSortColumn(sortColumn)} $sortingDirection limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
+                  ORDER BY $sortColumn $sortingDirection limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
     return jdbcTemplate.queryForList(
       sql,
       preparedStatementNamedParams,
@@ -36,20 +35,6 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
         q["type"] as String,
         q["reason"] as String,
       )
-    }
-  }
-
-  private fun validateAndBuildSortColumn(sortColumn: String): String {
-    return when (sortColumn) {
-      "date" -> "date"
-      "time" -> "time"
-      "prisonNumber" -> "prisoner"
-      "direction" -> "direction"
-      "from" -> "origin"
-      "to" -> "destination"
-      "type" -> "type"
-      "reason" -> "reason"
-      else -> throw ValidationException("Invalid sort column $sortColumn")
     }
   }
 
