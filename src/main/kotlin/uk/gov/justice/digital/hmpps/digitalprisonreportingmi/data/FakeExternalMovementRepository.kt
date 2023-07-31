@@ -5,17 +5,16 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.END_DATE
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.START_DATE
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class FakeExternalMovementRepository {
 
-  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovement> {
+  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovementEntity> {
     return readExternalMovementsFromFile()
       .filter { matchesFilters(it, filters) }
       .let {
@@ -27,7 +26,7 @@ class FakeExternalMovementRepository {
       } ?: emptyList()
   }
 
-  private fun sort(sortColumn: String, allExternalMovements: List<ExternalMovement>, sortedAsc: Boolean): List<ExternalMovement> {
+  private fun sort(sortColumn: String, allExternalMovements: List<ExternalMovementEntity>, sortedAsc: Boolean): List<ExternalMovementEntity> {
     val allExternalMovementsSorted =
       when (sortColumn) {
         "date" -> allExternalMovements.sortedBy { it.date }
@@ -47,16 +46,16 @@ class FakeExternalMovementRepository {
     return readExternalMovementsFromFile().count { matchesFilters(it, filters) }.toLong()
   }
 
-  private fun readExternalMovementsFromFile(): List<ExternalMovement> {
+  private fun readExternalMovementsFromFile(): List<ExternalMovementEntity> {
     val mapper = jacksonObjectMapper()
     mapper.registerModule(JavaTimeModule())
     return this::class.java.classLoader.getResource("fakeExternalMovementsData.json")
       ?.readText()
-      ?.let { mapper.readValue<List<ExternalMovement>>(it) } ?: emptyList()
+      ?.let { mapper.readValue<List<ExternalMovementEntity>>(it) } ?: emptyList()
   }
 
-  private fun matchesFilters(externalMovement: ExternalMovement, filters: Map<ExternalMovementFilter, Any>): Boolean =
+  private fun matchesFilters(externalMovement: ExternalMovementEntity, filters: Map<ExternalMovementFilter, Any>): Boolean =
     filters[DIRECTION]?.let { it as String }?.lowercase()?.equals(externalMovement.direction.lowercase()) ?: true &&
-      filters[START_DATE]?.let { it as LocalDate }?.let { it.isEqual(externalMovement.date) || it.isBefore(externalMovement.date) } ?: true &&
-      filters[END_DATE]?.let { it as LocalDate }?.let { it.isEqual(externalMovement.date) || it.isAfter(externalMovement.date) } ?: true
+      filters[START_DATE]?.let { it as LocalDateTime }?.let { it.isEqual(externalMovement.date) || it.isBefore(externalMovement.date) } ?: true &&
+      filters[END_DATE]?.let { it as LocalDateTime }?.let { it.isEqual(externalMovement.date) || it.isAfter(externalMovement.date) } ?: true
 }

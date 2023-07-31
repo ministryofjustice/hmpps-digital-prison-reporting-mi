@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.END_DATE
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.START_DATE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementModel
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService
 import java.time.LocalDate
 
@@ -45,7 +45,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     description = "Gets a list of external movements (mocked)",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
-  fun stubbedExternalMovements(
+  fun externalMovements(
     @RequestParam(defaultValue = "1")
     @Min(1)
     selectedPage: Long,
@@ -63,7 +63,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     @Parameter(description = "The end date (inclusive) up to which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
     @RequestParam
     endDate: LocalDate?,
-  ): List<ExternalMovement> {
+  ): List<ExternalMovementModel> {
     return externalMovementService.list(
       selectedPage = selectedPage,
       pageSize = pageSize,

@@ -1,41 +1,84 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
+import jakarta.validation.ValidationException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.jdbc.core.JdbcTemplate
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
+import java.sql.Timestamp
 import java.time.LocalDate
-import java.time.LocalTime
 
 class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
+
+  private data class WhereClause(val mapSqlParameterSource: MapSqlParameterSource, val stringWhereClause: String)
+
   @Autowired
-  lateinit var jdbcTemplate: JdbcTemplate
-  override fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovement> {
-    val directionCondition = filters[ExternalMovementFilter.DIRECTION]?.let { it as String }?.lowercase()?.let { "direction = '$it'" }
-    val startDateCondition = filters[ExternalMovementFilter.START_DATE]?.let { it as LocalDate }?.toString()?.let { "date >= $it" }
-    val endDateCondition = filters[ExternalMovementFilter.END_DATE]?.let { it as LocalDate }?.toString()?.let { "date <= $it" }
-    val dateConditions = startDateCondition?.plus(" AND $endDateCondition")
-      ?: endDateCondition?.plus(" AND $startDateCondition")
-    val allConditions = dateConditions?.plus(" AND $directionCondition") ?: directionCondition
-    val whereClause = allConditions?.let { "WHERE $it" } ?: ""
+  lateinit var jdbcTemplate: NamedParameterJdbcTemplate
+  override fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovementEntity> {
+    val (preparedStatementNamedParams, whereClause) = constructWhereClause(filters)
     val sortingDirection = if (sortedAsc) "asc" else "desc"
-    val sql = """ SELECT * FROM datamart.domain.movement_movements
+
+    val sql = """ SELECT * FROM datamart.domain.movements_movements
                   $whereClause 
-                  ORDER BY $sortColumn $sortingDirection limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
-    return jdbcTemplate.query(
+                  ORDER BY ${validateAndBuildSortColumn(sortColumn)} $sortingDirection limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
+    return jdbcTemplate.queryForList(
       sql,
-    ) { rs, rowNum ->
-      ExternalMovement(
-        rs.getLong("id"),
-        rs.getLong("prisoner"),
-        LocalDate.parse(rs.getString("date")),
-        LocalTime.parse(rs.getString("time")),
-        rs.getString("origin"),
-        rs.getString("destination"),
-        rs.getString("direction"),
-        rs.getString("type"),
-        rs.getString("reason"),
+      preparedStatementNamedParams,
+    ).map { q ->
+      ExternalMovementEntity(
+        q["id"] as Long,
+        q["prisoner"] as Long,
+        (q["date"] as Timestamp).toLocalDateTime(),
+        (q["time"] as Timestamp).toLocalDateTime(),
+        q["origin"] as String,
+        q["destination"] as String,
+        q["direction"] as String,
+        q["type"] as String,
+        q["reason"] as String,
       )
     }
+  }
+
+  private fun validateAndBuildSortColumn(sortColumn: String): String {
+    return when (sortColumn) {
+      "date" -> "date"
+      "time" -> "time"
+      "prisonNumber" -> "prisoner"
+      "direction" -> "direction"
+      "from" -> "origin"
+      "to" -> "destination"
+      "type" -> "type"
+      "reason" -> "reason"
+      else -> throw ValidationException("Invalid sort column $sortColumn")
+    }
+  }
+
+  override fun count(filters: Map<ExternalMovementFilter, Any>): Long {
+    val whereClause = constructWhereClause(filters)
+    return jdbcTemplate.queryForList(
+      "SELECT count(*) as total FROM datamart.domain.movements_movements ${whereClause.stringWhereClause}",
+      whereClause.mapSqlParameterSource,
+    ).first()?.get("total") as Long
+  }
+
+  private fun constructWhereClause(filters: Map<ExternalMovementFilter, Any>): WhereClause {
+    val preparedStatementNamedParams = MapSqlParameterSource()
+    val directionCondition = filters[ExternalMovementFilter.DIRECTION]?.let { it as String }?.lowercase()?.let {
+      preparedStatementNamedParams.addValue("direction", it)
+      "lower(direction) = :direction"
+    }
+    val startDateCondition = filters[ExternalMovementFilter.START_DATE]?.let { it as LocalDate }?.toString()?.plus(" 00:00:00")?.let {
+      preparedStatementNamedParams.addValue("startDate", it)
+      "date >= :startDate"
+    }
+    val endDateCondition = filters[ExternalMovementFilter.END_DATE]?.let { it as LocalDate }?.toString()?.let {
+      preparedStatementNamedParams.addValue("endDate", it)
+      "date <= :endDate"
+    }
+    val dateConditions = startDateCondition?.plus(endDateCondition?.let { " AND $it" } ?: "")
+      ?: endDateCondition?.plus(startDateCondition?.let { " AND $it" } ?: "")
+    val allConditions = dateConditions?.plus(directionCondition?.let { " AND $it" } ?: "") ?: directionCondition
+    val whereClause = allConditions?.let { "WHERE $it" } ?: ""
+    return WhereClause(preparedStatementNamedParams, whereClause)
   }
 }
