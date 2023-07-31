@@ -31,21 +31,21 @@ class ExternalMovementRepositoryTest {
   @Test
   fun `should return 2 external movements for the selected page 2 and pageSize 2 sorted by date in ascending order`() {
     val actual = externalMovementRepository.list(2, 2, "date", true, emptyMap())
-    Assertions.assertEquals(listOf(FakeExternalMovementRepositoryTest.AllMovements.externalMovement3, FakeExternalMovementRepositoryTest.AllMovements.externalMovement4), actual)
+    Assertions.assertEquals(listOf(AllMovements.externalMovement3, AllMovements.externalMovement4), actual)
     Assertions.assertEquals(2, actual.size)
   }
 
   @Test
   fun `should return 1 external movement for the selected page 3 and pageSize 2 sorted by date in ascending order`() {
     val actual = externalMovementRepository.list(3, 2, "date", true, emptyMap())
-    Assertions.assertEquals(listOf(FakeExternalMovementRepositoryTest.AllMovements.externalMovement5), actual)
+    Assertions.assertEquals(listOf(AllMovements.externalMovement5), actual)
     Assertions.assertEquals(1, actual.size)
   }
 
   @Test
   fun `should return 5 external movements for the selected page 1 and pageSize 5 sorted by date in ascending order`() {
     val actual = externalMovementRepository.list(1, 5, "date", true, emptyMap())
-    Assertions.assertEquals(listOf(FakeExternalMovementRepositoryTest.AllMovements.externalMovement1, FakeExternalMovementRepositoryTest.AllMovements.externalMovement2, FakeExternalMovementRepositoryTest.AllMovements.externalMovement3, FakeExternalMovementRepositoryTest.AllMovements.externalMovement4, FakeExternalMovementRepositoryTest.AllMovements.externalMovement5), actual)
+    Assertions.assertEquals(listOf(AllMovements.externalMovement1, AllMovements.externalMovement2, AllMovements.externalMovement3, AllMovements.externalMovement4, AllMovements.externalMovement5), actual)
     Assertions.assertEquals(5, actual.size)
   }
 
@@ -63,37 +63,37 @@ class ExternalMovementRepositoryTest {
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by date when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "date", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement1, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement5)
+    assertExternalMovements(sortColumn = "date", expectedForAscending = AllMovements.externalMovement1, expectedForDescending = AllMovements.externalMovement5)
 
   // TODO: Need to clarify this use case. Time now is a dateTime and sorting will be different than when sorting only
   // by time. e.g time=2023-05-01T15:19 and time=2023-05-20T14:00 will be sorted differently based on time only
 //  @TestFactory
 //  fun `should return all external movements for the selected page and pageSize sorted by time when sortedAsc is true and when it is false`() =
-//    assertExternalMovements(sortColumn = "time", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement1, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement4)
+//    assertExternalMovements(sortColumn = "time", expectedForAscending = AllMovements.externalMovement1, expectedForDescending = AllMovements.externalMovement4)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by prisoner when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "prisonNumber", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement3, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement1)
+    assertExternalMovements(sortColumn = "prisonNumber", expectedForAscending = AllMovements.externalMovement3, expectedForDescending = AllMovements.externalMovement1)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'from' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "from", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement4, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement3)
+    assertExternalMovements(sortColumn = "from", expectedForAscending = AllMovements.externalMovement4, expectedForDescending = AllMovements.externalMovement3)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'to' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "to", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement3, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement2)
+    assertExternalMovements(sortColumn = "to", expectedForAscending = AllMovements.externalMovement3, expectedForDescending = AllMovements.externalMovement2)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'direction' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "direction", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement1, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement4)
+    assertExternalMovements(sortColumn = "direction", expectedForAscending = AllMovements.externalMovement1, expectedForDescending = AllMovements.externalMovement4)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'type' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "type", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement1, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement2)
+    assertExternalMovements(sortColumn = "type", expectedForAscending = AllMovements.externalMovement1, expectedForDescending = AllMovements.externalMovement2)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'reason' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "reason", expectedForAscending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement2, expectedForDescending = FakeExternalMovementRepositoryTest.AllMovements.externalMovement1)
+    assertExternalMovements(sortColumn = "reason", expectedForAscending = AllMovements.externalMovement2, expectedForDescending = AllMovements.externalMovement1)
 
   @Test
   fun `should return a list of all results with no filters`() {
@@ -182,19 +182,19 @@ class ExternalMovementRepositoryTest {
   @Test
   fun `should return all the movements on or after the provided start date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, Collections.singletonMap(ExternalMovementFilter.START_DATE, LocalDate.parse("2023-04-30")))
-    Assertions.assertEquals(listOf(FakeExternalMovementRepositoryTest.AllMovements.externalMovement5, FakeExternalMovementRepositoryTest.AllMovements.externalMovement4, FakeExternalMovementRepositoryTest.AllMovements.externalMovement3), actual)
+    Assertions.assertEquals(listOf(AllMovements.externalMovement5, AllMovements.externalMovement4, AllMovements.externalMovement3), actual)
   }
 
   @Test
   fun `should return all the movements on or before the provided end date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, Collections.singletonMap(ExternalMovementFilter.END_DATE, LocalDate.parse("2023-04-25")))
-    Assertions.assertEquals(listOf(FakeExternalMovementRepositoryTest.AllMovements.externalMovement2, FakeExternalMovementRepositoryTest.AllMovements.externalMovement1), actual)
+    Assertions.assertEquals(listOf(AllMovements.externalMovement2, AllMovements.externalMovement1), actual)
   }
 
   @Test
   fun `should return all the movements between the provided start and end dates`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, mapOf(ExternalMovementFilter.START_DATE to LocalDate.parse("2023-04-25"), ExternalMovementFilter.END_DATE to LocalDate.parse("2023-05-20")))
-    Assertions.assertEquals(listOf(FakeExternalMovementRepositoryTest.AllMovements.externalMovement5, FakeExternalMovementRepositoryTest.AllMovements.externalMovement4, FakeExternalMovementRepositoryTest.AllMovements.externalMovement3, FakeExternalMovementRepositoryTest.AllMovements.externalMovement2), actual)
+    Assertions.assertEquals(listOf(AllMovements.externalMovement5, AllMovements.externalMovement4, AllMovements.externalMovement3, AllMovements.externalMovement2), actual)
   }
 
   @Test
