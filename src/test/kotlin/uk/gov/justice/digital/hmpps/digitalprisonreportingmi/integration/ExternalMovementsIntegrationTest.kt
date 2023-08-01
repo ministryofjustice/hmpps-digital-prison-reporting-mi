@@ -1,14 +1,28 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.web.util.UriBuilder
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovement
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementModel
 
 class ExternalMovementsIntegrationTest : IntegrationTestBase() {
+
+  @Autowired
+  lateinit var externalMovementRepository: ExternalMovementRepository
+
+  @BeforeEach
+  fun setup() {
+    ExternalMovementRepositoryTest.AllMovements.allExternalMovements.forEach {
+      externalMovementRepository.save(it)
+    }
+  }
 
   @Test
   fun `External movements count returns stubbed value`() {
@@ -63,9 +77,9 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-        {"prisonNumber":"Q966ABC","date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"Z966YYY","date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"A966ZZZ","date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
+        {"id": 5, "prisonNumber":"6851","date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"id": 4, "prisonNumber":"7849","date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"id": 3, "prisonNumber":"4800","date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
       ]       
       """,
       )
@@ -87,11 +101,11 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .json(
         """
       [
-        {"prisonNumber":"Q966ABC","date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"Z966YYY","date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"A966ZZZ","date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"Q9660WX","date": "2023-04-25","time":"12:19:00","from":"Elmley","to":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"N9980PJ","date": "2023-01-31","time":"03:01:00","from":"Ranby","to":"Kirkham","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
+        {"id": 5, "prisonNumber":"6851","date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"id": 4, "prisonNumber":"7849","date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"id": 3, "prisonNumber":"4800","date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"id": 2, "prisonNumber":"5207","date": "2023-04-25","time":"12:19:00","from":"Elmley","to":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"id": 1, "prisonNumber":"8894","date": "2023-01-31","time":"03:01:00","from":"Ranby","to":"Kirkham","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
       ]
       """,
       )
@@ -115,7 +129,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .exchange()
       .expectStatus()
       .isOk()
-      .expectBodyList<ExternalMovement>()
+      .expectBodyList<ExternalMovementModel>()
       .hasSize(numberOfResults)
       .returnResult()
       .responseBody
@@ -190,7 +204,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-         {"prisonNumber": "Z966YYY", "date": "2023-05-01", "time": "15:19:00", "from": "Cardiff", "to": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
+         {"id": 4, "prisonNumber": "7849", "date": "2023-05-01", "time": "15:19:00", "from": "Cardiff", "to": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
       ]       
       """,
       )
