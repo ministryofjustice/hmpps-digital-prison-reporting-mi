@@ -12,9 +12,9 @@ data class ExternalMovementEntity(
   val prisoner: Long,
   val date: LocalDateTime,
   val time: LocalDateTime,
-  val origin: String,
-  val destination: String,
-  val direction: String,
+  val origin: String?,
+  val destination: String?,
+  val direction: String?,
   val type: String,
   val reason: String,
 )

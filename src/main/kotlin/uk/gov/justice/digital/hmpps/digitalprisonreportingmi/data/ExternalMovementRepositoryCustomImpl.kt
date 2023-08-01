@@ -31,9 +31,9 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
         q["prisoner"] as Long,
         (q["date"] as Timestamp).toLocalDateTime(),
         (q["time"] as Timestamp).toLocalDateTime(),
-        q["origin"] as String,
-        q["destination"] as String,
-        q["direction"] as String,
+        q["origin"]?.let { it as String },
+        q["destination"]?.let { it as String },
+        q["direction"]?.let { it as String },
         q["type"] as String,
         q["reason"] as String,
       )

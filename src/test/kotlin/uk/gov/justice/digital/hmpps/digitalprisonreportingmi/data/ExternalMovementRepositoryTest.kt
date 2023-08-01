@@ -213,6 +213,38 @@ class ExternalMovementRepositoryTest {
     Assertions.assertEquals(emptyList<ExternalMovementEntity>(), actual)
   }
 
+  @Test
+  fun `should not throw an error when origin, destination or direction are null`() {
+    val externalMovementNullValues = ExternalMovementEntity(
+      6,
+      9846,
+      LocalDateTime.of(2050, 6, 1, 0, 0, 0),
+      LocalDateTime.of(2050, 6, 1, 12, 0, 0),
+      null,
+      null,
+      null,
+      "Transfer",
+      "Transfer In from Other Establishment",
+    )
+    try {
+      externalMovementRepository.save(externalMovementNullValues)
+      val actual = externalMovementRepository.list(
+        1,
+        1,
+        "date",
+        true,
+        mapOf(
+          ExternalMovementFilter.START_DATE to LocalDate.of(2050, 6, 1),
+          ExternalMovementFilter.END_DATE to LocalDate.of(2050, 6, 1),
+        ),
+      )
+      Assertions.assertEquals(listOf(externalMovementNullValues), actual)
+      Assertions.assertEquals(1, actual.size)
+    } finally {
+      externalMovementRepository.delete(externalMovementNullValues)
+    }
+  }
+
   private fun assertExternalMovements(sortColumn: String, expectedForAscending: ExternalMovementEntity, expectedForDescending: ExternalMovementEntity): List<DynamicTest> {
     return listOf(
       true to listOf(expectedForAscending),
