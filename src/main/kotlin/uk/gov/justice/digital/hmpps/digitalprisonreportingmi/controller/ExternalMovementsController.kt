@@ -28,7 +28,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     description = "Gets a count of external movements (mocked)",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
-  fun stubbedCount(
+  fun count(
     @RequestParam direction: String?,
     @Parameter(description = "The start date (inclusive) from which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
     @RequestParam

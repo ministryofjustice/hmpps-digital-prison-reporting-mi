@@ -12,8 +12,10 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementEntity
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementPrisonerEntity
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.prisoner5207
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.prisoner8894
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter.DIRECTION
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementModel
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementServiceTest.AllEntities.allExternalMovementEntities
@@ -67,6 +69,8 @@ class ExternalMovementServiceTest {
     val externalMovement1 = ExternalMovementModel(
       1,
       "8894",
+      prisoner8894.firstName,
+      prisoner8894.lastName,
       LocalDate.of(2023, 1, 31),
       LocalTime.of(3, 1),
       "Ranby",
@@ -78,6 +82,8 @@ class ExternalMovementServiceTest {
     val externalMovement2 = ExternalMovementModel(
       2,
       "5207",
+      prisoner5207.firstName,
+      prisoner5207.lastName,
       LocalDate.of(2023, 4, 25),
       LocalTime.of(12, 19),
       "Elmley",
@@ -93,9 +99,11 @@ class ExternalMovementServiceTest {
   }
 
   object AllEntities {
-    val externalMovement1 = ExternalMovementEntity(
+    val externalMovement1 = ExternalMovementPrisonerEntity(
       1,
-      8894,
+      prisoner8894.id,
+      prisoner8894.firstName,
+      prisoner8894.lastName,
       LocalDateTime.of(2023, 1, 31, 0, 0, 0),
       LocalDateTime.of(2023, 1, 31, 3, 1, 0),
       "Ranby",
@@ -104,9 +112,11 @@ class ExternalMovementServiceTest {
       "Admission",
       "Unconvicted Remand",
     )
-    val externalMovement2 = ExternalMovementEntity(
+    val externalMovement2 = ExternalMovementPrisonerEntity(
       2,
-      5207,
+      prisoner5207.id,
+      prisoner5207.firstName,
+      prisoner5207.lastName,
       LocalDateTime.of(2023, 4, 25, 0, 0, 0),
       LocalDateTime.of(2023, 4, 25, 12, 19, 0),
       "Elmley",

@@ -2,7 +2,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementEntity
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementPrisonerEntity
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
@@ -19,8 +19,11 @@ data class ExternalMovementService(val externalMovementRepository: ExternalMovem
     return Count(externalMovementRepository.count(filters))
   }
 
-  private fun toModel(entity: ExternalMovementEntity): ExternalMovementModel {
-    return ExternalMovementModel(entity.id, entity.prisoner.toString(), entity.date.toLocalDate(), entity.time.toLocalTime(), entity.origin, entity.destination, entity.direction, entity.type, entity.reason)
+  private fun toModel(entity: ExternalMovementPrisonerEntity): ExternalMovementModel {
+    return ExternalMovementModel(
+      entity.id, entity.prisoner.toString(), entity.firstName, entity.lastName,
+      entity.date.toLocalDate(), entity.time.toLocalTime(), entity.origin, entity.destination, entity.direction, entity.type, entity.reason,
+    )
   }
 
   private fun validateAndMapSortColumn(sortColumn: String): String {

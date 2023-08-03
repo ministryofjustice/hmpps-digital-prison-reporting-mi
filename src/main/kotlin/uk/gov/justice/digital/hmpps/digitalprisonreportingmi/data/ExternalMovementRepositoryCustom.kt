@@ -4,6 +4,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovem
 
 interface ExternalMovementRepositoryCustom {
 
-  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovementEntity>
+  fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovementPrisonerEntity>
   fun count(filters: Map<ExternalMovementFilter, Any>): Long
 }

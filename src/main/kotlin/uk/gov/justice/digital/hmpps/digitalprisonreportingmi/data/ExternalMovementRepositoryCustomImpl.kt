@@ -13,22 +13,28 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
 
   @Autowired
   lateinit var jdbcTemplate: NamedParameterJdbcTemplate
-  override fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovementEntity> {
+  override fun list(selectedPage: Long, pageSize: Long, sortColumn: String, sortedAsc: Boolean, filters: Map<ExternalMovementFilter, Any>): List<ExternalMovementPrisonerEntity> {
     val (preparedStatementNamedParams, whereClause) = constructWhereClause(filters)
     val sortingDirection = if (sortedAsc) "asc" else "desc"
 
-    val sql = """ SELECT id, prisoner, movements.date, movements.time, to_char(movements.time, 'HH24:MI:SS') as timeOnly, direction, type, origin, destination, reason 
+    val sql = """SELECT movements.id, movements.prisoner, prisoners.firstname, prisoners.lastname, movements.date, 
+                    movements.time, to_char(movements.time, 'HH24:MI:SS') as timeOnly, movements.direction, movements.type, 
+                    movements.origin, movements.destination, movements.reason 
                     FROM datamart.domain.movements_movements as movements
-                    $whereClause 
+                    JOIN datamart.domain.prisoner_prisoner as prisoners
+                    ON movements.prisoner = prisoners.id
+                    $whereClause
                     ORDER BY $sortColumn $sortingDirection 
                     limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
     return jdbcTemplate.queryForList(
       sql,
       preparedStatementNamedParams,
     ).map { q ->
-      ExternalMovementEntity(
+      ExternalMovementPrisonerEntity(
         q["id"] as Long,
         q["prisoner"] as Long,
+        q["firstname"] as String,
+        q["lastname"] as String,
         (q["date"] as Timestamp).toLocalDateTime(),
         (q["time"] as Timestamp).toLocalDateTime(),
         q["origin"]?.let { it as String },
