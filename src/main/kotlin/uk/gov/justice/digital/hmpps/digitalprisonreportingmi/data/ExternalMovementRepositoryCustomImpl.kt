@@ -1,5 +1,7 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
+import org.apache.commons.lang3.time.StopWatch
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -8,6 +10,10 @@ import java.sql.Timestamp
 import java.time.LocalDate
 
 class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
+
+  companion object {
+    private val log = LoggerFactory.getLogger(this::class.java)
+  }
 
   private data class WhereClause(val mapSqlParameterSource: MapSqlParameterSource, val stringWhereClause: String)
 
@@ -26,7 +32,8 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
                     $whereClause
                     ORDER BY $sortColumn $sortingDirection 
                     limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
-    return jdbcTemplate.queryForList(
+    val stopwatch = StopWatch.createStarted()
+    val externalMovementPrisonerEntities = jdbcTemplate.queryForList(
       sql,
       preparedStatementNamedParams,
     ).map { q ->
@@ -44,6 +51,9 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
         q["reason"] as String,
       )
     }
+    stopwatch.stop()
+    log.info("Query Execution time in ms: {}", stopwatch.time)
+    return externalMovementPrisonerEntities
   }
 
   override fun count(filters: Map<ExternalMovementFilter, Any>): Long {
