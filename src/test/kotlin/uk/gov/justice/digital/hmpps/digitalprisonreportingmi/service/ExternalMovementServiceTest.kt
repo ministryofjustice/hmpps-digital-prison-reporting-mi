@@ -47,7 +47,7 @@ class ExternalMovementServiceTest {
   @CsvSource(
     "date, date",
     "time, timeOnly",
-    "prisonNumber, prisoner",
+    "prisonNumber, prisoners.number",
     "direction, direction",
     "from, origin",
     "to, destination",
@@ -68,7 +68,7 @@ class ExternalMovementServiceTest {
   object AllModels {
     val externalMovement1 = ExternalMovementModel(
       1,
-      "8894",
+      AllEntities.externalMovement1.number,
       prisoner8894.firstName,
       prisoner8894.lastName,
       LocalDate.of(2023, 1, 31),
@@ -81,7 +81,7 @@ class ExternalMovementServiceTest {
     )
     val externalMovement2 = ExternalMovementModel(
       2,
-      "5207",
+      AllEntities.externalMovement2.number,
       prisoner5207.firstName,
       prisoner5207.lastName,
       LocalDate.of(2023, 4, 25),
@@ -101,7 +101,7 @@ class ExternalMovementServiceTest {
   object AllEntities {
     val externalMovement1 = ExternalMovementPrisonerEntity(
       1,
-      prisoner8894.id,
+      prisoner8894.number,
       prisoner8894.firstName,
       prisoner8894.lastName,
       LocalDateTime.of(2023, 1, 31, 0, 0, 0),
@@ -114,7 +114,7 @@ class ExternalMovementServiceTest {
     )
     val externalMovement2 = ExternalMovementPrisonerEntity(
       2,
-      prisoner5207.id,
+      prisoner5207.number,
       prisoner5207.firstName,
       prisoner5207.lastName,
       LocalDateTime.of(2023, 4, 25, 0, 0, 0),

@@ -241,7 +241,7 @@ class ExternalMovementRepositoryTest {
     val prisoner9846 = PrisonerEntity(9846, "W2505GF", "FirstName6", "LastName6", null)
     val movementPrisonerNullValues = ExternalMovementPrisonerEntity(
       6,
-      9846,
+      "W2505GF",
       "FirstName6",
       "LastName6",
       LocalDateTime.of(2050, 6, 1, 0, 0, 0),
@@ -370,7 +370,7 @@ class ExternalMovementRepositoryTest {
   object AllMovementPrisoners {
     val allMovementPrisoners = allExternalMovements.mapIndexed { i, em ->
       ExternalMovementPrisonerEntity(
-        em.id, em.prisoner,
+        em.id, allPrisoners[i].number,
         "FirstName${i + 1}", "LastName${i + 1}", em.date, em.time,
         em.origin, em.destination, em.direction, em.type, em.reason,
       )

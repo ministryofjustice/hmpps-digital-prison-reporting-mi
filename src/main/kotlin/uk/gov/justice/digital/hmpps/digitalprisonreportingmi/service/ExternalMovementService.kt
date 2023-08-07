@@ -21,7 +21,7 @@ data class ExternalMovementService(val externalMovementRepository: ExternalMovem
 
   private fun toModel(entity: ExternalMovementPrisonerEntity): ExternalMovementModel {
     return ExternalMovementModel(
-      entity.id, entity.prisoner.toString(), entity.firstName, entity.lastName,
+      entity.id, entity.number, entity.firstName, entity.lastName,
       entity.date.toLocalDate(), entity.time.toLocalTime(), entity.origin, entity.destination, entity.direction, entity.type, entity.reason,
     )
   }
@@ -30,7 +30,7 @@ data class ExternalMovementService(val externalMovementRepository: ExternalMovem
     return when (sortColumn) {
       "date" -> "date"
       "time" -> "timeOnly"
-      "prisonNumber" -> "prisoner"
+      "prisonNumber" -> "prisoners.number"
       "direction" -> "direction"
       "from" -> "origin"
       "to" -> "destination"

@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class ExternalMovementPrisonerEntity(
   val id: Long,
-  val prisoner: Long,
+  val number: String,
   val firstName: String,
   val lastName: String,
   val date: LocalDateTime,

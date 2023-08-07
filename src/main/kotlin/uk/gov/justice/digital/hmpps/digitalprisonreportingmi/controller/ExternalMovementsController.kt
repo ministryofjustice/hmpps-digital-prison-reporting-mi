@@ -25,7 +25,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
 
   @GetMapping("/external-movements/count")
   @Operation(
-    description = "Gets a count of external movements (mocked)",
+    description = "Gets a count of external movements",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
   fun count(
@@ -42,7 +42,7 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
 
   @GetMapping("/external-movements")
   @Operation(
-    description = "Gets a list of external movements (mocked)",
+    description = "Gets a list of external movements",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
   fun externalMovements(
