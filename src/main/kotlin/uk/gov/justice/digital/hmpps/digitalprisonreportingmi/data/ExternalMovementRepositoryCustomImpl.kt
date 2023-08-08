@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.name
 import java.sql.Timestamp
 import java.time.LocalDate
 
@@ -30,7 +31,7 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
                     JOIN datamart.domain.prisoner_prisoner as prisoners
                     ON movements.prisoner = prisoners.id
                     $whereClause
-                    ORDER BY $sortColumn $sortingDirection 
+                    ORDER BY ${constructOrderByClause(sortColumn, sortingDirection)} 
                     limit $pageSize OFFSET ($selectedPage - 1) * $pageSize;"""
     val stopwatch = StopWatch.createStarted()
     val externalMovementPrisonerEntities = jdbcTemplate.queryForList(
@@ -54,6 +55,13 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
     stopwatch.stop()
     log.info("Query Execution time in ms: {}", stopwatch.time)
     return externalMovementPrisonerEntities
+  }
+
+  private fun constructOrderByClause(sortColumn: String, sortingDirection: String): String {
+    if (name == sortColumn) {
+      return "lastname $sortingDirection,firstname"
+    }
+    return """$sortColumn $sortingDirection"""
   }
 
   override fun count(filters: Map<ExternalMovementFilter, Any>): Long {

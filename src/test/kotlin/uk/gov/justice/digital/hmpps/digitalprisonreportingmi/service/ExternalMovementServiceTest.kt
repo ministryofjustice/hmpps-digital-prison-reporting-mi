@@ -60,6 +60,15 @@ class ExternalMovementServiceTest {
   }
 
   @Test
+  fun `should call the repository to sort by lastname, firstname when name is the sort column`() {
+    externalMovementService.list(2, 2, "name", true, singletonMap(DIRECTION, "Out"))
+    verify(externalMovementRepository, times(1)).list(2, 2, "lastname,firstname", true, singletonMap(DIRECTION, "Out"))
+
+    externalMovementService.list(2, 2, "name", false, singletonMap(DIRECTION, "Out"))
+    verify(externalMovementRepository, times(1)).list(2, 2, "lastname,firstname", true, singletonMap(DIRECTION, "Out"))
+  }
+
+  @Test
   fun `should throw an exception for unknown column name and not call the repository`() {
     assertThrows<ValidationException> { externalMovementService.list(2, 2, "randomColumn", true, singletonMap(DIRECTION, "in")) }
     verify(externalMovementRepository, times(0)).list(any(), any(), any(), any(), any())

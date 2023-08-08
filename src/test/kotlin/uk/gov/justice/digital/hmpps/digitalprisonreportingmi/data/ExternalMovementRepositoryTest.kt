@@ -16,6 +16,15 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMoveme
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllMovements.allExternalMovements
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.allPrisoners
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.date
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.destination
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.direction
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.name
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.origin
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.prisonNumber
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.reason
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.timeOnly
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.type
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -75,35 +84,39 @@ class ExternalMovementRepositoryTest {
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by date when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "date", expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner5)
+    assertExternalMovements(sortColumn = date, expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner5)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by time when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "timeOnly", expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner4)
+    assertExternalMovements(sortColumn = timeOnly, expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner4)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by prisoner when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "prisoner", expectedForAscending = movementPrisoner3, expectedForDescending = movementPrisoner1)
+    assertExternalMovements(sortColumn = prisonNumber, expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner3)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'origin' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "origin", expectedForAscending = movementPrisoner4, expectedForDescending = movementPrisoner3)
+    assertExternalMovements(sortColumn = origin, expectedForAscending = movementPrisoner4, expectedForDescending = movementPrisoner3)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'destination' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "destination", expectedForAscending = movementPrisoner3, expectedForDescending = movementPrisoner2)
+    assertExternalMovements(sortColumn = destination, expectedForAscending = movementPrisoner3, expectedForDescending = movementPrisoner2)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'direction' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "direction", expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner4)
+    assertExternalMovements(sortColumn = direction, expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner4)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'type' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "type", expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner2)
+    assertExternalMovements(sortColumn = type, expectedForAscending = movementPrisoner1, expectedForDescending = movementPrisoner2)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'reason' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = "reason", expectedForAscending = movementPrisoner2, expectedForDescending = movementPrisoner1)
+    assertExternalMovements(sortColumn = reason, expectedForAscending = movementPrisoner2, expectedForDescending = movementPrisoner1)
+
+  @TestFactory
+  fun `should return all external movements for the selected page and pageSize sorted by 'lastname,firstname' when sortedAsc is true and when it is false`() =
+    assertExternalMovements(sortColumn = name, expectedForAscending = movementPrisoner2, expectedForDescending = movementPrisoner4)
 
   @Test
   fun `should return a list of all results with no filters`() {
@@ -352,10 +365,10 @@ class ExternalMovementRepositoryTest {
     )
   }
   object AllPrisoners {
-    val prisoner8894 = PrisonerEntity(8894, "G2504UV", "FirstName1", "LastName1", null)
-    val prisoner5207 = PrisonerEntity(5207, "G2927UV", "FirstName2", "LastName2", null)
+    val prisoner8894 = PrisonerEntity(8894, "G2504UV", "FirstName2", "LastName1", null)
+    val prisoner5207 = PrisonerEntity(5207, "G2927UV", "FirstName1", "LastName1", null)
     val prisoner4800 = PrisonerEntity(4800, "G3418VR", "FirstName3", "LastName3", null)
-    val prisoner7849 = PrisonerEntity(7849, "G3411VR", "FirstName4", "LastName4", 142595)
+    val prisoner7849 = PrisonerEntity(7849, "G3411VR", "FirstName4", "LastName5", 142595)
     val prisoner6851 = PrisonerEntity(6851, "G3154UG", "FirstName5", "LastName5", null)
 
     val allPrisoners = listOf(
@@ -371,7 +384,7 @@ class ExternalMovementRepositoryTest {
     val allMovementPrisoners = allExternalMovements.mapIndexed { i, em ->
       ExternalMovementPrisonerEntity(
         em.id, allPrisoners[i].number,
-        "FirstName${i + 1}", "LastName${i + 1}", em.date, em.time,
+        allPrisoners[i].firstName, allPrisoners[i].lastName, em.date, em.time,
         em.origin, em.destination, em.direction, em.type, em.reason,
       )
     }
