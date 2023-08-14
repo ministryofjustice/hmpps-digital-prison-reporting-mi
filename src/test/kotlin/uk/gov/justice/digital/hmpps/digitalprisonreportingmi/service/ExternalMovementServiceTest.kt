@@ -76,7 +76,6 @@ class ExternalMovementServiceTest {
 
   object AllModels {
     val externalMovement1 = ExternalMovementModel(
-      1,
       AllEntities.externalMovement1.number,
       prisoner8894.firstName,
       prisoner8894.lastName,
@@ -89,7 +88,6 @@ class ExternalMovementServiceTest {
       "Unconvicted Remand",
     )
     val externalMovement2 = ExternalMovementModel(
-      2,
       AllEntities.externalMovement2.number,
       prisoner5207.firstName,
       prisoner5207.lastName,
@@ -109,7 +107,6 @@ class ExternalMovementServiceTest {
 
   object AllEntities {
     val externalMovement1 = ExternalMovementPrisonerEntity(
-      1,
       prisoner8894.number,
       prisoner8894.firstName,
       prisoner8894.lastName,
@@ -122,7 +119,6 @@ class ExternalMovementServiceTest {
       "Unconvicted Remand",
     )
     val externalMovement2 = ExternalMovementPrisonerEntity(
-      2,
       prisoner5207.number,
       prisoner5207.firstName,
       prisoner5207.lastName,

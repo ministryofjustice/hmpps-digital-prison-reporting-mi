@@ -24,7 +24,7 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
     val (preparedStatementNamedParams, whereClause) = constructWhereClause(filters)
     val sortingDirection = if (sortedAsc) "asc" else "desc"
 
-    val sql = """SELECT movements.id, prisoners.number, prisoners.firstname, prisoners.lastname, movements.date, 
+    val sql = """SELECT prisoners.number, prisoners.firstname, prisoners.lastname, movements.date, 
                     movements.time, to_char(movements.time, 'HH24:MI:SS') as timeOnly, movements.direction, movements.type, 
                     movements.origin, movements.destination, movements.reason 
                     FROM datamart.domain.movements_movements as movements
@@ -39,7 +39,6 @@ class ExternalMovementRepositoryCustomImpl : ExternalMovementRepositoryCustom {
       preparedStatementNamedParams,
     ).map { q ->
       ExternalMovementPrisonerEntity(
-        q["id"] as Long,
         q["number"] as String,
         q["firstname"] as String,
         q["lastname"] as String,

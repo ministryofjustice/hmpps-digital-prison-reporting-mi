@@ -30,7 +30,7 @@ data class ExternalMovementService(val externalMovementRepository: ExternalMovem
 
   private fun toModel(entity: ExternalMovementPrisonerEntity): ExternalMovementModel {
     return ExternalMovementModel(
-      entity.id, entity.number, entity.firstName, entity.lastName,
+      entity.number, entity.firstName, entity.lastName,
       entity.date.toLocalDate(), entity.time.toLocalTime(), entity.origin, entity.destination, entity.direction, entity.type, entity.reason,
     )
   }

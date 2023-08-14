@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 import java.time.LocalDateTime
 
 data class ExternalMovementPrisonerEntity(
-  val id: Long,
   val number: String,
   val firstName: String,
   val lastName: String,

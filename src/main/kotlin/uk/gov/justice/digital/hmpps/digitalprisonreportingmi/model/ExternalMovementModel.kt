@@ -4,7 +4,6 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class ExternalMovementModel(
-  val id: Long,
   val prisonNumber: String,
   val firstName: String,
   val lastName: String,
