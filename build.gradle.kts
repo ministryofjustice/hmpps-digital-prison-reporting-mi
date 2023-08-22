@@ -3,6 +3,7 @@ plugins {
   kotlin("jvm") version "1.8.21"
   kotlin("plugin.spring") version "1.8.21"
   kotlin("plugin.jpa") version "1.8.21"
+  id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "3.1.0"
 }
 
@@ -40,10 +41,20 @@ tasks {
     }
   }
 }
+
 repositories {
   mavenCentral()
   maven("https://s3.amazonaws.com/redshift-maven-repository/release")
 }
+
 kotlin {
   jvmToolchain(19)
+}
+
+tasks.test {
+  finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+  dependsOn(tasks.test)
 }
