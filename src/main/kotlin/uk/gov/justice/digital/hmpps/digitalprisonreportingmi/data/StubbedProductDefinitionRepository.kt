@@ -1,14 +1,14 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSource
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterOption
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterType
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSource
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.MetaData
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.WordWrap
 
 @Service
@@ -119,9 +119,9 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
           DataSource(
             id = "1",
             name = "RedShift",
-            connection = "redshift"
-          )
-        )
+            connection = "redshift",
+          ),
+        ),
       ),
     )
   }
