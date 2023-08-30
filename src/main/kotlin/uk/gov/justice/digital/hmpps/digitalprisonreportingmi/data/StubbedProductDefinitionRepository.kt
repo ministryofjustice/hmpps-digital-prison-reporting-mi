@@ -1,29 +1,31 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FieldDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterOption
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.VariantDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSource
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.MetaData
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.WordWrap
 
 @Service
 class StubbedProductDefinitionRepository : ProductDefinitionRepository {
 
   override fun getProductDefinitions(): List<ProductDefinition> {
-    val fields = listOf(
-      FieldDefinition(
+    val parameters = listOf(
+      ParameterDefinition(
         name = "prisonNumber",
         displayName = "Prison Number",
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "name",
         displayName = "Name",
         wordWrap = WordWrap.None,
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "date",
         displayName = "Date",
         dateFormat = "dd/MM/yy",
@@ -32,22 +34,22 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
           type = FilterType.DateRange,
         ),
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "date",
         displayName = "Time",
         dateFormat = "HH:mm",
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "origin",
         displayName = "From",
         wordWrap = WordWrap.None,
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "destination",
         displayName = "To",
         wordWrap = WordWrap.None,
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "direction",
         displayName = "Direction",
         filter = FilterDefinition(
@@ -58,11 +60,11 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
           ),
         ),
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "type",
         displayName = "Type",
       ),
-      FieldDefinition(
+      ParameterDefinition(
         name = "reason",
         displayName = "Reason",
       ),
@@ -70,9 +72,12 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
 
     return listOf(
       ProductDefinition(
+        id = "1",
         name = "External Movements",
-        variants = listOf(
-          VariantDefinition(
+        metaData = MetaData(author = "Adam", version = "1.2.3.4", owner = "Eve"),
+        dataSets = listOf(
+          DataSet(
+            id = "1",
             name = "list",
             displayName = "All movements",
             query = "SELECT " +
@@ -87,9 +92,10 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
               "FROM datamart.domain.movements_movements as movements\n" +
               "JOIN datamart.domain.prisoner_prisoner as prisoners\n" +
               "ON movements.prisoner = prisoners.id",
-            fields = fields,
+            parameters = parameters,
           ),
-          VariantDefinition(
+          DataSet(
+            id = "2",
             name = "last-week",
             displayName = "Last week",
             description = "All movements in the past week",
@@ -106,9 +112,16 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
               "JOIN datamart.domain.prisoner_prisoner as prisoners\n" +
               "ON movements.prisoner = prisoners.id\n" +
               "WHERE DATE_PART('day', CURRENT_DATE() - movements.date) BETWEEN 0 AND 7",
-            fields = fields,
+            parameters = parameters,
           ),
         ),
+        dataSources = listOf(
+          DataSource(
+            id = "1",
+            name = "RedShift",
+            connection = "redshift"
+          )
+        )
       ),
     )
   }

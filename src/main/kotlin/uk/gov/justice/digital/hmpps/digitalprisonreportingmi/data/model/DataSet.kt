@@ -1,9 +1,10 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model
 
-data class VariantDefinition(
+data class DataSet(
+  val id: String,
   val name: String,
   val query: String,
   val displayName: String,
   val description: String? = null,
-  val fields: List<FieldDefinition>,
+  val parameters: List<ParameterDefinition>,
 )

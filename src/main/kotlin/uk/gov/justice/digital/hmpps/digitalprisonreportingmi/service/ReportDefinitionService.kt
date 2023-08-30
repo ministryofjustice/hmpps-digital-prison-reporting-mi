@@ -9,6 +9,8 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Re
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.VariantDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.WordWrap
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ProductDefinitionRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
 
 @Service
@@ -21,17 +23,17 @@ class ReportDefinitionService(val productDefinitionRepository: ProductDefinition
   private fun map(definition: ProductDefinition): ReportDefinition = ReportDefinition(
     name = definition.name,
     description = definition.description,
-    variants = definition.variants.map(this::map),
+    variants = definition.dataSets.map(this::map),
   )
 
-  private fun map(definition: uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.VariantDefinition): VariantDefinition = VariantDefinition(
+  private fun map(definition: DataSet): VariantDefinition = VariantDefinition(
     name = definition.name,
     displayName = definition.displayName,
     description = definition.description,
-    fields = definition.fields.map(this::map),
+    fields = definition.parameters.map(this::map),
   )
 
-  private fun map(definition: uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FieldDefinition): FieldDefinition = FieldDefinition(
+  private fun map(definition: ParameterDefinition): FieldDefinition = FieldDefinition(
     name = definition.name,
     displayName = definition.displayName,
     dateFormat = definition.dateFormat,
