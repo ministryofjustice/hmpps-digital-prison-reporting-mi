@@ -1,7 +1,13 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.*
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FieldDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterOption
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterType
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.VariantDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.WordWrap
 
 @Service
 class StubbedProductDefinitionRepository : ProductDefinitionRepository {
@@ -15,7 +21,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
       FieldDefinition(
         name = "name",
         displayName = "Name",
-        wordWrap = WordWrap.None
+        wordWrap = WordWrap.None,
       ),
       FieldDefinition(
         name = "date",
@@ -23,23 +29,23 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
         dateFormat = "dd/MM/yy",
         defaultSortColumn = true,
         filter = FilterDefinition(
-          type = FilterType.DateRange
-        )
+          type = FilterType.DateRange,
+        ),
       ),
       FieldDefinition(
         name = "date",
         displayName = "Time",
-        dateFormat = "HH:mm"
+        dateFormat = "HH:mm",
       ),
       FieldDefinition(
         name = "origin",
         displayName = "From",
-        wordWrap = WordWrap.None
+        wordWrap = WordWrap.None,
       ),
       FieldDefinition(
         name = "destination",
         displayName = "To",
-        wordWrap = WordWrap.None
+        wordWrap = WordWrap.None,
       ),
       FieldDefinition(
         name = "direction",
@@ -49,17 +55,17 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
           staticOptions = listOf(
             FilterOption("in", "In"),
             FilterOption("out", "Out"),
-          )
-        )
+          ),
+        ),
       ),
       FieldDefinition(
         name = "type",
-        displayName = "Type"
+        displayName = "Type",
       ),
       FieldDefinition(
         name = "reason",
-        displayName = "Reason"
-      )
+        displayName = "Reason",
+      ),
     )
 
     return listOf(
@@ -81,7 +87,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
               "FROM datamart.domain.movements_movements as movements\n" +
               "JOIN datamart.domain.prisoner_prisoner as prisoners\n" +
               "ON movements.prisoner = prisoners.id",
-            fields = fields
+            fields = fields,
           ),
           VariantDefinition(
             name = "last-week",
@@ -100,11 +106,10 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
               "JOIN datamart.domain.prisoner_prisoner as prisoners\n" +
               "ON movements.prisoner = prisoners.id\n" +
               "WHERE DATE_PART('day', CURRENT_DATE() - movements.date) BETWEEN 0 AND 7",
-            fields = fields
-          )
-        )
-      )
+            fields = fields,
+          ),
+        ),
+      ),
     )
   }
-  
 }

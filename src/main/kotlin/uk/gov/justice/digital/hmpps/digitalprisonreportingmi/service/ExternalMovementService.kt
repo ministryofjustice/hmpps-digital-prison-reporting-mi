@@ -2,11 +2,11 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementPrisonerEntity
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementModel
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementPrisonerEntity
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.date
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.destination
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.direction

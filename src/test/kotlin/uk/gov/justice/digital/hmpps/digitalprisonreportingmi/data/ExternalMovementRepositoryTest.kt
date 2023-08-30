@@ -8,6 +8,7 @@ import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllMovementPrisoners.movementPrisoner1
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllMovementPrisoners.movementPrisoner2
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllMovementPrisoners.movementPrisoner3
@@ -15,7 +16,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMoveme
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllMovementPrisoners.movementPrisoner5
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllMovements.allExternalMovements
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.allPrisoners
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementFilter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.date
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.destination
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.direction
@@ -73,13 +73,13 @@ class ExternalMovementRepositoryTest {
   @Test
   fun `should return an empty list for the selected page 2 and pageSize 5 sorted by date in ascending order`() {
     val actual = externalMovementRepository.list(2, 5, "date", true, emptyMap())
-    Assertions.assertEquals(emptyList<ExternalMovementEntity>(), actual)
+    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
   }
 
   @Test
   fun `should return an empty list for the selected page 6 and pageSize 1 sorted by date in ascending order`() {
     val actual = externalMovementRepository.list(6, 1, "date", true, emptyMap())
-    Assertions.assertEquals(emptyList<ExternalMovementEntity>(), actual)
+    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
   }
 
   @TestFactory
@@ -223,19 +223,19 @@ class ExternalMovementRepositoryTest {
   @Test
   fun `should return no movements if the start date is after the latest movement date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, Collections.singletonMap(ExternalMovementFilter.START_DATE, LocalDate.parse("2025-01-01")))
-    Assertions.assertEquals(emptyList<ExternalMovementEntity>(), actual)
+    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
   }
 
   @Test
   fun `should return no movements if the end date is before the earliest movement date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, Collections.singletonMap(ExternalMovementFilter.END_DATE, LocalDate.parse("2015-01-01")))
-    Assertions.assertEquals(emptyList<ExternalMovementEntity>(), actual)
+    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
   }
 
   @Test
   fun `should return no movements if the start date is after the end date`() {
     val actual = externalMovementRepository.list(1, 10, "date", false, mapOf(ExternalMovementFilter.START_DATE to LocalDate.parse("2023-05-01"), ExternalMovementFilter.END_DATE to LocalDate.parse("2023-04-25")))
-    Assertions.assertEquals(emptyList<ExternalMovementEntity>(), actual)
+    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
   }
 
   @Test

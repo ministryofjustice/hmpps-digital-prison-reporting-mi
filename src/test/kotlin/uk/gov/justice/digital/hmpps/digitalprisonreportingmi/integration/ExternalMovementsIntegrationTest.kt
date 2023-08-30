@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.web.util.UriBuilder
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementModel
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners
@@ -17,7 +18,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMoveme
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.prisoner7849
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.prisoner8894
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementModel
 
 class ExternalMovementsIntegrationTest : IntegrationTestBase() {
 

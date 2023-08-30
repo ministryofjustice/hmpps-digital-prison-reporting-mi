@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model
 
-data class VariantDefinition (
+data class VariantDefinition(
   val name: String,
   val query: String,
   val displayName: String,

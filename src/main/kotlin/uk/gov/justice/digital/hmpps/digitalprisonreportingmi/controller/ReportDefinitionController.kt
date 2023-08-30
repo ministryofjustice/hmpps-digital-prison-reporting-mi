@@ -22,5 +22,4 @@ class ReportDefinitionController(val reportDefinitionService: ReportDefinitionSe
   fun definitions(): List<ReportDefinition> {
     return reportDefinitionService.getListForUser()
   }
-
 }

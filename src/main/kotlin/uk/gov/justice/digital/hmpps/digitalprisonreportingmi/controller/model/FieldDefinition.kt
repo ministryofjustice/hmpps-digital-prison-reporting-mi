@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model
 
-data class FieldDefinition (
+data class FieldDefinition(
   val name: String,
   val displayName: String,
   val dateFormat: String? = null,
