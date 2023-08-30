@@ -5,6 +5,7 @@ data class ProductDefinition(
   val name: String,
   val description: String? = null,
   val metaData: MetaData,
-  val dataSources: List<DataSource>,
-  val dataSets: List<DataSet>,
+  val dataSource: List<DataSource>,
+  val dataSet: List<DataSet>,
+  val report: List<Report>,
 )

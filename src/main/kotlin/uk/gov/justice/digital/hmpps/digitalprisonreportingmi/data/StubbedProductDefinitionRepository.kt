@@ -9,7 +9,10 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterTy
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.MetaData
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.RenderMethod
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.WordWrap
+import java.time.LocalDate
 
 @Service
 class StubbedProductDefinitionRepository : ProductDefinitionRepository {
@@ -74,12 +77,11 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
       ProductDefinition(
         id = "1",
         name = "External Movements",
-        metaData = MetaData(author = "Adam", version = "1.2.3.4", owner = "Eve"),
-        dataSets = listOf(
+        metaData = MetaData(author = "Adam", version = "1.2.3", owner = "Eve"),
+        dataSet = listOf(
           DataSet(
-            id = "1",
-            name = "list",
-            displayName = "All movements",
+            id = "list",
+            name = "All movements",
             query = "SELECT " +
               "prisoners.number AS prisonNumber," +
               "CONCAT(prisoners.lastname, ', ', substring(prisoners.firstname, 1, 1)) AS name," +
@@ -95,10 +97,8 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             parameters = parameters,
           ),
           DataSet(
-            id = "2",
-            name = "last-week",
-            displayName = "Last week",
-            description = "All movements in the past week",
+            id = "last-week",
+            name = "Last week",
             query = "SELECT " +
               "prisoners.number AS prisonNumber," +
               "CONCAT(prisoners.lastname, ', ', substring(prisoners.firstname, 1, 1)) AS name," +
@@ -115,11 +115,34 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             parameters = parameters,
           ),
         ),
-        dataSources = listOf(
+        dataSource = listOf(
           DataSource(
             id = "1",
             name = "RedShift",
             connection = "redshift",
+          ),
+        ),
+        report = listOf(
+          Report(
+            id = "1.a",
+            name = "All movements",
+            dataset = "\$ref:list",
+            policy = emptyList(),
+            specification = "list",
+            render = RenderMethod.HTML,
+            created = LocalDate.now(),
+            version = "1.2.3",
+          ),
+          Report(
+            id = "1.b",
+            name = "Last week",
+            description = "All movements in the past week",
+            dataset = "\$ref:last-week",
+            policy = emptyList(),
+            specification = "list",
+            render = RenderMethod.HTML,
+            created = LocalDate.now(),
+            version = "1.2.3",
           ),
         ),
       ),

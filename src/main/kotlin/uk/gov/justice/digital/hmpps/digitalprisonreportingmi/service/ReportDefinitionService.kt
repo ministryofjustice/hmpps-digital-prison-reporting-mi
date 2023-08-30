@@ -12,26 +12,35 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ProductDefinit
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
 
 @Service
 class ReportDefinitionService(val productDefinitionRepository: ProductDefinitionRepository) {
 
   fun getListForUser(): List<ReportDefinition> {
-    return productDefinitionRepository.getProductDefinitions().map(this::map)
+    return productDefinitionRepository.getProductDefinitions()
+      .map(this::map)
+      .filter { it.variants.isNotEmpty() }
   }
 
   private fun map(definition: ProductDefinition): ReportDefinition = ReportDefinition(
     name = definition.name,
     description = definition.description,
-    variants = definition.dataSets.map(this::map),
+    variants = definition.report.map { map(it, definition.dataSet) },
   )
 
-  private fun map(definition: DataSet): VariantDefinition = VariantDefinition(
-    name = definition.name,
-    displayName = definition.displayName,
-    description = definition.description,
-    fields = definition.parameters.map(this::map),
-  )
+  private fun map(definition: Report, dataSets: List<DataSet>): VariantDefinition {
+    val dataSet = dataSets.find { it.id == definition.dataset.removePrefix("\$ref:") }!!
+
+    return VariantDefinition(
+      id = definition.id,
+      name = definition.name,
+      description = definition.description,
+      specification = definition.specification,
+      resourceName = dataSet.id,
+      fields = dataSet.parameters.map(this::map),
+    )
+  }
 
   private fun map(definition: ParameterDefinition): FieldDefinition = FieldDefinition(
     name = definition.name,

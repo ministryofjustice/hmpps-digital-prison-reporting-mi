@@ -32,15 +32,17 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
 
     val allVariant = definition.variants[0]
 
-    assertThat(allVariant.name).isEqualTo("list")
+    assertThat(allVariant.id).isEqualTo("1.a")
+    assertThat(allVariant.resourceName).isEqualTo("list")
     assertThat(allVariant.description).isNull()
-    assertThat(allVariant.displayName).isEqualTo("All movements")
+    assertThat(allVariant.name).isEqualTo("All movements")
     assertThat(allVariant.fields).hasSize(9)
 
     val lastWeekVariant = definition.variants[1]
-    assertThat(lastWeekVariant.name).isEqualTo("last-week")
+    assertThat(lastWeekVariant.id).isEqualTo("1.b")
+    assertThat(lastWeekVariant.resourceName).isEqualTo("last-week")
     assertThat(lastWeekVariant.description).isEqualTo("All movements in the past week")
-    assertThat(lastWeekVariant.displayName).isEqualTo("Last week")
+    assertThat(lastWeekVariant.name).isEqualTo("Last week")
     assertThat(lastWeekVariant.fields).hasSize(9)
   }
 }
