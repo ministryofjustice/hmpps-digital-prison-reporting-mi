@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model
+package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model
 
 import java.time.LocalDate
 import java.time.LocalTime

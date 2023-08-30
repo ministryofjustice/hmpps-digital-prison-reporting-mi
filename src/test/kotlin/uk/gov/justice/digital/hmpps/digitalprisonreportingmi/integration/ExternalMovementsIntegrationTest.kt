@@ -17,7 +17,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMoveme
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.prisoner7849
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners.prisoner8894
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementModel
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementModel
 
 class ExternalMovementsIntegrationTest : IntegrationTestBase() {
 

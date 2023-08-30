@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model
+package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model
 
 import io.swagger.v3.oas.annotations.media.Schema
 

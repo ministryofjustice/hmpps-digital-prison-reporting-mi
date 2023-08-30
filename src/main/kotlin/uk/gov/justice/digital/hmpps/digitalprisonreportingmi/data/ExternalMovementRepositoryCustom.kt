@@ -1,6 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.model.ExternalMovementFilter
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ExternalMovementFilter
 
 interface ExternalMovementRepositoryCustom {
 
