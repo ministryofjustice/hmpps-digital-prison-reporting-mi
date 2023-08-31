@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.then
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.RenderMethod.HTML
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ProductDefinitionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSource
@@ -94,7 +95,7 @@ class ReportDefinitionServiceTest {
     }
     val service = ReportDefinitionService(repository)
 
-    val result = service.getListForUser()
+    val result = service.getListForUser(null)
 
     then(repository).should().getProductDefinitions()
 
@@ -158,7 +159,7 @@ class ReportDefinitionServiceTest {
     }
     val service = ReportDefinitionService(repository)
 
-    val result = service.getListForUser()
+    val result = service.getListForUser(null)
 
     then(repository).should().getProductDefinitions()
 
@@ -193,9 +194,99 @@ class ReportDefinitionServiceTest {
     val service = ReportDefinitionService(repository)
 
     val exception = assertThrows(IllegalArgumentException::class.java) {
-      service.getListForUser()
+      service.getListForUser(null)
     }
 
     assertThat(exception).message().isEqualTo("Could not find matching DataSet '9'")
+  }
+
+  @Test
+  fun `Getting HTML report list returns relevant reports`() {
+    val repository = mock<ProductDefinitionRepository> {
+      on { getProductDefinitions() } doReturn listOf(
+        ProductDefinition(
+          id = "1",
+          name = "2",
+          metaData = MetaData(
+            author = "3",
+            owner = "4",
+            version = "5",
+          ),
+          dataSet = listOf(
+            DataSet(
+              id = "10",
+              name = "11",
+              query = "12",
+              parameters = emptyList(),
+            ),
+          ),
+          report = listOf(
+            Report(
+              id = "13",
+              name = "14",
+              created = LocalDate.MAX,
+              version = "15",
+              dataset = "\$ref:10",
+              render = RenderMethod.SVG,
+            ),
+            Report(
+              id = "16",
+              name = "17",
+              created = LocalDate.MAX,
+              version = "18",
+              dataset = "\$ref:10",
+              render = RenderMethod.HTML,
+            ),
+          ),
+        ),
+      )
+    }
+    val service = ReportDefinitionService(repository)
+
+    val result = service.getListForUser(HTML)
+
+    assertThat(result).hasSize(1)
+    assertThat(result.first().variants).hasSize(1)
+    assertThat(result.first().variants.first().id).isEqualTo("16")
+  }
+
+  @Test
+  fun `Getting HTML report list with no matches returns no domains`() {
+    val repository = mock<ProductDefinitionRepository> {
+      on { getProductDefinitions() } doReturn listOf(
+        ProductDefinition(
+          id = "1",
+          name = "2",
+          metaData = MetaData(
+            author = "3",
+            owner = "4",
+            version = "5",
+          ),
+          dataSet = listOf(
+            DataSet(
+              id = "10",
+              name = "11",
+              query = "12",
+              parameters = emptyList(),
+            ),
+          ),
+          report = listOf(
+            Report(
+              id = "13",
+              name = "14",
+              created = LocalDate.MAX,
+              version = "15",
+              dataset = "\$ref:10",
+              render = RenderMethod.SVG,
+            ),
+          ),
+        ),
+      )
+    }
+    val service = ReportDefinitionService(repository)
+
+    val result = service.getListForUser(HTML)
+
+    assertThat(result).hasSize(0)
   }
 }

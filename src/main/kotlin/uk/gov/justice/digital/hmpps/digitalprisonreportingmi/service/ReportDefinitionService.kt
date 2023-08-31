@@ -5,6 +5,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Fi
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FilterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FilterOption
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FilterType
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.RenderMethod
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ReportDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.VariantDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.WordWrap
@@ -17,16 +18,18 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
 @Service
 class ReportDefinitionService(val productDefinitionRepository: ProductDefinitionRepository) {
 
-  fun getListForUser(): List<ReportDefinition> {
+  fun getListForUser(renderMethod: RenderMethod?): List<ReportDefinition> {
     return productDefinitionRepository.getProductDefinitions()
-      .map(this::map)
+      .map { map(it, renderMethod) }
       .filter { it.variants.isNotEmpty() }
   }
 
-  private fun map(definition: ProductDefinition): ReportDefinition = ReportDefinition(
+  private fun map(definition: ProductDefinition, renderMethod: RenderMethod?): ReportDefinition = ReportDefinition(
     name = definition.name,
     description = definition.description,
-    variants = definition.report.map { map(it, definition.dataSet) },
+    variants = definition.report
+      .filter { renderMethod == null || it.render.toString() == renderMethod.toString() }
+      .map { map(it, definition.dataSet) },
   )
 
   private fun map(definition: Report, dataSets: List<DataSet>): VariantDefinition {

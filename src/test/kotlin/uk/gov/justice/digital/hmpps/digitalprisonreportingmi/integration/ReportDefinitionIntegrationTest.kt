@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.test.web.reactive.server.expectBodyList
+import org.springframework.web.util.UriBuilder
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.ReportDefinition
 
 class ReportDefinitionIntegrationTest : IntegrationTestBase() {
@@ -44,5 +45,50 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
     assertThat(lastWeekVariant.description).isEqualTo("All movements in the past week")
     assertThat(lastWeekVariant.name).isEqualTo("Last week")
     assertThat(lastWeekVariant.fields).hasSize(9)
+  }
+
+  @Test
+  fun `Definitions are returned when they match the filter`() {
+    val result = webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/definitions")
+          .queryParam("renderMethod", "HTML")
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk
+      .expectBodyList<ReportDefinition>()
+      .returnResult()
+
+    assertThat(result.responseBody).isNotNull
+    assertThat(result.responseBody).hasSize(1)
+    assertThat(result.responseBody).first().isNotNull
+
+    val definition = result.responseBody!!.first()
+
+    assertThat(definition.variants).hasSize(2)
+  }
+
+  @Test
+  fun `Definitions are not returned when they do not match the filter`() {
+    val result = webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/definitions")
+          .queryParam("renderMethod", "SVG")
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk
+      .expectBodyList<ReportDefinition>()
+      .returnResult()
+
+    assertThat(result.responseBody).isNotNull
+    assertThat(result.responseBody).hasSize(0)
   }
 }
