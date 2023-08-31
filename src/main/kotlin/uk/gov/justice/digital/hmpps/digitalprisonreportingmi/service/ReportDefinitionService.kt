@@ -10,7 +10,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Va
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.WordWrap
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ProductDefinitionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Parameter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
 
@@ -30,7 +30,9 @@ class ReportDefinitionService(val productDefinitionRepository: ProductDefinition
   )
 
   private fun map(definition: Report, dataSets: List<DataSet>): VariantDefinition {
-    val dataSet = dataSets.find { it.id == definition.dataset.removePrefix("\$ref:") }!!
+    val dataSetRef = definition.dataset.removePrefix("\$ref:")
+    val dataSet = dataSets.find { it.id == dataSetRef }
+      ?: throw IllegalArgumentException("Could not find matching DataSet '$dataSetRef'")
 
     return VariantDefinition(
       id = definition.id,
@@ -42,7 +44,7 @@ class ReportDefinitionService(val productDefinitionRepository: ProductDefinition
     )
   }
 
-  private fun map(definition: ParameterDefinition): FieldDefinition = FieldDefinition(
+  private fun map(definition: Parameter): FieldDefinition = FieldDefinition(
     name = definition.name,
     displayName = definition.displayName,
     dateFormat = definition.dateFormat,

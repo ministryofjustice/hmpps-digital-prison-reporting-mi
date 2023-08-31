@@ -9,7 +9,7 @@ data class Report(
   val created: LocalDate,
   val version: String,
   val dataset: String,
-  val policy: List<String>,
+  val policy: List<String> = emptyList(),
   val render: RenderMethod,
   val schedule: String? = null,
   val specification: String? = null,

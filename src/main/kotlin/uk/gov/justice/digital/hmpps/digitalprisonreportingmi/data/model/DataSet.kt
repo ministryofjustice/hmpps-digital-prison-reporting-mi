@@ -4,5 +4,5 @@ data class DataSet(
   val id: String,
   val name: String,
   val query: String,
-  val parameters: List<ParameterDefinition>,
+  val parameters: List<Parameter>,
 )

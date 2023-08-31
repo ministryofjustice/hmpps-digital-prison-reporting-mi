@@ -7,7 +7,8 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDe
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterOption
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.MetaData
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Parameter
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.RenderMethod
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
@@ -19,16 +20,18 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
 
   override fun getProductDefinitions(): List<ProductDefinition> {
     val parameters = listOf(
-      ParameterDefinition(
+      Parameter(
         name = "prisonNumber",
         displayName = "Prison Number",
+        type = ParameterType.String,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "name",
         displayName = "Name",
         wordWrap = WordWrap.None,
+        type = ParameterType.String,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "date",
         displayName = "Date",
         dateFormat = "dd/MM/yy",
@@ -36,23 +39,27 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
         filter = FilterDefinition(
           type = FilterType.DateRange,
         ),
+        type = ParameterType.Date,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "date",
         displayName = "Time",
         dateFormat = "HH:mm",
+        type = ParameterType.Date,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "origin",
         displayName = "From",
         wordWrap = WordWrap.None,
+        type = ParameterType.String,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "destination",
         displayName = "To",
         wordWrap = WordWrap.None,
+        type = ParameterType.String,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "direction",
         displayName = "Direction",
         filter = FilterDefinition(
@@ -62,14 +69,17 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             FilterOption("out", "Out"),
           ),
         ),
+        type = ParameterType.String,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "type",
         displayName = "Type",
+        type = ParameterType.String,
       ),
-      ParameterDefinition(
+      Parameter(
         name = "reason",
         displayName = "Reason",
+        type = ParameterType.String,
       ),
     )
 

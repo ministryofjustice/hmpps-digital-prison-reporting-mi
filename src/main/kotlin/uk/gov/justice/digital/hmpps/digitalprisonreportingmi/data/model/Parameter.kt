@@ -1,8 +1,9 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model
 
-data class ParameterDefinition(
+data class Parameter(
   val name: String,
   val displayName: String,
+  val type: ParameterType,
   val dateFormat: String? = null,
   val wordWrap: WordWrap? = null,
   val filter: FilterDefinition? = null,
