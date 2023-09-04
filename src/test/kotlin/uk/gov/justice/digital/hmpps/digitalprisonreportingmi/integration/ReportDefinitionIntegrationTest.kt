@@ -91,4 +91,24 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
     assertThat(result.responseBody).isNotNull
     assertThat(result.responseBody).hasSize(0)
   }
+
+  @Test
+  fun `Definitions do not contain null values`() {
+    val result = webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/definitions")
+          .queryParam("renderMethod", "HTML")
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk
+      .expectBody(String::class.java)
+      .returnResult()
+
+    assertThat(result.responseBody).isNotNull
+    assertThat(result.responseBody).doesNotContain(": null")
+  }
 }

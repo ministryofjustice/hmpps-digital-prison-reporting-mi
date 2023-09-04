@@ -12,6 +12,7 @@ spring:
     date-format: "yyyy-MM-dd HH:mm:ss"
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+    default-property-inclusion: NON_NULL
 
   profiles:
     group:
