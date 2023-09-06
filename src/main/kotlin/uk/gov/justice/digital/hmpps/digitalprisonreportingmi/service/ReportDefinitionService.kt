@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FieldDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FieldType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FilterDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FilterOption
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.FilterType
@@ -25,6 +26,7 @@ class ReportDefinitionService(val productDefinitionRepository: ProductDefinition
   }
 
   private fun map(definition: ProductDefinition, renderMethod: RenderMethod?): ReportDefinition = ReportDefinition(
+    id = definition.id,
     name = definition.name,
     description = definition.description,
     variants = definition.report
@@ -55,6 +57,7 @@ class ReportDefinitionService(val productDefinitionRepository: ProductDefinition
     filter = definition.filter?.let(this::map),
     sortable = definition.sortable,
     defaultSortColumn = definition.defaultSortColumn,
+    type = definition.type.toString().let(FieldType::valueOf),
   )
 
   private fun map(definition: uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDefinition): FilterDefinition = FilterDefinition(

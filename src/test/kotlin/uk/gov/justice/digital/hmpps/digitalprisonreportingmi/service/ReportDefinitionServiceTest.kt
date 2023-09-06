@@ -105,6 +105,7 @@ class ReportDefinitionServiceTest {
     val definition = result.first()
 
     assertThat(definition).isNotNull
+    assertThat(definition.id).isEqualTo(fullProductDefinition.id)
     assertThat(definition.name).isEqualTo(fullProductDefinition.name)
     assertThat(definition.description).isEqualTo(fullProductDefinition.description)
     assertThat(definition.variants).isNotEmpty
@@ -134,6 +135,7 @@ class ReportDefinitionServiceTest {
     assertThat(field.filter?.type.toString()).isEqualTo(sourceParameter.filter?.type.toString())
     assertThat(field.filter?.staticOptions).isNotEmpty
     assertThat(field.filter?.staticOptions).hasSize(1)
+    assertThat(field.type.toString()).isEqualTo(sourceParameter.type.toString())
 
     val filterOption = field.filter?.staticOptions?.first()
     val sourceFilterOption = sourceParameter.filter?.staticOptions?.first()
