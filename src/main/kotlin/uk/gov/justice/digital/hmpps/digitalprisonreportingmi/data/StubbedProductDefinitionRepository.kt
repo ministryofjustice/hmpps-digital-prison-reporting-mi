@@ -175,8 +175,8 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
                   defaultSortColumn = true,
                   filter = FilterDefinition(
                     type = FilterType.DateRange,
+                    defaultValue = "today(-7,Days) - today()",
                   ),
-                  defaultFilter = "",
                 ),
                 ReportField(
                   schemaField = "\$ref:origin",

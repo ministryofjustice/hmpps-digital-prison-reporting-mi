@@ -7,5 +7,4 @@ data class ReportField(
   val filter: FilterDefinition? = null,
   val sortable: Boolean = true,
   val defaultSortColumn: Boolean = false,
-  val defaultFilter: String? = null,
 )

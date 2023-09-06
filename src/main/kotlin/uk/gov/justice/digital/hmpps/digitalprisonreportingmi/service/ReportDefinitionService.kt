@@ -17,6 +17,15 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductD
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ReportField
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.SchemaField
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.DateDifferenceMagnitude.Days
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.DateDifferenceMagnitude.Months
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.DateDifferenceMagnitude.Weeks
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.DateDifferenceMagnitude.Years
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
+
+val todayRegex: Regex = Regex("today\\(\\)")
+val dateRegex: Regex = Regex("today\\((-?\\d+), ?(.[a-z]+)\\)")
 
 @Service
 class ReportDefinitionService(val productDefinitionRepository: ProductDefinitionRepository) {
@@ -84,10 +93,45 @@ class ReportDefinitionService(val productDefinitionRepository: ProductDefinition
   private fun map(definition: uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDefinition): FilterDefinition = FilterDefinition(
     type = FilterType.valueOf(definition.type.toString()),
     staticOptions = definition.staticOptions?.map(this::map),
+    defaultValue = replaceTokens(definition.defaultValue),
   )
+
+  private fun replaceTokens(defaultValue: String?): String? {
+    if (defaultValue == null) {
+      return null
+    }
+
+    val today = LocalDate.now().format(ISO_LOCAL_DATE)
+    var result = defaultValue.replace(todayRegex, today)
+
+    if (result.matches(dateRegex)) {
+      dateRegex.findAll(result)
+        .forEach {
+          val offset = it.groupValues[0].toLong()
+
+          val resultDate = when (DateDifferenceMagnitude.valueOf(it.groupValues[1])) {
+            Days -> LocalDate.now().plusDays(offset)
+            Weeks -> LocalDate.now().plusWeeks(offset)
+            Months -> LocalDate.now().plusMonths(offset)
+            Years -> LocalDate.now().plusYears(offset)
+          }
+
+          result = result.replace(it.value, resultDate.format(ISO_LOCAL_DATE))
+        }
+    }
+
+    return result
+  }
 
   private fun map(definition: uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterOption): FilterOption = FilterOption(
     name = definition.name,
     displayName = definition.displayName,
   )
+}
+
+enum class DateDifferenceMagnitude {
+  Days,
+  Weeks,
+  Months,
+  Years,
 }
