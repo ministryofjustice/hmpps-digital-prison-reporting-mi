@@ -5,6 +5,5 @@ data class VariantDefinition(
   val name: String,
   val resourceName: String,
   val description: String?,
-  val specification: String?,
-  val fields: List<FieldDefinition>,
+  val specification: Specification?,
 )

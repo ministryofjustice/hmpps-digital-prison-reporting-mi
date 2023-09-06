@@ -1,8 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model
 
-data class DataSet(
-  val id: String,
+data class SchemaField(
   val name: String,
-  val query: String,
-  val schema: Schema,
+  val type: ParameterType,
 )

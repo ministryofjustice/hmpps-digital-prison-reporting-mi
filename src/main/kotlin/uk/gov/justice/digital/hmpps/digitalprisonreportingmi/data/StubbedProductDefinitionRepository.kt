@@ -7,11 +7,14 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDe
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterOption
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.MetaData
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Parameter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.RenderMethod
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ReportField
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Schema
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.SchemaField
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Specification
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.WordWrap
 import java.time.LocalDate
 
@@ -19,66 +22,37 @@ import java.time.LocalDate
 class StubbedProductDefinitionRepository : ProductDefinitionRepository {
 
   override fun getProductDefinitions(): List<ProductDefinition> {
-    val parameters = listOf(
-      Parameter(
+    val fields = listOf(
+      SchemaField(
         name = "prisonNumber",
-        displayName = "Prison Number",
         type = ParameterType.String,
       ),
-      Parameter(
+      SchemaField(
         name = "name",
-        displayName = "Name",
-        wordWrap = WordWrap.None,
         type = ParameterType.String,
       ),
-      Parameter(
+      SchemaField(
         name = "date",
-        displayName = "Date",
-        dateFormat = "dd/MM/yy",
-        defaultSortColumn = true,
-        filter = FilterDefinition(
-          type = FilterType.DateRange,
-        ),
         type = ParameterType.Date,
       ),
-      Parameter(
-        name = "date",
-        displayName = "Time",
-        dateFormat = "HH:mm",
-        type = ParameterType.Date,
-      ),
-      Parameter(
+      SchemaField(
         name = "origin",
-        displayName = "From",
-        wordWrap = WordWrap.None,
         type = ParameterType.String,
       ),
-      Parameter(
+      SchemaField(
         name = "destination",
-        displayName = "To",
-        wordWrap = WordWrap.None,
         type = ParameterType.String,
       ),
-      Parameter(
+      SchemaField(
         name = "direction",
-        displayName = "Direction",
-        filter = FilterDefinition(
-          type = FilterType.Radio,
-          staticOptions = listOf(
-            FilterOption("in", "In"),
-            FilterOption("out", "Out"),
-          ),
-        ),
         type = ParameterType.String,
       ),
-      Parameter(
+      SchemaField(
         name = "type",
-        displayName = "Type",
         type = ParameterType.String,
       ),
-      Parameter(
+      SchemaField(
         name = "reason",
-        displayName = "Reason",
         type = ParameterType.String,
       ),
     )
@@ -104,25 +78,9 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
               "FROM datamart.domain.movements_movements as movements\n" +
               "JOIN datamart.domain.prisoner_prisoner as prisoners\n" +
               "ON movements.prisoner = prisoners.id",
-            parameters = parameters,
-          ),
-          DataSet(
-            id = "last-week",
-            name = "Last week",
-            query = "SELECT " +
-              "prisoners.number AS prisonNumber," +
-              "CONCAT(prisoners.lastname, ', ', substring(prisoners.firstname, 1, 1)) AS name," +
-              "movements.date," +
-              "movements.direction," +
-              "movements.type," +
-              "movements.origin," +
-              "movements.destination," +
-              "movements.reason\n" +
-              "FROM datamart.domain.movements_movements as movements\n" +
-              "JOIN datamart.domain.prisoner_prisoner as prisoners\n" +
-              "ON movements.prisoner = prisoners.id\n" +
-              "WHERE DATE_PART('day', CURRENT_DATE() - movements.date) BETWEEN 0 AND 7",
-            parameters = parameters,
+            schema = Schema(
+              field = fields,
+            ),
           ),
         ),
         dataSource = listOf(
@@ -138,7 +96,57 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             name = "All movements",
             dataset = "\$ref:list",
             policy = emptyList(),
-            specification = "list",
+            specification = Specification(
+              template = "list",
+              field = listOf(
+                ReportField(
+                  schemaField = "\$ref:prisonNumber",
+                  displayName = "Prison Number",
+                ),
+                ReportField(
+                  schemaField = "\$ref:name",
+                  displayName = "Name",
+                  wordWrap = WordWrap.None,
+                ),
+                ReportField(
+                  schemaField = "\$ref:date",
+                  displayName = "Date",
+                  defaultSortColumn = true,
+                  filter = FilterDefinition(
+                    type = FilterType.DateRange,
+                  ),
+                ),
+                ReportField(
+                  schemaField = "\$ref:origin",
+                  displayName = "From",
+                  wordWrap = WordWrap.None,
+                ),
+                ReportField(
+                  schemaField = "\$ref:destination",
+                  displayName = "To",
+                  wordWrap = WordWrap.None,
+                ),
+                ReportField(
+                  schemaField = "\$ref:direction",
+                  displayName = "Direction",
+                  filter = FilterDefinition(
+                    type = FilterType.Radio,
+                    staticOptions = listOf(
+                      FilterOption("in", "In"),
+                      FilterOption("out", "Out"),
+                    ),
+                  ),
+                ),
+                ReportField(
+                  schemaField = "\$ref:type",
+                  displayName = "Type",
+                ),
+                ReportField(
+                  schemaField = "\$ref:reason",
+                  displayName = "Reason",
+                ),
+              ),
+            ),
             render = RenderMethod.HTML,
             created = LocalDate.now(),
             version = "1.2.3",
@@ -147,9 +155,60 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             id = "1.b",
             name = "Last week",
             description = "All movements in the past week",
-            dataset = "\$ref:last-week",
+            dataset = "\$ref:list",
             policy = emptyList(),
-            specification = "list",
+            specification = Specification(
+              template = "list",
+              field = listOf(
+                ReportField(
+                  schemaField = "\$ref:prisonNumber",
+                  displayName = "Prison Number",
+                ),
+                ReportField(
+                  schemaField = "\$ref:name",
+                  displayName = "Name",
+                  wordWrap = WordWrap.None,
+                ),
+                ReportField(
+                  schemaField = "\$ref:date",
+                  displayName = "Date",
+                  defaultSortColumn = true,
+                  filter = FilterDefinition(
+                    type = FilterType.DateRange,
+                  ),
+                  defaultFilter = "",
+                ),
+                ReportField(
+                  schemaField = "\$ref:origin",
+                  displayName = "From",
+                  wordWrap = WordWrap.None,
+                ),
+                ReportField(
+                  schemaField = "\$ref:destination",
+                  displayName = "To",
+                  wordWrap = WordWrap.None,
+                ),
+                ReportField(
+                  schemaField = "\$ref:direction",
+                  displayName = "Direction",
+                  filter = FilterDefinition(
+                    type = FilterType.Radio,
+                    staticOptions = listOf(
+                      FilterOption("in", "In"),
+                      FilterOption("out", "Out"),
+                    ),
+                  ),
+                ),
+                ReportField(
+                  schemaField = "\$ref:type",
+                  displayName = "Type",
+                ),
+                ReportField(
+                  schemaField = "\$ref:reason",
+                  displayName = "Reason",
+                ),
+              ),
+            ),
             render = RenderMethod.HTML,
             created = LocalDate.now(),
             version = "1.2.3",

@@ -14,11 +14,14 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterDe
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterOption
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.FilterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.MetaData
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Parameter
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.RenderMethod
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ReportField
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Schema
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.SchemaField
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Specification
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.WordWrap
 import java.time.LocalDate
 import java.util.Collections.singletonMap
@@ -42,24 +45,12 @@ class ReportDefinitionServiceTest {
         id = "10",
         name = "11",
         query = "12",
-        parameters = listOf(
-          Parameter(
-            name = "13",
-            displayName = "14",
-            type = ParameterType.Long,
-            dateFormat = "15",
-            wordWrap = WordWrap.None,
-            filter = FilterDefinition(
-              type = FilterType.Radio,
-              staticOptions = listOf(
-                FilterOption(
-                  name = "16",
-                  displayName = "17",
-                ),
-              ),
+        schema = Schema(
+          field = listOf(
+            SchemaField(
+              name = "13",
+              type = ParameterType.Long,
             ),
-            sortable = true,
-            defaultSortColumn = true,
           ),
         ),
       ),
@@ -82,7 +73,27 @@ class ReportDefinitionServiceTest {
         policy = listOf("25"),
         render = RenderMethod.PDF,
         schedule = "26",
-        specification = "27",
+        specification = Specification(
+          template = "27",
+          field = listOf(
+            ReportField(
+              schemaField = "\$ref:13",
+              displayName = "14",
+              wordWrap = WordWrap.None,
+              filter = FilterDefinition(
+                type = FilterType.Radio,
+                staticOptions = listOf(
+                  FilterOption(
+                    name = "16",
+                    displayName = "17",
+                  ),
+                ),
+              ),
+              sortable = true,
+              defaultSortColumn = true,
+            ),
+          ),
+        ),
         destination = listOf(singletonMap("28", "29")),
       ),
     ),
@@ -118,27 +129,28 @@ class ReportDefinitionServiceTest {
     assertThat(variant.resourceName).isEqualTo(fullProductDefinition.dataSet.first().id)
     assertThat(variant.resourceName).isEqualTo(fullProductDefinition.dataSet.first().id)
     assertThat(variant.description).isEqualTo(fullProductDefinition.report.first().description)
-    assertThat(variant.specification).isEqualTo(fullProductDefinition.report.first().specification)
-    assertThat(variant.fields).isNotEmpty
-    assertThat(variant.fields).hasSize(1)
+    assertThat(variant.specification).isNotNull
+    assertThat(variant.specification?.template).isEqualTo(fullProductDefinition.report.first().specification?.template)
+    assertThat(variant.specification?.fields).isNotEmpty
+    assertThat(variant.specification?.fields).hasSize(1)
 
-    val field = variant.fields.first()
-    val sourceParameter = fullProductDefinition.dataSet.first().parameters.first()
+    val field = variant.specification!!.fields.first()
+    val sourceSchemaField = fullProductDefinition.dataSet.first().schema.field.first()
+    val sourceReportField = fullProductDefinition.report.first().specification!!.field.first()
 
-    assertThat(field.name).isEqualTo(sourceParameter.name)
-    assertThat(field.displayName).isEqualTo(sourceParameter.displayName)
-    assertThat(field.dateFormat).isEqualTo(sourceParameter.dateFormat)
-    assertThat(field.wordWrap.toString()).isEqualTo(sourceParameter.wordWrap.toString())
-    assertThat(field.sortable).isEqualTo(sourceParameter.sortable)
-    assertThat(field.defaultSortColumn).isEqualTo(sourceParameter.defaultSortColumn)
+    assertThat(field.name).isEqualTo(sourceSchemaField.name)
+    assertThat(field.displayName).isEqualTo(sourceReportField.displayName)
+    assertThat(field.wordWrap.toString()).isEqualTo(sourceReportField.wordWrap.toString())
+    assertThat(field.sortable).isEqualTo(sourceReportField.sortable)
+    assertThat(field.defaultSortColumn).isEqualTo(sourceReportField.defaultSortColumn)
     assertThat(field.filter).isNotNull
-    assertThat(field.filter?.type.toString()).isEqualTo(sourceParameter.filter?.type.toString())
+    assertThat(field.filter?.type.toString()).isEqualTo(sourceReportField.filter?.type.toString())
     assertThat(field.filter?.staticOptions).isNotEmpty
     assertThat(field.filter?.staticOptions).hasSize(1)
-    assertThat(field.type.toString()).isEqualTo(sourceParameter.type.toString())
+    assertThat(field.type.toString()).isEqualTo(sourceSchemaField.type.toString())
 
     val filterOption = field.filter?.staticOptions?.first()
-    val sourceFilterOption = sourceParameter.filter?.staticOptions?.first()
+    val sourceFilterOption = sourceReportField.filter?.staticOptions?.first()
 
     assertThat(filterOption?.name).isEqualTo(sourceFilterOption?.name)
     assertThat(filterOption?.displayName).isEqualTo(sourceFilterOption?.displayName)
@@ -219,7 +231,9 @@ class ReportDefinitionServiceTest {
               id = "10",
               name = "11",
               query = "12",
-              parameters = emptyList(),
+              schema = Schema(
+                field = emptyList(),
+              ),
             ),
           ),
           report = listOf(
@@ -269,7 +283,9 @@ class ReportDefinitionServiceTest {
               id = "10",
               name = "11",
               query = "12",
-              parameters = emptyList(),
+              schema = Schema(
+                field = emptyList(),
+              ),
             ),
           ),
           report = listOf(

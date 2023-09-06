@@ -12,6 +12,6 @@ data class Report(
   val policy: List<String> = emptyList(),
   val render: RenderMethod,
   val schedule: String? = null,
-  val specification: String? = null,
+  val specification: Specification? = null,
   val destination: List<Map<String, String>> = emptyList(),
 )
