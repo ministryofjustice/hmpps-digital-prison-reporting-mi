@@ -26,7 +26,7 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
     val definition = result.responseBody!!.first()
 
     assertThat(definition.name).isEqualTo("External Movements")
-    assertThat(definition.description).isNull()
+    assertThat(definition.description).isEqualTo("Reports about prisoner external movements")
     assertThat(definition.variants).hasSize(2)
     assertThat(definition.variants[0]).isNotNull
     assertThat(definition.variants[1]).isNotNull
@@ -34,7 +34,7 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
     val lastMonthVariant = definition.variants[0]
 
     assertThat(lastMonthVariant.id).isEqualTo("last-month")
-    assertThat(lastMonthVariant.resourceName).isEqualTo("list")
+    assertThat(lastMonthVariant.resourceName).isEqualTo("external-movements")
     assertThat(lastMonthVariant.name).isEqualTo("Last month")
     assertThat(lastMonthVariant.description).isEqualTo("All movements in the past month")
     assertThat(lastMonthVariant.specification).isNotNull
@@ -42,7 +42,7 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
 
     val lastWeekVariant = definition.variants[1]
     assertThat(lastWeekVariant.id).isEqualTo("last-week")
-    assertThat(lastWeekVariant.resourceName).isEqualTo("list")
+    assertThat(lastWeekVariant.resourceName).isEqualTo("external-movements")
     assertThat(lastWeekVariant.description).isEqualTo("All movements in the past week")
     assertThat(lastWeekVariant.name).isEqualTo("Last week")
     assertThat(lastWeekVariant.specification).isNotNull

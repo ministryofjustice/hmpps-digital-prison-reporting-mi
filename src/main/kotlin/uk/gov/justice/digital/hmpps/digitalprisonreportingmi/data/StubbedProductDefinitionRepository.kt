@@ -59,12 +59,13 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
 
     return listOf(
       ProductDefinition(
-        id = "1",
+        id = "external-movements",
         name = "External Movements",
+        description = "Reports about prisoner external movements",
         metaData = MetaData(author = "Adam", version = "1.2.3", owner = "Eve"),
         dataSet = listOf(
           DataSet(
-            id = "list",
+            id = "external-movements",
             name = "All movements",
             query = "SELECT " +
               "prisoners.number AS prisonNumber," +
@@ -85,7 +86,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
         ),
         dataSource = listOf(
           DataSource(
-            id = "1",
+            id = "redshift",
             name = "RedShift",
             connection = "redshift",
           ),
@@ -95,7 +96,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             id = "last-month",
             name = "Last month",
             description = "All movements in the past month",
-            dataset = "\$ref:list",
+            dataset = "\$ref:external-movements",
             policy = emptyList(),
             specification = Specification(
               template = "list",
@@ -157,7 +158,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             id = "last-week",
             name = "Last week",
             description = "All movements in the past week",
-            dataset = "\$ref:list",
+            dataset = "\$ref:external-movements",
             policy = emptyList(),
             specification = Specification(
               template = "list",
