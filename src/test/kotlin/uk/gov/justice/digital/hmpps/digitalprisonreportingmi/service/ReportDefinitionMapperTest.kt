@@ -117,7 +117,6 @@ class ReportDefinitionMapperTest {
     assertThat(variant.id).isEqualTo(fullProductDefinition.report.first().id)
     assertThat(variant.name).isEqualTo(fullProductDefinition.report.first().name)
     assertThat(variant.resourceName).isEqualTo(fullProductDefinition.dataSet.first().id)
-    assertThat(variant.resourceName).isEqualTo(fullProductDefinition.dataSet.first().id)
     assertThat(variant.description).isEqualTo(fullProductDefinition.report.first().description)
     assertThat(variant.specification).isNotNull
     assertThat(variant.specification?.template).isEqualTo(fullProductDefinition.report.first().specification?.template)

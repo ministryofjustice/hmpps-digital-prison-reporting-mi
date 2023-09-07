@@ -92,8 +92,9 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
         ),
         report = listOf(
           Report(
-            id = "1.a",
-            name = "All movements",
+            id = "last-month",
+            name = "Last month",
+            description = "All movements in the past month",
             dataset = "\$ref:list",
             policy = emptyList(),
             specification = Specification(
@@ -114,6 +115,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
                   defaultSortColumn = true,
                   filter = FilterDefinition(
                     type = FilterType.DateRange,
+                    defaultValue = "today(-1,months) - today()",
                   ),
                 ),
                 ReportField(
@@ -152,7 +154,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             version = "1.2.3",
           ),
           Report(
-            id = "1.b",
+            id = "last-week",
             name = "Last week",
             description = "All movements in the past week",
             dataset = "\$ref:list",
