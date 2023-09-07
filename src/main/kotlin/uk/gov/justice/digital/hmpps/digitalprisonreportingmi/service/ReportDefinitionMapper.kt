@@ -16,18 +16,15 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ProductD
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.Report
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ReportField
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.SchemaField
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ReportDefinitionMapper.DateDifferenceMagnitude.Days
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ReportDefinitionMapper.DateDifferenceMagnitude.Months
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ReportDefinitionMapper.DateDifferenceMagnitude.Weeks
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ReportDefinitionMapper.DateDifferenceMagnitude.Years
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
+import java.time.temporal.ChronoUnit
 
 @Component
 class ReportDefinitionMapper {
 
   val todayRegex: Regex = Regex("today\\(\\)")
-  val dateRegex: Regex = Regex("today\\((-?\\d+), ?(.[a-z]+)\\)")
+  val dateRegex: Regex = Regex("today\\((-?\\d+), ?([a-z]+)\\)", RegexOption.IGNORE_CASE)
 
   fun map(definition: ProductDefinition, renderMethod: RenderMethod?): ReportDefinition = ReportDefinition(
     id = definition.id,
@@ -97,21 +94,13 @@ class ReportDefinitionMapper {
     val today = LocalDate.now().format(ISO_LOCAL_DATE)
     var result = defaultValue.replace(todayRegex, today)
 
-    if (result.matches(dateRegex)) {
-      dateRegex.findAll(result)
-        .forEach {
-          val offset = it.groupValues[0].toLong()
+    dateRegex.findAll(result)
+      .forEach {
+        val offset = it.groupValues[1].toLong()
+        val resultDate = LocalDate.now().plus(offset, ChronoUnit.valueOf(it.groupValues[2].uppercase()))
 
-          val resultDate = when (DateDifferenceMagnitude.valueOf(it.groupValues[1])) {
-            Days -> LocalDate.now().plusDays(offset)
-            Weeks -> LocalDate.now().plusWeeks(offset)
-            Months -> LocalDate.now().plusMonths(offset)
-            Years -> LocalDate.now().plusYears(offset)
-          }
-
-          result = result.replace(it.value, resultDate.format(ISO_LOCAL_DATE))
-        }
-    }
+        result = result.replace(it.value, resultDate.format(ISO_LOCAL_DATE))
+      }
 
     return result
   }
@@ -120,11 +109,4 @@ class ReportDefinitionMapper {
     name = definition.name,
     displayName = definition.displayName,
   )
-
-  enum class DateDifferenceMagnitude {
-    Days,
-    Weeks,
-    Months,
-    Years,
-  }
 }

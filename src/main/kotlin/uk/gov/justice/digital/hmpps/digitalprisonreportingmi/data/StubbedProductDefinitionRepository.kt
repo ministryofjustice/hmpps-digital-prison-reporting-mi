@@ -175,7 +175,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
                   defaultSortColumn = true,
                   filter = FilterDefinition(
                     type = FilterType.DateRange,
-                    defaultValue = "today(-7,Days) - today()",
+                    defaultValue = "today(-1,weeks) - today()",
                   ),
                 ),
                 ReportField(
