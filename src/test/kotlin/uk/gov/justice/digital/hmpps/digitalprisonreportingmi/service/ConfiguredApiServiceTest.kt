@@ -39,6 +39,23 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
+  fun `the service calls the repository without filters if no filters are provided`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
+    val expectedResult = listOf(
+      mapOf("prisonNumber" to "1")
+    )
+
+    whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), emptyMap())).thenReturn(expectedResult)
+
+    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, emptyMap())
+
+    verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), emptyMap())
+    assertEquals(expectedResult, actual)
+  }
+
+  @Test
   fun `should throw an exception for invalid report variant`() {
     val reportId = "external-movements"
     val reportVariantId = "non existent variant"

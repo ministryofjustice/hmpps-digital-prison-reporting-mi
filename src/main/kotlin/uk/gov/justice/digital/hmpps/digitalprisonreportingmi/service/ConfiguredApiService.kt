@@ -29,6 +29,9 @@ class ConfiguredApiService(
   }
 
   private fun validateFilters(reportId: String, reportVariantId: String, filters: Map<String, String>) {
+    if (filters.isEmpty()) {
+      return
+    }
     stubbedProductDefinitionRepository.getProductDefinitions()
       .filter { it.id == reportId }
       .flatMap { it.report.filter { report -> report.id == reportVariantId } }
