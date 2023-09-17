@@ -4,12 +4,12 @@ import jakarta.validation.ValidationException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.*
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryCustom
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 
 class ConfiguredApiServiceTest {
   private val stubbedProductDefinitionRepository: StubbedProductDefinitionRepository = StubbedProductDefinitionRepository()
-  private val configuredApiRepository: ConfiguredApiRepository = mock<ConfiguredApiRepository>()
+  private val configuredApiRepository: ConfiguredApiRepositoryCustom = mock<ConfiguredApiRepositoryCustom>()
   private val configuredApiService = ConfiguredApiService(stubbedProductDefinitionRepository, configuredApiRepository)
   @Test
   fun `should call the repositories with the corresponding arguments and get a list of rows`() {
@@ -18,6 +18,10 @@ class ConfiguredApiServiceTest {
     val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
     val filtersExcludingRange = mapOf("direction" to "in")
     val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "date"
+    val sortedAsc = true
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
     val expectedResult = listOf(
       mapOf("prisonNumber" to "1"),
@@ -30,11 +34,11 @@ class ConfiguredApiServiceTest {
       mapOf("reason" to "normal transfer"),
       )
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange)).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filters)
+    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
 
-    verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange)
+    verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
     assertEquals(expectedResult, actual)
   }
 
@@ -46,12 +50,16 @@ class ConfiguredApiServiceTest {
     val expectedResult = listOf(
       mapOf("prisonNumber" to "1")
     )
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "date"
+    val sortedAsc = true
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), emptyMap())).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, emptyMap())
+    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)
 
-    verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), emptyMap())
+    verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), emptyMap(), 1, 10, "date", true)
     assertEquals(expectedResult, actual)
   }
 
@@ -60,10 +68,16 @@ class ConfiguredApiServiceTest {
     val reportId = "external-movements"
     val reportVariantId = "non existent variant"
     val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "date"
+    val sortedAsc = true
 
-    val e = org.junit.jupiter.api.assertThrows<ValidationException> { configuredApiService.validateAndFetchData(reportId, "dataSetId", reportVariantId, filters) }
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndFetchData(reportId, "dataSetId", reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    }
     assertEquals(ConfiguredApiService.INVALID_REPORT_ID_MESSAGE, e.message)
-    verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any())
+    verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
   }
 
   @Test
@@ -71,9 +85,15 @@ class ConfiguredApiServiceTest {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("non existent filter" to "blah")
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "date"
+    val sortedAsc = true
 
-    val e = org.junit.jupiter.api.assertThrows<ValidationException> { configuredApiService.validateAndFetchData(reportId, "dataSetId", reportVariantId, filters) }
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndFetchData(reportId, "dataSetId", reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    }
     assertEquals(ConfiguredApiService.INVALID_FILTERS_MESSAGE, e.message)
-    verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any())
+    verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
   }
 }
