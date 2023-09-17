@@ -96,4 +96,35 @@ class ConfiguredApiServiceTest {
     assertEquals(ConfiguredApiService.INVALID_FILTERS_MESSAGE, e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
   }
+
+  @Test
+  fun `should call the configuredApiRepository with the default sort column if none is provided`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filtersExcludingRange = mapOf("direction" to "in")
+    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "date"
+    val sortedAsc = true
+    val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
+    val expectedResult = listOf(
+      mapOf("prisonNumber" to "1"),
+      mapOf("name" to "FirstName"),
+      mapOf("date" to "2023-05-20"),
+      mapOf("origin" to "OriginLocation"),
+      mapOf("destination" to "DestinationLocation"),
+      mapOf("direction" to "in"),
+      mapOf("type" to "trn"),
+      mapOf("reason" to "normal transfer"),
+    )
+
+    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
+
+    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filters, selectedPage, pageSize, null, sortedAsc)
+
+    verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
+    assertEquals(expectedResult, actual)
+  }
 }

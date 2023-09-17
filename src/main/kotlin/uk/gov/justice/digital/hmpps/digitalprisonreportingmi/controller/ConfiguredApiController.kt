@@ -28,7 +28,7 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     @RequestParam(defaultValue = "10")
     @Min(1)
     pageSize: Long,
-    @RequestParam(defaultValue = "date") sortColumn: String,
+    @RequestParam sortColumn: String?,
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
     @RequestParam allQueryParams: Map<String, String>,
     @PathVariable("reportId") reportId: String,

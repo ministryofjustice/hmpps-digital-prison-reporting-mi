@@ -92,7 +92,6 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       ]       
       """,
       )
-    //         {"prisonNumber": "${prisoner7849.number}", "firstName": "${prisoner7849.firstName}", "lastName": "${prisoner7849.lastName}", "date": "2023-05-01", "time": "15:19:00", "from": "Cardiff", "to": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
   }
 
   @Test
@@ -177,13 +176,25 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
   }
 
   @Test
+  fun `Configured API returns 400 for non-existent filter`() {
+    requestWithQueryAndAssert400("filters.abc", "abc", "/external-movements/external-movements/last-month")
+  }
+
+  @Test
+  fun `Configured API returns 400 for a report field which is not a filter`() {
+    requestWithQueryAndAssert400("filters.name", "some name", "/external-movements/external-movements/last-month")
+  }
+
+  //TODO: Need to rethink if this is the best way to throw this exception
+  @Test
   fun `Configured API returns 400 for invalid startDate query param`() {
     requestWithQueryAndAssert400("filters.date.start", "abc", "/external-movements/external-movements/last-month")
   }
 
+  //TODO: Need to rethink if this is the best way to throw this exception
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("endDate", "b", "/external-movements")
+    requestWithQueryAndAssert400("filters.date.end", "b", "/external-movements/external-movements/last-month")
   }
 
   private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any, path: String) {
