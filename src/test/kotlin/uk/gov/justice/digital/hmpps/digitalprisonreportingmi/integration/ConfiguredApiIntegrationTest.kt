@@ -186,13 +186,11 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     requestWithQueryAndAssert400("filters.name", "some name", "/external-movements/external-movements/last-month")
   }
 
-  // TODO: Need to rethink if this is the best way to throw this exception
   @Test
   fun `Configured API returns 400 for invalid startDate query param`() {
     requestWithQueryAndAssert400("filters.date.start", "abc", "/external-movements/external-movements/last-month")
   }
 
-  // TODO: Need to rethink if this is the best way to throw this exception
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
     requestWithQueryAndAssert400("filters.date.end", "b", "/external-movements/external-movements/last-month")

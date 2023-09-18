@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryCustom
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterType
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 @Service
 class ConfiguredApiService(
@@ -30,11 +33,10 @@ class ConfiguredApiService(
     sortColumn: String?,
     sortedAsc: Boolean,
   ): List<Map<String, Any>> {
-    validateFilters(reportId, reportVariantId, filters)
-    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
     val dataSet = stubbedProductDefinitionRepository.getDataSet(reportId, dataSetId)
+    validateFilters(reportId, reportVariantId, filters, dataSet)
+    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
     val validatedSortColumn = validateSortColumnOrGetDefault(sortColumn, reportId, dataSet, reportVariantId)
-    // executeQuery for found dataSet
     return configuredApiRepository
       .executeQuery(
         dataSet.query,
@@ -63,7 +65,7 @@ class ConfiguredApiService(
     } ?: calculateDefaultSortColumn(reportId, dataSet.id, reportVariantId)
   }
 
-  private fun validateFilters(reportId: String, reportVariantId: String, filters: Map<String, String>) {
+  private fun validateFilters(reportId: String, reportVariantId: String, filters: Map<String, String>, dataSet: DataSet) {
     if (filters.isEmpty()) {
       return
     }
@@ -73,6 +75,28 @@ class ConfiguredApiService(
 //      ?.takeIf { it.size ==  truncateRangeFilters(filters).size}
       ?.ifEmpty { throw ValidationException(INVALID_FILTERS_MESSAGE) }
       ?: throw ValidationException(INVALID_FILTERS_MESSAGE)
+
+    validateFilterTypes(filters, dataSet)
+  }
+
+  private fun validateFilterTypes(filters: Map<String, String>, dataSet: DataSet) {
+    truncateRangeFilters(filters)
+      .forEach { filter ->
+        val schemaField = dataSet.schema.field.first { it.name == filter.key }
+        if (schemaField.type == ParameterType.Long) {
+          try {
+            filter.value.toLong()
+          } catch (e: NumberFormatException) {
+            throw ValidationException("Invalid value ${filter.value} for filter ${filter.key}. Cannot be parsed as a number.")
+          }
+        } else if (schemaField.type == ParameterType.Date) {
+          try {
+            LocalDate.parse(filter.value)
+          } catch (e: DateTimeParseException) {
+            throw ValidationException("Invalid value ${filter.value} for filter ${filter.key}. Cannot be parsed as a date.")
+          }
+        }
+      }
   }
 
   private fun getReportVariantSpecFields(reportId: String, reportVariantId: String) =

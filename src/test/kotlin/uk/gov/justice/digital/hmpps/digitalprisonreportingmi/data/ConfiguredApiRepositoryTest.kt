@@ -56,8 +56,8 @@ class ConfiguredApiRepositoryTest {
 
   @Test
   fun `should return 2 external movements for the selected page 2 and pageSize 2 sorted by date in ascending order`() {
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
-    val filtersExcludingRange = mapOf("direction" to "In")
+//    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+//    val filtersExcludingRange = mapOf("direction" to "In")
 
     val actual = configuredApiRepository.executeQuery(query, emptyMap(), emptyMap(), 2, 2, "date", true)
     Assertions.assertEquals(listOf(movementPrisoner3, movementPrisoner4), actual)
