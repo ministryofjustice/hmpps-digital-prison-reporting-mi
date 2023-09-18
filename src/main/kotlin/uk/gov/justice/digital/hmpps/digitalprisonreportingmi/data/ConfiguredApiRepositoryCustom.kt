@@ -68,7 +68,7 @@ class ConfiguredApiRepositoryCustom {
         }
       }
     stopwatch.stop()
-    log.info("Query Execution time in ms: {}", stopwatch.time)
+    log.debug("Query Execution time in ms: {}", stopwatch.time)
     return result
   }
 }
