@@ -6,6 +6,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiR
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterType
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ReportField
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -18,6 +19,7 @@ class ConfiguredApiService(
   companion object {
     const val INVALID_REPORT_ID_MESSAGE = "Invalid report id provided."
     const val INVALID_FILTERS_MESSAGE = "Invalid filters provided."
+    const val INVALID_STATIC_OPTIONS_MESSAGE = "Invalid static options provided."
     private const val schemaFieldPrefix = "\$ref:"
   }
 
@@ -66,17 +68,52 @@ class ConfiguredApiService(
   }
 
   private fun validateFilters(reportId: String, reportVariantId: String, filters: Map<String, String>, dataSet: DataSet) {
-    if (filters.isEmpty()) {
-      return
-    }
-    getReportVariantSpecFields(reportId, reportVariantId)
-      ?.filter { it.filter?.let { true } ?: false }
-      ?.filter { truncateRangeFilters(filters).containsKey(it.schemaField.removePrefix(schemaFieldPrefix)) }
-      ?.takeIf { it.size == truncateRangeFilters(filters).size }
-      ?.ifEmpty { throw ValidationException(INVALID_FILTERS_MESSAGE) }
-      ?: throw ValidationException(INVALID_FILTERS_MESSAGE)
-
+    filters.ifEmpty { return }
+    val reportFieldsWithFiltersOnly = getReportFieldsWithFiltersOnly(reportId, reportVariantId)
+    validateFiltersMatchSchemaName(reportFieldsWithFiltersOnly, filters)
     validateFilterTypes(filters, dataSet)
+    val filtersWithStaticOptionsOnly = getFiltersWithStaticOptionsOnly(filters, reportFieldsWithFiltersOnly)
+    filtersWithStaticOptionsOnly.ifEmpty { return }
+    validateStaticOptions(filtersWithStaticOptionsOnly, reportFieldsWithFiltersOnly)
+  }
+
+  private fun getReportFieldsWithFiltersOnly(reportId: String, reportVariantId: String) =
+    getReportVariantSpecFields(reportId, reportVariantId)
+      ?.filter { it.filter?.let { true } ?: false }.orEmpty()
+
+  private fun getFiltersWithStaticOptionsOnly(filters: Map<String, String>, reportFieldsWithFiltersOnly: List<ReportField>) =
+    filters.entries.filter { filterEntry ->
+      reportFieldsWithFiltersOnly.any { reportField ->
+        reportField.schemaField.removePrefix(schemaFieldPrefix) == filterEntry.key
+      }
+    }
+
+  private fun validateFiltersMatchSchemaName(reportFieldsWithFilters: List<ReportField>?, filters: Map<String, String>) {
+    (
+      reportFieldsWithFilters
+        ?.filter { truncateRangeFilters(filters).containsKey(it.schemaField.removePrefix(schemaFieldPrefix)) }
+        ?.takeIf { it.size == truncateRangeFilters(filters).size }
+        ?.ifEmpty { throw ValidationException(INVALID_FILTERS_MESSAGE) }
+        ?: throw ValidationException(INVALID_FILTERS_MESSAGE)
+      )
+  }
+
+  private fun validateStaticOptions(filtersWithStaticOptionsOnly: List<Map.Entry<String, String>>, reportFieldsWithFiltersOnly: List<ReportField>) {
+    filtersWithStaticOptionsOnly.forEach { filterWithStaticOptionsOnlyEntry ->
+      reportFieldsWithFiltersOnly.first { reportField ->
+        filterWithStaticOptionsOnlyEntry.key == reportField.schemaField.removePrefix(schemaFieldPrefix)
+      }
+        .filter
+        ?.staticOptions
+        ?.filter { staticOption ->
+          // Case Insensitive comparison for static option filter values. This is in line with the same lenience in the ConfiguredApiRepository.
+          staticOption.name.lowercase() == filterWithStaticOptionsOnlyEntry.value.lowercase()
+        }
+        .orEmpty()
+        .ifEmpty {
+          throw ValidationException(INVALID_STATIC_OPTIONS_MESSAGE)
+        }
+    }
   }
 
   private fun validateFilterTypes(filters: Map<String, String>, dataSet: DataSet) {
@@ -97,7 +134,6 @@ class ConfiguredApiService(
           }
         }
       }
-
   }
 
   private fun getReportVariantSpecFields(reportId: String, reportVariantId: String) =
@@ -113,6 +149,7 @@ class ConfiguredApiService(
     return filters.entries
       .associate { (k, v) -> truncateBasedOnSuffix(k, v) }
   }
+
   private fun truncateBasedOnSuffix(k: String, v: String): Pair<String, String> {
     return if (k.endsWith(startSuffix)) {
       k.substring(0, k.length - startSuffix.length) to v

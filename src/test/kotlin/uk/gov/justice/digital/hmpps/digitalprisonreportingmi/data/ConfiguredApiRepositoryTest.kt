@@ -134,12 +134,11 @@ class ConfiguredApiRepositoryTest {
     Assertions.assertEquals(4, actual.size)
   }
 
-// TODO: Is this needed?
-//  @Test
-//  fun `should return a list of inwards movements with an in direction filter regardless of the casing`() {
-//    val actual = configuredApiRepository.executeQuery(query, emptyMap(), Collections.singletonMap("direction", "in"), 1, 20, "date", true)
-//    Assertions.assertEquals(4, actual.size)
-//  }
+  @Test
+  fun `should return a list of inwards movements with an in direction filter regardless of the casing`() {
+    val actual = configuredApiRepository.executeQuery(query, emptyMap(), Collections.singletonMap("direction", "in"), 1, 20, "date", true)
+    Assertions.assertEquals(4, actual.size)
+  }
 
   @Test
   fun `should return a list of rows filtered by out direction filter`() {
@@ -147,13 +146,11 @@ class ConfiguredApiRepositoryTest {
     Assertions.assertEquals(1, actual.size)
   }
 
-// TODO: Is this needed?
-//  @Test
-//  fun `should return a list of outwards movements with an out direction filter regardless of the casing`() {
-//    val actual = externalMovementRepository.list(1, 20, "date", true, Collections.singletonMap(ExternalMovementFilter.DIRECTION, "out"))
-//    Assertions.assertEquals(1, actual.size)
-//  }
-//
+  @Test
+  fun `should return a list of outwards movements with an out direction filter regardless of the casing`() {
+    val actual = configuredApiRepository.executeQuery(query, emptyMap(), Collections.singletonMap("direction", "out"), 1, 20, "date", true)
+    Assertions.assertEquals(1, actual.size)
+  }
 
   @Test
   fun `should return all the rows on or after the provided start date`() {

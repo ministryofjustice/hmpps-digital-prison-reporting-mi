@@ -29,10 +29,9 @@ class ConfiguredApiRepositoryCustom {
     sortedAsc: Boolean,
   ): List<Map<String, Any>> {
     val preparedStatementNamedParams = MapSqlParameterSource()
-    // TODO: Consider case insensitive non range filters
-    filtersExcludingRange.forEach { preparedStatementNamedParams.addValue(it.key, it.value) }
+    filtersExcludingRange.forEach { preparedStatementNamedParams.addValue(it.key, it.value.lowercase()) }
     rangeFilters.forEach { preparedStatementNamedParams.addValue(it.key, it.value) }
-    val whereNoRange = filtersExcludingRange.keys.map { k -> "$k = :$k" }.joinToString(" AND ").removeSuffix(" AND ").ifEmpty { null }
+    val whereNoRange = filtersExcludingRange.keys.joinToString(" AND ") { k -> "lower($k) = :$k" }.ifEmpty { null }
     val whereRange = rangeFilters.keys.map { k ->
       if (k.endsWith(".start")) {
         "${k.removeSuffix(".start")} >= :$k"

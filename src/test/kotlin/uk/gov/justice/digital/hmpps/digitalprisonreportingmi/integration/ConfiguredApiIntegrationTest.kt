@@ -80,7 +80,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
           .path("/external-movements/external-movements/last-month")
           .queryParam("${FILTERS_PREFIX}date.start", "2023-04-25")
           .queryParam("${FILTERS_PREFIX}date.end", "2023-05-20")
-          .queryParam("${FILTERS_PREFIX}direction", "Out")
+          .queryParam("${FILTERS_PREFIX}direction", "out")
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
@@ -124,7 +124,9 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
   @ParameterizedTest
   @CsvSource(
+    "in,  4",
     "In,  4",
+    "out, 1",
     "Out, 1",
     ",    5",
   )
@@ -147,7 +149,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
     if (direction != null) {
       results?.forEach {
-        assertThat(it[DIRECTION]).isEqualTo(direction)
+        assertThat(it[DIRECTION].toString().lowercase()).isEqualTo(direction.lowercase())
       }
     }
   }
