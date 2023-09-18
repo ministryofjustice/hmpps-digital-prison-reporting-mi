@@ -225,7 +225,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
 
   override fun getDataSet(reportId: String, dataSetId: String): DataSet {
     return getProductDefinitions().filter { it.id == reportId }
-      .flatMap{ pd -> pd.dataSet.filter { it.id == dataSetId } }
+      .flatMap { pd -> pd.dataSet.filter { it.id == dataSetId } }
       .ifEmpty { throw ValidationException("Invalid dataSetId provided: $dataSetId") }
       .takeIf { it.size == 1 }?. first() ?: throw DuplicateDataSetIdException(dataSetId)
   }

@@ -3,7 +3,11 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 import jakarta.validation.ValidationException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.mockito.kotlin.*
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryCustom
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 
@@ -11,6 +15,7 @@ class ConfiguredApiServiceTest {
   private val stubbedProductDefinitionRepository: StubbedProductDefinitionRepository = StubbedProductDefinitionRepository()
   private val configuredApiRepository: ConfiguredApiRepositoryCustom = mock<ConfiguredApiRepositoryCustom>()
   private val configuredApiService = ConfiguredApiService(stubbedProductDefinitionRepository, configuredApiRepository)
+
   @Test
   fun `should call the repositories with the corresponding arguments and get a list of rows`() {
     val reportId = "external-movements"
@@ -32,7 +37,7 @@ class ConfiguredApiServiceTest {
       mapOf("direction" to "in"),
       mapOf("type" to "trn"),
       mapOf("reason" to "normal transfer"),
-      )
+    )
 
     whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
@@ -48,7 +53,7 @@ class ConfiguredApiServiceTest {
     val reportVariantId = "last-month"
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
     val expectedResult = listOf(
-      mapOf("prisonNumber" to "1")
+      mapOf("prisonNumber" to "1"),
     )
     val selectedPage = 1L
     val pageSize = 10L

@@ -87,7 +87,8 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .expectStatus()
       .isOk()
       .expectBody()
-      .json("""[
+      .json(
+        """[
          {"PRISONNUMBER": "${movementPrisoner4[PRISON_NUMBER]}", "NAME": "${movementPrisoner4[NAME]}", "DATE": "${movementPrisoner4[DATE]}", "ORIGIN": "${movementPrisoner4[ORIGIN]}", "DESTINATION": "${movementPrisoner4[DESTINATION]}", "DIRECTION": "${movementPrisoner4[DIRECTION]}", "TYPE": "${movementPrisoner4[TYPE]}", "REASON": "${movementPrisoner4[REASON]}"}
       ]       
       """,
@@ -116,7 +117,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
         {"PRISONNUMBER": "${movementPrisoner2[PRISON_NUMBER]}", "NAME": "${movementPrisoner2[NAME]}", "DATE": "${movementPrisoner2[DATE]}", "ORIGIN": "${movementPrisoner2[ORIGIN]}", "DESTINATION": "${movementPrisoner2[DESTINATION]}", "DIRECTION": "${movementPrisoner2[DIRECTION]}", "TYPE": "${movementPrisoner2[TYPE]}", "REASON": "${movementPrisoner2[REASON]}"},
         {"PRISONNUMBER": "${movementPrisoner1[PRISON_NUMBER]}", "NAME": "${movementPrisoner1[NAME]}", "DATE": "${movementPrisoner1[DATE]}", "ORIGIN": "${movementPrisoner1[ORIGIN]}", "DESTINATION": "${movementPrisoner1[DESTINATION]}", "DIRECTION": "${movementPrisoner1[DIRECTION]}", "TYPE": "${movementPrisoner1[TYPE]}", "REASON": "${movementPrisoner1[REASON]}"}
       ]
-      """
+      """,
       )
   }
 
@@ -138,7 +139,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .exchange()
       .expectStatus()
       .isOk()
-      .expectBodyList<Map<String,Any>>()
+      .expectBodyList<Map<String, Any>>()
       .hasSize(numberOfResults)
       .returnResult()
       .responseBody
@@ -185,13 +186,13 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     requestWithQueryAndAssert400("filters.name", "some name", "/external-movements/external-movements/last-month")
   }
 
-  //TODO: Need to rethink if this is the best way to throw this exception
+  // TODO: Need to rethink if this is the best way to throw this exception
   @Test
   fun `Configured API returns 400 for invalid startDate query param`() {
     requestWithQueryAndAssert400("filters.date.start", "abc", "/external-movements/external-movements/last-month")
   }
 
-  //TODO: Need to rethink if this is the best way to throw this exception
+  // TODO: Need to rethink if this is the best way to throw this exception
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
     requestWithQueryAndAssert400("filters.date.end", "b", "/external-movements/external-movements/last-month")

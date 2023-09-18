@@ -21,18 +21,30 @@ class ConfiguredApiService(
   val startSuffix = ".start"
   val endSuffix = ".end"
   fun validateAndFetchData(
-    reportId: String, dataSetId: String, reportVariantId: String,
-    filters: Map<String, String>, selectedPage: Long, pageSize: Long,
-    sortColumn: String?, sortedAsc: Boolean): List<Map<String, Any>> {
-
+    reportId: String,
+    dataSetId: String,
+    reportVariantId: String,
+    filters: Map<String, String>,
+    selectedPage: Long,
+    pageSize: Long,
+    sortColumn: String?,
+    sortedAsc: Boolean,
+  ): List<Map<String, Any>> {
     validateFilters(reportId, reportVariantId, filters)
-    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix)}
+    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
     val dataSet = stubbedProductDefinitionRepository.getDataSet(reportId, dataSetId)
     val validatedSortColumn = validateSortColumnOrGetDefault(sortColumn, reportId, dataSet, reportVariantId)
-    //executeQuery for found dataSet
+    // executeQuery for found dataSet
     return configuredApiRepository
-      .executeQuery(dataSet.query, rangeFilters.associate(transformMapEntryToPair()),
-        filtersExcludingRange.associate(transformMapEntryToPair()), selectedPage, pageSize, validatedSortColumn, sortedAsc)
+      .executeQuery(
+        dataSet.query,
+        rangeFilters.associate(transformMapEntryToPair()),
+        filtersExcludingRange.associate(transformMapEntryToPair()),
+        selectedPage,
+        pageSize,
+        validatedSortColumn,
+        sortedAsc,
+      )
   }
 
   fun calculateDefaultSortColumn(reportId: String, dataSetId: String, reportVariantId: String): String {
@@ -49,7 +61,6 @@ class ConfiguredApiService(
         .ifEmpty { throw ValidationException("Invalid sortColumn provided: $sortColumn") }
         .first().name
     } ?: calculateDefaultSortColumn(reportId, dataSet.id, reportVariantId)
-
   }
 
   private fun validateFilters(reportId: String, reportVariantId: String, filters: Map<String, String>) {
@@ -82,8 +93,9 @@ class ConfiguredApiService(
       k.substring(0, k.length - startSuffix.length) to v
     } else if (k.endsWith(endSuffix)) {
       k.substring(0, k.length - endSuffix.length) to v
+    } else {
+      k to v
     }
-    else k to v
   }
 
   private fun transformMapEntryToPair(): (Map.Entry<String, String>) -> Pair<String, String> {

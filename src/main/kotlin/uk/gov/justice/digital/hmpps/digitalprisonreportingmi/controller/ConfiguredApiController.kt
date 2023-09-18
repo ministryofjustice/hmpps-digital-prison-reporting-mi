@@ -33,15 +33,15 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     @RequestParam allQueryParams: Map<String, String>,
     @PathVariable("reportId") reportId: String,
     @PathVariable("dataSetId") dataSetId: String,
-    @PathVariable ("reportVariantId") reportVariantId: String
-    ): List<Map<String, Any>> {
+    @PathVariable("reportVariantId") reportVariantId: String,
+  ): List<Map<String, Any>> {
     return configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filtersOnly(allQueryParams), selectedPage, pageSize, sortColumn, sortedAsc)
   }
 
   private fun filtersOnly(filters: Map<String, String>): Map<String, String> {
     return filters.entries
       .filter { it.key.startsWith("filters.") }
-      .filter { it.value.isNotBlank()}
+      .filter { it.value.isNotBlank() }
       .associate { (k, v) -> k.removePrefix("filters.") to v }
   }
 }
