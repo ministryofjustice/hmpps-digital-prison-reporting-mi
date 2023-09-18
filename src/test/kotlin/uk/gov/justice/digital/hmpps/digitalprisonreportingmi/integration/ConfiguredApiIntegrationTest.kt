@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.web.util.UriBuilder
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.FILTERS_PREFIX
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.DATE
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.DESTINATION
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.DIRECTION
@@ -77,9 +78,9 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/external-movements/external-movements/last-month")
-          .queryParam("filters.date.start", "2023-04-25")
-          .queryParam("filters.date.end", "2023-05-20")
-          .queryParam("filters.direction", "Out")
+          .queryParam("${FILTERS_PREFIX}date.start", "2023-04-25")
+          .queryParam("${FILTERS_PREFIX}date.end", "2023-05-20")
+          .queryParam("${FILTERS_PREFIX}direction", "Out")
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
@@ -132,7 +133,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/external-movements/external-movements/last-month")
-          .queryParam("filters.direction", direction)
+          .queryParam("${FILTERS_PREFIX}direction", direction)
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
@@ -178,22 +179,22 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
   @Test
   fun `Configured API returns 400 for non-existent filter`() {
-    requestWithQueryAndAssert400("filters.abc", "abc", "/external-movements/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}abc", "abc", "/external-movements/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for a report field which is not a filter`() {
-    requestWithQueryAndAssert400("filters.name", "some name", "/external-movements/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}name", "some name", "/external-movements/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for invalid startDate query param`() {
-    requestWithQueryAndAssert400("filters.date.start", "abc", "/external-movements/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.start", "abc", "/external-movements/external-movements/last-month")
   }
 
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("filters.date.end", "b", "/external-movements/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.end", "b", "/external-movements/external-movements/last-month")
   }
 
   private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any, path: String) {
