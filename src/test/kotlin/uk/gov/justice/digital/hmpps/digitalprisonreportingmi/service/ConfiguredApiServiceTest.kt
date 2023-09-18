@@ -105,6 +105,24 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
+  fun `should throw an exception when having a valid and an invalid filter`() {
+    val reportId = "external-movements"
+    val dataSetId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("non existent filter" to "blah", "date.start" to "2023-01-01")
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "date"
+    val sortedAsc = true
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    }
+    assertEquals(ConfiguredApiService.INVALID_FILTERS_MESSAGE, e.message)
+    verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
+  }
+
+  @Test
   fun `should call the configuredApiRepository with the default sort column if none is provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"

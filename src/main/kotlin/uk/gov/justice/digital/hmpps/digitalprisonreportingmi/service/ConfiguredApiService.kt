@@ -72,7 +72,7 @@ class ConfiguredApiService(
     getReportVariantSpecFields(reportId, reportVariantId)
       ?.filter { it.filter?.let { true } ?: false }
       ?.filter { truncateRangeFilters(filters).containsKey(it.schemaField.removePrefix(schemaFieldPrefix)) }
-//      ?.takeIf { it.size ==  truncateRangeFilters(filters).size}
+      ?.takeIf { it.size == truncateRangeFilters(filters).size }
       ?.ifEmpty { throw ValidationException(INVALID_FILTERS_MESSAGE) }
       ?: throw ValidationException(INVALID_FILTERS_MESSAGE)
 
@@ -97,6 +97,7 @@ class ConfiguredApiService(
           }
         }
       }
+
   }
 
   private fun getReportVariantSpecFields(reportId: String, reportVariantId: String) =
