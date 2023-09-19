@@ -22,7 +22,7 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
 
   @GetMapping("/{reportId}/{reportVariantId}")
   @Operation(
-    description = "Returns the dataset for the given report ID and dataSetId ID filtered by the filters provided in the query." +
+    description = "Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query." +
       "Note: The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
