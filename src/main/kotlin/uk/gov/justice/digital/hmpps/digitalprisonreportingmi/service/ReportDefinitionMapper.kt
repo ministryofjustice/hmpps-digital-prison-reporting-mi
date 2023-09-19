@@ -26,26 +26,26 @@ class ReportDefinitionMapper {
   val todayRegex: Regex = Regex("today\\(\\)")
   val dateRegex: Regex = Regex("today\\((-?\\d+), ?([a-z]+)\\)", RegexOption.IGNORE_CASE)
 
-  fun map(definition: ProductDefinition, renderMethod: RenderMethod?): ReportDefinition = ReportDefinition(
-    id = definition.id,
-    name = definition.name,
-    description = definition.description,
-    variants = definition.report
+  fun map(productDefinition: ProductDefinition, renderMethod: RenderMethod?): ReportDefinition = ReportDefinition(
+    id = productDefinition.id,
+    name = productDefinition.name,
+    description = productDefinition.description,
+    variants = productDefinition.report
       .filter { renderMethod == null || it.render.toString() == renderMethod.toString() }
-      .map { map(it, definition.dataSet) },
+      .map { map(productDefinition.id, it, productDefinition.dataSet) },
   )
 
-  private fun map(definition: Report, dataSets: List<DataSet>): VariantDefinition {
-    val dataSetRef = definition.dataset.removePrefix("\$ref:")
+  private fun map(productDefinitionId: String, report: Report, dataSets: List<DataSet>): VariantDefinition {
+    val dataSetRef = report.dataset.removePrefix("\$ref:")
     val dataSet = dataSets.find { it.id == dataSetRef }
       ?: throw IllegalArgumentException("Could not find matching DataSet '$dataSetRef'")
 
     return VariantDefinition(
-      id = definition.id,
-      name = definition.name,
-      description = definition.description,
-      specification = map(definition.specification, dataSet.schema.field),
-      resourceName = dataSet.id,
+      id = report.id,
+      name = report.name,
+      description = report.description,
+      specification = map(report.specification, dataSet.schema.field),
+      resourceName = "$productDefinitionId/${report.id}",
     )
   }
 
