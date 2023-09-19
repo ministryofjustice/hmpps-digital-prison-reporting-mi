@@ -35,9 +35,12 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     pageSize: Long,
     @RequestParam sortColumn: String?,
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
-    @Parameter(description = "The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
-      example = "filters.date.start=2023-04-25")
-    @RequestParam allQueryParams: Map<String, String>,
+    @Parameter(
+      description = "The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
+      example = "filters.date.start=2023-04-25",
+    )
+    @RequestParam
+    allQueryParams: Map<String, String>,
     @PathVariable("reportId") reportId: String,
     @PathVariable("reportVariantId") reportVariantId: String,
   ): List<Map<String, Any>> {
