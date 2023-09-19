@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
-import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSource
@@ -220,12 +219,5 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
         ),
       ),
     )
-  }
-
-  override fun getDataSet(reportId: String, dataSetId: String): DataSet {
-    return getProductDefinitions().filter { it.id == reportId }
-      .flatMap { pd -> pd.dataSet.filter { it.id == dataSetId } }
-      .ifEmpty { throw ValidationException("Invalid dataSetId provided: $dataSetId") }
-      .first()
   }
 }

@@ -20,14 +20,13 @@ class ConfiguredApiService(
     const val INVALID_REPORT_ID_MESSAGE = "Invalid report id provided."
     const val INVALID_FILTERS_MESSAGE = "Invalid filters provided."
     const val INVALID_STATIC_OPTIONS_MESSAGE = "Invalid static options provided."
-    private const val schemaFieldPrefix = "\$ref:"
+    private const val schemaRefPrefix = "\$ref:"
   }
 
   val startSuffix = ".start"
   val endSuffix = ".end"
   fun validateAndFetchData(
     reportId: String,
-    dataSetId: String,
     reportVariantId: String,
     filters: Map<String, String>,
     selectedPage: Long,
@@ -35,7 +34,7 @@ class ConfiguredApiService(
     sortColumn: String?,
     sortedAsc: Boolean,
   ): List<Map<String, Any>> {
-    val dataSet = stubbedProductDefinitionRepository.getDataSet(reportId, dataSetId)
+    val dataSet = getDataSet(reportId, reportVariantId)
     validateFilters(reportId, reportVariantId, filters, dataSet)
     val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
     val validatedSortColumn = validateSortColumnOrGetDefault(sortColumn, reportId, dataSet, reportVariantId)
@@ -51,11 +50,23 @@ class ConfiguredApiService(
       )
   }
 
+  private fun getDataSet(reportId: String, reportVariantId: String) =
+    stubbedProductDefinitionRepository.getProductDefinitions()
+      .filter { it.id == reportId }
+      .flatMap { pd -> pd.dataSet.filter { it.id == getDataSetId(reportId, reportVariantId) } }
+      .ifEmpty { throw ValidationException("Invalid dataSetId provided: ${getDataSetId(reportId, reportVariantId)}") }
+      .first()
+
+  private fun getDataSetId(reportId: String, reportVariantId: String) =
+    getReportVariant(reportId, reportVariantId)
+      .dataset
+      .removePrefix(schemaRefPrefix)
+
   fun calculateDefaultSortColumn(reportId: String, dataSetId: String, reportVariantId: String): String {
     return getReportVariantSpecFields(reportId, reportVariantId)
       ?.first { it.defaultSortColumn }
       ?.schemaField
-      ?.removePrefix(schemaFieldPrefix)
+      ?.removePrefix(schemaRefPrefix)
       ?: throw ValidationException("Could not find default sort column for reportId: $reportId, dataSetId: $dataSetId, reportVariantId: $reportVariantId")
   }
 
@@ -84,14 +95,14 @@ class ConfiguredApiService(
   private fun getFiltersWithStaticOptionsOnly(filters: Map<String, String>, reportFieldsWithFiltersOnly: List<ReportField>) =
     filters.entries.filter { filterEntry ->
       reportFieldsWithFiltersOnly.any { reportField ->
-        reportField.schemaField.removePrefix(schemaFieldPrefix) == filterEntry.key
+        reportField.schemaField.removePrefix(schemaRefPrefix) == filterEntry.key
       }
     }
 
   private fun validateFiltersMatchSchemaName(reportFieldsWithFilters: List<ReportField>?, filters: Map<String, String>) {
     (
       reportFieldsWithFilters
-        ?.filter { truncateRangeFilters(filters).containsKey(it.schemaField.removePrefix(schemaFieldPrefix)) }
+        ?.filter { truncateRangeFilters(filters).containsKey(it.schemaField.removePrefix(schemaRefPrefix)) }
         ?.takeIf { it.size == truncateRangeFilters(filters).size }
         ?.ifEmpty { throw ValidationException(INVALID_FILTERS_MESSAGE) }
         ?: throw ValidationException(INVALID_FILTERS_MESSAGE)
@@ -101,7 +112,7 @@ class ConfiguredApiService(
   private fun validateStaticOptions(filtersWithStaticOptionsOnly: List<Map.Entry<String, String>>, reportFieldsWithFiltersOnly: List<ReportField>) {
     filtersWithStaticOptionsOnly.forEach { filterWithStaticOptionsOnlyEntry ->
       reportFieldsWithFiltersOnly.first { reportField ->
-        filterWithStaticOptionsOnlyEntry.key == reportField.schemaField.removePrefix(schemaFieldPrefix)
+        filterWithStaticOptionsOnlyEntry.key == reportField.schemaField.removePrefix(schemaRefPrefix)
       }
         .filter
         ?.staticOptions
@@ -137,13 +148,16 @@ class ConfiguredApiService(
   }
 
   private fun getReportVariantSpecFields(reportId: String, reportVariantId: String) =
+    getReportVariant(reportId, reportVariantId)
+      .specification
+      ?.field
+
+  private fun getReportVariant(reportId: String, reportVariantId: String) =
     stubbedProductDefinitionRepository.getProductDefinitions()
       .filter { it.id == reportId }
       .flatMap { it.report.filter { report -> report.id == reportVariantId } }
       .ifEmpty { throw ValidationException(INVALID_REPORT_ID_MESSAGE) }
       .first()
-      .specification
-      ?.field
 
   private fun truncateRangeFilters(filters: Map<String, String>): Map<String, String> {
     return filters.entries

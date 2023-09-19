@@ -37,10 +37,9 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
     @RequestParam allQueryParams: Map<String, String>,
     @PathVariable("reportId") reportId: String,
-    @PathVariable("dataSetId") dataSetId: String,
     @PathVariable("reportVariantId") reportVariantId: String,
   ): List<Map<String, Any>> {
-    return configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filtersOnly(allQueryParams), selectedPage, pageSize, sortColumn, sortedAsc)
+    return configuredApiService.validateAndFetchData(reportId, reportVariantId, filtersOnly(allQueryParams), selectedPage, pageSize, sortColumn, sortedAsc)
   }
 
   private fun filtersOnly(filters: Map<String, String>): Map<String, String> {

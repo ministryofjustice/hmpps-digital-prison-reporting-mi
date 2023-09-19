@@ -41,7 +41,7 @@ class ConfiguredApiServiceTest {
 
     whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
     assertEquals(expectedResult, actual)
@@ -61,7 +61,7 @@ class ConfiguredApiServiceTest {
 
     whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)
     assertEquals(expectedResult, actual)
@@ -80,7 +80,7 @@ class ConfiguredApiServiceTest {
 
     whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
+    val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
     assertEquals(expectedResult, actual)
@@ -101,7 +101,7 @@ class ConfiguredApiServiceTest {
 
     whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
     assertEquals(expectedResult, actual)
@@ -122,7 +122,7 @@ class ConfiguredApiServiceTest {
 
     whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)
+    val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), emptyMap(), 1, 10, "date", true)
     assertEquals(expectedResult, actual)
@@ -140,7 +140,7 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
-      configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
     }
     assertEquals(ConfiguredApiService.INVALID_REPORT_ID_MESSAGE, e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
@@ -158,7 +158,7 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
-      configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
     }
     assertEquals(ConfiguredApiService.INVALID_FILTERS_MESSAGE, e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
@@ -176,7 +176,7 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
-      configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
     }
     assertEquals(ConfiguredApiService.INVALID_FILTERS_MESSAGE, e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
@@ -194,7 +194,7 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
-      configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
     }
     assertEquals(ConfiguredApiService.INVALID_STATIC_OPTIONS_MESSAGE, e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
@@ -212,7 +212,7 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
-      configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
     }
     assertEquals(ConfiguredApiService.INVALID_STATIC_OPTIONS_MESSAGE, e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
@@ -230,7 +230,7 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
-      configuredApiService.validateAndFetchData(reportId, dataSetId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
     }
     assertEquals("Invalid value abc for filter date. Cannot be parsed as a date.", e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
@@ -251,7 +251,7 @@ class ConfiguredApiServiceTest {
 
     whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
 
-    val actual = configuredApiService.validateAndFetchData(reportId, dataSet.id, reportVariantId, filters, selectedPage, pageSize, null, sortedAsc)
+    val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, null, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
     assertEquals(expectedResult, actual)
