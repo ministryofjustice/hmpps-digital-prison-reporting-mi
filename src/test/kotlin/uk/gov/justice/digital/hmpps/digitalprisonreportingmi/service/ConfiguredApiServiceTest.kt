@@ -8,12 +8,12 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryCustom
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 
 class ConfiguredApiServiceTest {
   private val stubbedProductDefinitionRepository: StubbedProductDefinitionRepository = StubbedProductDefinitionRepository()
-  private val configuredApiRepository: ConfiguredApiRepositoryCustom = mock<ConfiguredApiRepositoryCustom>()
+  private val configuredApiRepository: ConfiguredApiRepository = mock<ConfiguredApiRepository>()
   private val configuredApiService = ConfiguredApiService(stubbedProductDefinitionRepository, configuredApiRepository)
   private val expectedResult = listOf(
     mapOf("prisonNumber" to "1"),

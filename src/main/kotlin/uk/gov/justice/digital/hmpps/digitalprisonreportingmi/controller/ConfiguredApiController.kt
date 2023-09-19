@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.constraints.Min
@@ -22,8 +23,7 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
 
   @GetMapping("/{reportId}/{reportVariantId}")
   @Operation(
-    description = "Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query." +
-      "Note: The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
+    description = "Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query.",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
   fun configuredApiDataset(
@@ -35,6 +35,8 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     pageSize: Long,
     @RequestParam sortColumn: String?,
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
+    @Parameter(description = "The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
+      example = "filters.date.start=2023-04-25")
     @RequestParam allQueryParams: Map<String, String>,
     @PathVariable("reportId") reportId: String,
     @PathVariable("reportVariantId") reportVariantId: String,

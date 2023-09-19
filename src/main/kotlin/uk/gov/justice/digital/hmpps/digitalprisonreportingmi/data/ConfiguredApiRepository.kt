@@ -11,7 +11,7 @@ import java.sql.Timestamp
 
 @Service
 @Suppress("UNCHECKED_CAST")
-class ConfiguredApiRepositoryCustom {
+class ConfiguredApiRepository {
 
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)

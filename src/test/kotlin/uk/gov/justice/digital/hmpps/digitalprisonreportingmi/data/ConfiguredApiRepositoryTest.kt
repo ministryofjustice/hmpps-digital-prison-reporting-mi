@@ -29,7 +29,7 @@ class ConfiguredApiRepositoryTest {
   lateinit var prisonerRepository: PrisonerRepository
 
   @Autowired
-  lateinit var configuredApiRepository: ConfiguredApiRepositoryCustom
+  lateinit var configuredApiRepository: ConfiguredApiRepository
 
   @BeforeEach
   fun setup() {

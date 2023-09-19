@@ -2,7 +2,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryCustom
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterType
@@ -13,7 +13,7 @@ import java.time.format.DateTimeParseException
 @Service
 class ConfiguredApiService(
   val stubbedProductDefinitionRepository: StubbedProductDefinitionRepository,
-  val configuredApiRepository: ConfiguredApiRepositoryCustom,
+  val configuredApiRepository: ConfiguredApiRepository,
 ) {
 
   companion object {
