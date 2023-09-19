@@ -171,6 +171,12 @@ class ConfiguredApiRepositoryTest {
   }
 
   @Test
+  fun `should return all the rows between the provided start and end dates matching the direction filter`() {
+    val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2023-04-25", "date.end" to "2023-05-20"), mapOf("direction" to "in"), 1, 10, "date", false)
+    Assertions.assertEquals(listOf(movementPrisoner5, movementPrisoner3, movementPrisoner2), actual)
+  }
+
+  @Test
   fun `should return no rows if the start date is after the latest table date`() {
     val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2025-01-01"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
