@@ -132,7 +132,6 @@ class ConfiguredApiServiceTest {
   fun `should throw an exception for invalid report variant`() {
     val reportId = "external-movements"
     val reportVariantId = "non existent variant"
-    val dataSetId = "external-movements"
     val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
@@ -149,7 +148,6 @@ class ConfiguredApiServiceTest {
   @Test
   fun `should throw an exception for invalid filter`() {
     val reportId = "external-movements"
-    val dataSetId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("non existent filter" to "blah")
     val selectedPage = 1L
@@ -167,7 +165,6 @@ class ConfiguredApiServiceTest {
   @Test
   fun `should throw an exception when having a valid and an invalid filter`() {
     val reportId = "external-movements"
-    val dataSetId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("non existent filter" to "blah", "date.start" to "2023-01-01")
     val selectedPage = 1L
@@ -185,7 +182,6 @@ class ConfiguredApiServiceTest {
   @Test
   fun `should throw an exception when having invalid static options for a filter and a valid range filter`() {
     val reportId = "external-movements"
-    val dataSetId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("direction" to "randomValue", "date.start" to "2023-01-01")
     val selectedPage = 1L
@@ -203,7 +199,6 @@ class ConfiguredApiServiceTest {
   @Test
   fun `should throw an exception when having invalid static options for a filter and no range filters`() {
     val reportId = "external-movements"
-    val dataSetId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("direction" to "randomValue")
     val selectedPage = 1L
@@ -221,7 +216,6 @@ class ConfiguredApiServiceTest {
   @Test
   fun `should throw an exception when having an invalid range filter`() {
     val reportId = "external-movements"
-    val dataSetId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("date.start" to "abc")
     val selectedPage = 1L

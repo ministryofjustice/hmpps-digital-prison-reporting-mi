@@ -28,24 +28,8 @@ class ConfiguredApiRepositoryCustom {
     sortColumn: String,
     sortedAsc: Boolean,
   ): List<Map<String, Any>> {
-    val preparedStatementNamedParams = MapSqlParameterSource()
-    filtersExcludingRange.forEach { preparedStatementNamedParams.addValue(it.key, it.value.lowercase()) }
-    rangeFilters.forEach { preparedStatementNamedParams.addValue(it.key, it.value) }
-    val whereNoRange = filtersExcludingRange.keys.joinToString(" AND ") { k -> "lower($k) = :$k" }.ifEmpty { null }
-    val whereRange = rangeFilters.keys.joinToString(" AND ") { k ->
-      if (k.endsWith(".start")) {
-        "${k.removeSuffix(".start")} >= :$k"
-      } else if (k.endsWith(".end")) {
-        "${k.removeSuffix(".end")} <= :$k"
-      } else {
-        throw ValidationException("Range filter does not have a .start or .end suffix: $k")
-      }
-    }
-      .ifEmpty { null }
-
-    val whereClause = whereNoRange?.let { "WHERE ${whereRange?.let { "$whereNoRange AND $whereRange"} ?: whereNoRange}" } ?: whereRange?.let { "WHERE $it" } ?: ""
+    val (preparedStatementNamedParams, whereClause) = buildWhereClause(filtersExcludingRange, rangeFilters)
     val sortingDirection = if (sortedAsc) "asc" else "desc"
-
     val stopwatch = StopWatch.createStarted()
     val result = jdbcTemplate.queryForList(
       """SELECT *
@@ -56,16 +40,42 @@ class ConfiguredApiRepositoryCustom {
       preparedStatementNamedParams,
     )
       .map {
-        it.entries.associate { (k, v) ->
-          if (v is Timestamp) {
-            k to v.toLocalDateTime().toLocalDate().toString()
-          } else {
-            k to v
-          }
-        }
+        transformTimestampToString(it)
       }
     stopwatch.stop()
     log.debug("Query Execution time in ms: {}", stopwatch.time)
     return result
   }
+
+  private fun transformTimestampToString(it: MutableMap<String, Any>) = it.entries.associate { (k, v) ->
+    if (v is Timestamp) {
+      k to v.toLocalDateTime().toLocalDate().toString()
+    } else {
+      k to v
+    }
+  }
+
+  private fun buildWhereClause(filtersExcludingRange: Map<String, String>, rangeFilters: Map<String, String>): Pair<MapSqlParameterSource, String> {
+    val preparedStatementNamedParams = MapSqlParameterSource()
+    filtersExcludingRange.forEach { preparedStatementNamedParams.addValue(it.key, it.value.lowercase()) }
+    rangeFilters.forEach { preparedStatementNamedParams.addValue(it.key, it.value) }
+    val whereNoRange = filtersExcludingRange.keys.joinToString(" AND ") { k -> "lower($k) = :$k" }.ifEmpty { null }
+    val whereRange = buildWhereRangeCondition(rangeFilters)
+    //    val whereClause = whereNoRange?.let { "WHERE ${whereRange?.let { "$whereNoRange AND $whereRange"} ?: whereNoRange}" } ?: whereRange?.let { "WHERE $it" } ?: ""
+    val allFilters = whereNoRange?.plus(whereRange?.let { " AND $it" } ?: "") ?: whereRange
+    val whereClause = allFilters?.let { "WHERE $it" } ?: ""
+    return Pair(preparedStatementNamedParams, whereClause)
+  }
+
+  private fun buildWhereRangeCondition(rangeFilters: Map<String, String>) =
+    rangeFilters.keys.joinToString(" AND ") { k ->
+      if (k.endsWith(".start")) {
+        "${k.removeSuffix(".start")} >= :$k"
+      } else if (k.endsWith(".end")) {
+        "${k.removeSuffix(".end")} <= :$k"
+      } else {
+        throw ValidationException("Range filter does not have a .start or .end suffix: $k")
+      }
+    }
+      .ifEmpty { null }
 }
