@@ -32,7 +32,7 @@ class ConfiguredApiRepositoryCustom {
     filtersExcludingRange.forEach { preparedStatementNamedParams.addValue(it.key, it.value.lowercase()) }
     rangeFilters.forEach { preparedStatementNamedParams.addValue(it.key, it.value) }
     val whereNoRange = filtersExcludingRange.keys.joinToString(" AND ") { k -> "lower($k) = :$k" }.ifEmpty { null }
-    val whereRange = rangeFilters.keys.map { k ->
+    val whereRange = rangeFilters.keys.joinToString(" AND ") { k ->
       if (k.endsWith(".start")) {
         "${k.removeSuffix(".start")} >= :$k"
       } else if (k.endsWith(".end")) {
@@ -40,11 +40,9 @@ class ConfiguredApiRepositoryCustom {
       } else {
         throw ValidationException("Range filter does not have a .start or .end suffix: $k")
       }
-    }.joinToString(" AND ")
-      .removeSuffix(" AND ")
+    }
       .ifEmpty { null }
 
-//    val whereClause = whereNoRange?.let{"WHERE $it AND $whereRange"} ?: whereRange?.let { "WHERE $it" } ?: ""
     val whereClause = whereNoRange?.let { "WHERE ${whereRange?.let { "$whereNoRange AND $whereRange"} ?: whereNoRange}" } ?: whereRange?.let { "WHERE $it" } ?: ""
     val sortingDirection = if (sortedAsc) "asc" else "desc"
 
