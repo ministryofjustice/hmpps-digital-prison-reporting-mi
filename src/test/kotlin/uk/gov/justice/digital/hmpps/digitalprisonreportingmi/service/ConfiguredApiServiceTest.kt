@@ -146,6 +146,23 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
+  fun `should throw an exception for invalid sort column`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "abc"
+    val sortedAsc = true
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    }
+    assertEquals("Invalid sortColumn provided: abc", e.message)
+    verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
+  }
+
+  @Test
   fun `should throw an exception for invalid filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"

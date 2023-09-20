@@ -19,14 +19,6 @@ class DigitalPrisonReportingMiExceptionHandler {
     return respondWithBadRequest(e)
   }
 
-//  // TODO: Need to rethink if this is the best way to throw this exception
-//  /** @see uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest line 190 and 196 */
-//  @ExceptionHandler(DataIntegrityViolationException::class)
-//  @ResponseStatus(BAD_REQUEST)
-//  fun handleDataIntegrityViolationException(e: Exception): ResponseEntity<ErrorResponse> {
-//    return respondWithBadRequest(e)
-//  }
-
   @Suppress("TYPE_MISMATCH")
   @ExceptionHandler(MethodArgumentTypeMismatchException::class)
   fun handleTypeMismatch(e: Exception): ResponseEntity<ErrorResponse> {

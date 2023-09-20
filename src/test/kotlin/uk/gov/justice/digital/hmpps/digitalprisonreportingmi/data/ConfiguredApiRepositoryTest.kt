@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
 
+import jakarta.validation.ValidationException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest
@@ -192,6 +193,14 @@ class ConfiguredApiRepositoryTest {
   fun `should return no rows if the start date is after the end date`() {
     val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2023-05-01", "date.end" to "2023-04-25"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
+  }
+
+  @Test
+  fun `should throw an exception if a range filter does not have a start or end suffix`() {
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiRepository.executeQuery(query, mapOf("date" to "2023-05-01"), emptyMap(), 1, 10, "date", false)
+    }
+    Assertions.assertEquals("Range filter does not have a .start or .end suffix: date", e.message)
   }
 
   @Test

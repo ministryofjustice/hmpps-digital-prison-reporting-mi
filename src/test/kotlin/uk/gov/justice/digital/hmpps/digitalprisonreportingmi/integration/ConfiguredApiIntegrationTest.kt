@@ -23,8 +23,8 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiR
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.movementPrisoner4
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.movementPrisoner5
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryTest.AllPrisoners
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryCustomTest
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepositoryCustomTest.AllPrisoners
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
 
 class ConfiguredApiIntegrationTest : IntegrationTestBase() {
@@ -37,7 +37,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
   @BeforeEach
   fun setup() {
-    ExternalMovementRepositoryTest.AllMovements.allExternalMovements.forEach {
+    ExternalMovementRepositoryCustomTest.AllMovements.allExternalMovements.forEach {
       externalMovementRepository.save(it)
     }
     AllPrisoners.allPrisoners.forEach {
