@@ -69,7 +69,7 @@ class StubbedProductDefinitionRepository : ProductDefinitionRepository {
             name = "All movements",
             query = "SELECT " +
               "prisoners.number AS prisonNumber," +
-              "CONCAT(prisoners.lastname, ', ', substring(prisoners.firstname, 1, 1)) AS name," +
+              "CONCAT(CONCAT(prisoners.lastname, ', '), substring(prisoners.firstname, 1, 1)) AS name," +
               "movements.date," +
               "movements.direction," +
               "movements.type," +

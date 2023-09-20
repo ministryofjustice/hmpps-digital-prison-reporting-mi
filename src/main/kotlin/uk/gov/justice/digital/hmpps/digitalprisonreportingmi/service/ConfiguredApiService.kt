@@ -17,7 +17,8 @@ class ConfiguredApiService(
 ) {
 
   companion object {
-    const val INVALID_REPORT_ID_MESSAGE = "Invalid report id provided."
+    const val INVALID_REPORT_ID_MESSAGE = "Invalid report id provided:"
+    const val INVALID_REPORT_VARIANT_ID_MESSAGE = "Invalid report variant id provided:"
     const val INVALID_FILTERS_MESSAGE = "Invalid filters provided."
     const val INVALID_STATIC_OPTIONS_MESSAGE = "Invalid static options provided."
     private const val schemaRefPrefix = "\$ref:"
@@ -155,8 +156,9 @@ class ConfiguredApiService(
   private fun getReportVariant(reportId: String, reportVariantId: String) =
     stubbedProductDefinitionRepository.getProductDefinitions()
       .filter { it.id == reportId }
+      .ifEmpty { throw ValidationException("$INVALID_REPORT_ID_MESSAGE $reportId") }
       .flatMap { it.report.filter { report -> report.id == reportVariantId } }
-      .ifEmpty { throw ValidationException(INVALID_REPORT_ID_MESSAGE) }
+      .ifEmpty { throw ValidationException("$INVALID_REPORT_VARIANT_ID_MESSAGE $reportVariantId") }
       .first()
 
   private fun truncateRangeFilters(filters: Map<String, String>): Map<String, String> {

@@ -129,6 +129,23 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
+  fun `should throw an exception for invalid report id`() {
+    val reportId = "random report id"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val selectedPage = 1L
+    val pageSize = 10L
+    val sortColumn = "date"
+    val sortedAsc = true
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
+    }
+    assertEquals("${ConfiguredApiService.INVALID_REPORT_ID_MESSAGE} $reportId", e.message)
+    verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
+  }
+
+  @Test
   fun `should throw an exception for invalid report variant`() {
     val reportId = "external-movements"
     val reportVariantId = "non existent variant"
@@ -141,7 +158,7 @@ class ConfiguredApiServiceTest {
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
       configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
     }
-    assertEquals(ConfiguredApiService.INVALID_REPORT_ID_MESSAGE, e.message)
+    assertEquals("${ConfiguredApiService.INVALID_REPORT_VARIANT_ID_MESSAGE} $reportVariantId", e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
   }
 
