@@ -50,7 +50,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     webTestClient.get()
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
-          .path("/external-movements/last-month")
+          .path("/reports/external-movements/last-month")
           .queryParam("selectedPage", 1)
           .queryParam("pageSize", 3)
           .queryParam("sortColumn", "date")
@@ -77,7 +77,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     webTestClient.get()
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
-          .path("/external-movements/last-month")
+          .path("/reports/external-movements/last-month")
           .queryParam("${FILTERS_PREFIX}date.start", "2023-04-25")
           .queryParam("${FILTERS_PREFIX}date.end", "2023-05-20")
           .queryParam("${FILTERS_PREFIX}direction", "out")
@@ -101,7 +101,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     webTestClient.get()
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
-          .path("/external-movements/last-month")
+          .path("/reports/external-movements/last-month")
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
@@ -134,7 +134,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     val results = webTestClient.get()
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
-          .path("/external-movements/last-month")
+          .path("/reports/external-movements/last-month")
           .queryParam("${FILTERS_PREFIX}direction", direction)
           .build()
       }
@@ -156,47 +156,47 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
   @Test
   fun `Configured API returns 400 for invalid selectedPage query param`() {
-    requestWithQueryAndAssert400("selectedPage", 0, "/external-movements/last-month")
+    requestWithQueryAndAssert400("selectedPage", 0, "/reports/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for invalid pageSize query param`() {
-    requestWithQueryAndAssert400("pageSize", 0, "/external-movements/last-month")
+    requestWithQueryAndAssert400("pageSize", 0, "/reports/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for invalid (wrong type) pageSize query param`() {
-    requestWithQueryAndAssert400("pageSize", "a", "/external-movements/last-month")
+    requestWithQueryAndAssert400("pageSize", "a", "/reports/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for invalid sortColumn query param`() {
-    requestWithQueryAndAssert400("sortColumn", "nonExistentColumn", "/external-movements/last-month")
+    requestWithQueryAndAssert400("sortColumn", "nonExistentColumn", "/reports/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for invalid sortedAsc query param`() {
-    requestWithQueryAndAssert400("sortedAsc", "abc", "/external-movements/last-month")
+    requestWithQueryAndAssert400("sortedAsc", "abc", "/reports/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for non-existent filter`() {
-    requestWithQueryAndAssert400("${FILTERS_PREFIX}abc", "abc", "/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}abc", "abc", "/reports/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for a report field which is not a filter`() {
-    requestWithQueryAndAssert400("${FILTERS_PREFIX}name", "some name", "/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}name", "some name", "/reports/external-movements/last-month")
   }
 
   @Test
   fun `Configured API returns 400 for invalid startDate query param`() {
-    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.start", "abc", "/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.start", "abc", "/reports/external-movements/last-month")
   }
 
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.end", "b", "/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.end", "b", "/reports/external-movements/last-month")
   }
 
   private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any, path: String) {

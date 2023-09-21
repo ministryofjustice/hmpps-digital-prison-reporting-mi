@@ -21,7 +21,7 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     const val FILTERS_PREFIX = "filters."
   }
 
-  @GetMapping("/{reportId}/{reportVariantId}")
+  @GetMapping("/reports/{reportId}/{reportVariantId}")
   @Operation(
     description = "Returns the dataset for the given report ID and report variant ID filtered by the filters provided in the query.",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
