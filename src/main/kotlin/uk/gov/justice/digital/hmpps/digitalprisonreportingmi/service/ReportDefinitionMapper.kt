@@ -45,7 +45,7 @@ class ReportDefinitionMapper {
       name = report.name,
       description = report.description,
       specification = map(report.specification, dataSet.schema.field),
-      resourceName = "$productDefinitionId/${report.id}",
+      resourceName = "reports/$productDefinitionId/${report.id}",
     )
   }
 
