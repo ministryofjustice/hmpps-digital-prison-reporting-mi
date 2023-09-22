@@ -47,6 +47,18 @@ class ConfiguredApiRepository {
     return result
   }
 
+  fun count(
+    rangeFilters: Map<String, String>,
+    filtersExcludingRange: Map<String, String>,
+    query: String,
+  ): Long {
+    val (preparedStatementNamedParams, whereClause) = buildWhereClause(filtersExcludingRange, rangeFilters)
+    return jdbcTemplate.queryForList(
+      "SELECT count(*) as total FROM ($query) $whereClause",
+      preparedStatementNamedParams,
+    ).first()?.get("total") as Long
+  }
+
   private fun transformTimestampToString(it: MutableMap<String, Any>) = it.entries.associate { (k, v) ->
     if (v is Timestamp) {
       k to v.toLocalDateTime().toLocalDate().toString()

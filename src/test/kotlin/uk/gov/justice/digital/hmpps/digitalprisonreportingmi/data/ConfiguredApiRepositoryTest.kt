@@ -44,7 +44,7 @@ class ConfiguredApiRepositoryTest {
 
   val query = "SELECT " +
     "prisoners.number AS prisonNumber," +
-    "CONCAT(prisoners.lastname, ', ', substring(prisoners.firstname, 1, 1)) AS name," +
+    "CONCAT(CONCAT(prisoners.lastname, ', '), substring(prisoners.firstname, 1, 1)) AS name," +
     "movements.date," +
     "movements.direction," +
     "movements.type," +
@@ -246,6 +246,60 @@ class ConfiguredApiRepositoryTest {
       externalMovementRepository.delete(externalMovementNullValues)
       prisonerRepository.delete(prisoner9846)
     }
+  }
+
+  @Test
+  fun `should return a count of all rows with no filters`() {
+    val actual = configuredApiRepository.count(emptyMap(), emptyMap(), query)
+    Assertions.assertEquals(5L, actual)
+  }
+
+  @Test
+  fun `should return a count of rows with an in direction filter`() {
+    val actual = configuredApiRepository.count(emptyMap(), Collections.singletonMap("direction", "in"), query)
+    Assertions.assertEquals(4L, actual)
+  }
+
+  @Test
+  fun `should return a count of rows with an out direction filter`() {
+    val actual = configuredApiRepository.count(emptyMap(), Collections.singletonMap("direction", "out"), query)
+    Assertions.assertEquals(1L, actual)
+  }
+
+  @Test
+  fun `should return a count of rows with a startDate filter`() {
+    val actual = configuredApiRepository.count(Collections.singletonMap("date.start", "2023-05-01"), emptyMap(), query)
+    Assertions.assertEquals(2, actual)
+  }
+
+  @Test
+  fun `should return a count of rows with an endDate filter`() {
+    val actual = configuredApiRepository.count(Collections.singletonMap("date.end", "2023-01-31"), emptyMap(), query)
+    Assertions.assertEquals(1, actual)
+  }
+
+  @Test
+  fun `should return a count of movements with a startDate and an endDate filter`() {
+    val actual = configuredApiRepository.count(mapOf("date.start" to "2023-04-30", "date.end" to "2023-05-01"), emptyMap(), query)
+    Assertions.assertEquals(2, actual)
+  }
+
+  @Test
+  fun `should return a count of zero with a date start greater than the latest movement date`() {
+    val actual = configuredApiRepository.count(Collections.singletonMap("date.start", "2025-04-30"), emptyMap(), query)
+    Assertions.assertEquals(0, actual)
+  }
+
+  @Test
+  fun `should return a count of zero with a date end less than the earliest movement date`() {
+    val actual = configuredApiRepository.count(Collections.singletonMap("date.end", "2019-04-30"), emptyMap(), query)
+    Assertions.assertEquals(0, actual)
+  }
+
+  @Test
+  fun `should return a count of zero if the start date is after the end date`() {
+    val actual = configuredApiRepository.count(mapOf("date.start" to "2023-04-30", "date.end" to "2019-05-01"), emptyMap(), query)
+    Assertions.assertEquals(0, actual)
   }
 
   private fun assertExternalMovements(sortColumn: String, expectedForAscending: Map<String, String>, expectedForDescending: Map<String, String>): List<DynamicTest> {

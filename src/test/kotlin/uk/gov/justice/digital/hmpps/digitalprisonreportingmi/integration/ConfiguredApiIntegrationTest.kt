@@ -73,6 +73,40 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
   }
 
   @Test
+  fun `Configured API count returns the number of records`() {
+    webTestClient.get()
+      .uri("/reports/external-movements/last-month/count")
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk
+      .expectBody()
+      .jsonPath("count").isEqualTo("5")
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    "In,  4",
+    "Out, 1",
+    ",    5",
+  )
+  fun `Configured API count returns filtered value`(direction: String?, numberOfResults: Int) {
+    webTestClient.get()
+      .uri { uriBuilder: UriBuilder ->
+        uriBuilder
+          .path("/reports/external-movements/last-month/count")
+          .queryParam("filters.direction", direction?.lowercase())
+          .build()
+      }
+      .headers(setAuthorisation(roles = listOf(authorisedRole)))
+      .exchange()
+      .expectStatus()
+      .isOk()
+      .expectBody()
+      .jsonPath("count").isEqualTo(numberOfResults.toString())
+  }
+
+  @Test
   fun `Configured API returns value matching the filters provided`() {
     webTestClient.get()
       .uri { uriBuilder: UriBuilder ->
@@ -185,8 +219,18 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
   }
 
   @Test
+  fun `Configured API count returns 400 for non-existent filter`() {
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}abc", "abc", "/reports/external-movements/last-month/count")
+  }
+
+  @Test
   fun `Configured API returns 400 for a report field which is not a filter`() {
     requestWithQueryAndAssert400("${FILTERS_PREFIX}name", "some name", "/reports/external-movements/last-month")
+  }
+
+  @Test
+  fun `Configured API count returns 400 for a report field which is not a filter`() {
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}name", "some name", "/reports/external-movements/last-month/count")
   }
 
   @Test
@@ -197,6 +241,16 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
     requestWithQueryAndAssert400("${FILTERS_PREFIX}date.end", "b", "/reports/external-movements/last-month")
+  }
+
+  @Test
+  fun `Configured API count returns 400 for invalid startDate query param`() {
+    requestWithQueryAndAssert400("filters.startDate", "a", "/reports/external-movements/last-month/count")
+  }
+
+  @Test
+  fun `Configured API count returns 400 for invalid endDate query param`() {
+    requestWithQueryAndAssert400("filters.endDate", "17-12-2050", "/reports/external-movements/last-month/count")
   }
 
   private fun requestWithQueryAndAssert400(paramName: String, paramValue: Any, path: String) {

@@ -2,6 +2,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
@@ -49,6 +50,23 @@ class ConfiguredApiService(
         validatedSortColumn,
         sortedAsc,
       )
+  }
+
+  fun validateAndCount(
+    reportId: String,
+    reportVariantId: String,
+    filters: Map<String, String>,
+  ): Count {
+    val dataSet = getDataSet(reportId, reportVariantId)
+    validateFilters(reportId, reportVariantId, filters, dataSet)
+    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
+    return Count(
+      configuredApiRepository.count(
+        rangeFilters.associate(transformMapEntryToPair()),
+        filtersExcludingRange.associate(transformMapEntryToPair()),
+        dataSet.query,
+      ),
+    )
   }
 
   private fun getDataSet(reportId: String, reportVariantId: String) =

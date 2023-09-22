@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.FILTERS_PREFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ConfiguredApiService
 
 @Validated
@@ -45,6 +46,24 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     @PathVariable("reportVariantId") reportVariantId: String,
   ): List<Map<String, Any>> {
     return configuredApiService.validateAndFetchData(reportId, reportVariantId, filtersOnly(allQueryParams), selectedPage, pageSize, sortColumn, sortedAsc)
+  }
+
+  @GetMapping("/reports/{reportId}/{reportVariantId}/count")
+  @Operation(
+    description = "Returns the number of records for the given report ID and report variant ID filtered by the filters provided in the query.",
+    security = [ SecurityRequirement(name = "bearer-jwt") ],
+  )
+  fun configuredApiCount(
+    @Parameter(
+      description = "The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
+      example = "filters.date.start=2023-04-25",
+    )
+    @RequestParam
+    allQueryParams: Map<String, String>,
+    @PathVariable("reportId") reportId: String,
+    @PathVariable("reportVariantId") reportVariantId: String,
+  ): Count {
+    return configuredApiService.validateAndCount(reportId, reportVariantId, filtersOnly(allQueryParams))
   }
 
   private fun filtersOnly(filters: Map<String, String>): Map<String, String> {

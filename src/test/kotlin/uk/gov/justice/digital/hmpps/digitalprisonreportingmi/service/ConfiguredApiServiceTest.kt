@@ -8,6 +8,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
 
@@ -48,6 +49,23 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
+  fun `should call the repository with the corresponding arguments and get a count of rows when both range and non range filters are provided`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filtersExcludingRange = mapOf("direction" to "in")
+    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
+
+    whenever(configuredApiRepository.count(rangeFilters, filtersExcludingRange, dataSet.query)).thenReturn(4)
+
+    val actual = configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+
+    verify(configuredApiRepository, times(1)).count(rangeFilters, filtersExcludingRange, dataSet.query)
+    assertEquals(Count(4), actual)
+  }
+
+  @Test
   fun `should call the repository with the corresponding arguments and get a list of rows when only range filters are provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
@@ -68,6 +86,22 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
+  fun `should call the repository with the corresponding arguments and get a count of rows when only range filters are provided`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
+
+    whenever(configuredApiRepository.count(rangeFilters, emptyMap(), dataSet.query)).thenReturn(4)
+
+    val actual = configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+
+    verify(configuredApiRepository, times(1)).count(rangeFilters, emptyMap(), dataSet.query)
+    assertEquals(Count(4), actual)
+  }
+
+  @Test
   fun `should call the repository with the corresponding arguments and get a list of rows when only non range filters are provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
@@ -84,6 +118,22 @@ class ConfiguredApiServiceTest {
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
     assertEquals(expectedResult, actual)
+  }
+
+  @Test
+  fun `should call the repository with the corresponding arguments and get a count of rows when only non range filters are provided`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "in")
+    val filtersExcludingRange = mapOf("direction" to "in")
+    val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
+
+    whenever(configuredApiRepository.count(emptyMap(), filtersExcludingRange, dataSet.query)).thenReturn(4)
+
+    val actual = configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+
+    verify(configuredApiRepository, times(1)).count(emptyMap(), filtersExcludingRange, dataSet.query)
+    assertEquals(Count(4), actual)
   }
 
   @Test
@@ -108,6 +158,23 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
+  fun `should call the repository with the corresponding arguments and get a count of rows regardless of the casing of the values of the non range filters`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "In", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filtersExcludingRange = mapOf("direction" to "In")
+    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
+
+    whenever(configuredApiRepository.count(rangeFilters, filtersExcludingRange, dataSet.query)).thenReturn(4)
+
+    val actual = configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+
+    verify(configuredApiRepository, times(1)).count(rangeFilters, filtersExcludingRange, dataSet.query)
+    assertEquals(Count(4), actual)
+  }
+
+  @Test
   fun `the service calls the repository without filters if no filters are provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
@@ -129,7 +196,21 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception for invalid report id`() {
+  fun `the service count method calls the repository without filters if no filters are provided`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
+
+    whenever(configuredApiRepository.count(emptyMap(), emptyMap(), dataSet.query)).thenReturn(4)
+
+    val actual = configuredApiService.validateAndCount(reportId, reportVariantId, emptyMap())
+
+    verify(configuredApiRepository, times(1)).count(emptyMap(), emptyMap(), dataSet.query)
+    assertEquals(Count(4), actual)
+  }
+
+  @Test
+  fun `validateAndFetchData should throw an exception for invalid report id`() {
     val reportId = "random report id"
     val reportVariantId = "last-month"
     val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
@@ -146,7 +227,20 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception for invalid report variant`() {
+  fun `validateAndCount should throw an exception for invalid report id`() {
+    val reportId = "random report id"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+    }
+    assertEquals("${ConfiguredApiService.INVALID_REPORT_ID_MESSAGE} $reportId", e.message)
+    verify(configuredApiRepository, times(0)).count(any(), any(), any())
+  }
+
+  @Test
+  fun `validateAndFetchData should throw an exception for invalid report variant`() {
     val reportId = "external-movements"
     val reportVariantId = "non existent variant"
     val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
@@ -163,7 +257,20 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception for invalid sort column`() {
+  fun `validateAndCount should throw an exception for invalid report variant`() {
+    val reportId = "external-movements"
+    val reportVariantId = "non existent variant"
+    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+    }
+    assertEquals("${ConfiguredApiService.INVALID_REPORT_VARIANT_ID_MESSAGE} $reportVariantId", e.message)
+    verify(configuredApiRepository, times(0)).count(any(), any(), any())
+  }
+
+  @Test
+  fun `validateAndFetchData should throw an exception for invalid sort column`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
@@ -180,7 +287,7 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception for invalid filter`() {
+  fun `validateAndFetchData should throw an exception for invalid filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("non existent filter" to "blah")
@@ -197,7 +304,20 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception when having a valid and an invalid filter`() {
+  fun `validateAndCount should throw an exception for invalid filter`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("non existent filter" to "blah")
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+    }
+    assertEquals(ConfiguredApiService.INVALID_FILTERS_MESSAGE, e.message)
+    verify(configuredApiRepository, times(0)).count(any(), any(), any())
+  }
+
+  @Test
+  fun `validateAndFetchData should throw an exception when having a valid and an invalid filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("non existent filter" to "blah", "date.start" to "2023-01-01")
@@ -214,7 +334,20 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception when having invalid static options for a filter and a valid range filter`() {
+  fun `validateAndCount should throw an exception when having a valid and an invalid filter`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("non existent filter" to "blah", "date.start" to "2023-01-01")
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+    }
+    assertEquals(ConfiguredApiService.INVALID_FILTERS_MESSAGE, e.message)
+    verify(configuredApiRepository, times(0)).count(any(), any(), any())
+  }
+
+  @Test
+  fun `validateAndFetchData should throw an exception when having invalid static options for a filter and a valid range filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("direction" to "randomValue", "date.start" to "2023-01-01")
@@ -231,7 +364,20 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception when having invalid static options for a filter and no range filters`() {
+  fun `validateAndCount should throw an exception when having invalid static options for a filter and a valid range filter`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "randomValue", "date.start" to "2023-01-01")
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+    }
+    assertEquals(ConfiguredApiService.INVALID_STATIC_OPTIONS_MESSAGE, e.message)
+    verify(configuredApiRepository, times(0)).count(any(), any(), any())
+  }
+
+  @Test
+  fun `validateAndFetchData should throw an exception when having invalid static options for a filter and no range filters`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("direction" to "randomValue")
@@ -248,7 +394,20 @@ class ConfiguredApiServiceTest {
   }
 
   @Test
-  fun `should throw an exception when having an invalid range filter`() {
+  fun `validateAndCount should throw an exception when having invalid static options for a filter and no range filters`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("direction" to "randomValue")
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+    }
+    assertEquals(ConfiguredApiService.INVALID_STATIC_OPTIONS_MESSAGE, e.message)
+    verify(configuredApiRepository, times(0)).count(any(), any(), any())
+  }
+
+  @Test
+  fun `validateAndFetchData should throw an exception when having an invalid range filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val filters = mapOf("date.start" to "abc")
@@ -262,6 +421,19 @@ class ConfiguredApiServiceTest {
     }
     assertEquals("Invalid value abc for filter date. Cannot be parsed as a date.", e.message)
     verify(configuredApiRepository, times(0)).executeQuery(any(), any(), any(), any(), any(), any(), any())
+  }
+
+  @Test
+  fun `validateAndCount should throw an exception when having an invalid range filter`() {
+    val reportId = "external-movements"
+    val reportVariantId = "last-month"
+    val filters = mapOf("date.start" to "abc")
+
+    val e = org.junit.jupiter.api.assertThrows<ValidationException> {
+      configuredApiService.validateAndCount(reportId, reportVariantId, filters)
+    }
+    assertEquals("Invalid value abc for filter date. Cannot be parsed as a date.", e.message)
+    verify(configuredApiRepository, times(0)).count(any(), any(), any())
   }
 
   @Test
