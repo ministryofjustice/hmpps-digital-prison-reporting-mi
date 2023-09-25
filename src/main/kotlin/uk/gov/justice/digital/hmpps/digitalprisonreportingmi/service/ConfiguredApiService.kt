@@ -8,6 +8,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProduct
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.DataSet
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ParameterType
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.ReportField
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model.SchemaField
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
@@ -40,16 +41,19 @@ class ConfiguredApiService(
     validateFilters(reportId, reportVariantId, filters, dataSet)
     val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
     val validatedSortColumn = validateSortColumnOrGetDefault(sortColumn, reportId, dataSet, reportVariantId)
-    return configuredApiRepository
-      .executeQuery(
-        dataSet.query,
-        rangeFilters.associate(transformMapEntryToPair()),
-        filtersExcludingRange.associate(transformMapEntryToPair()),
-        selectedPage,
-        pageSize,
-        validatedSortColumn,
-        sortedAsc,
-      )
+    return formatToSchemaFieldsCasing(
+      configuredApiRepository
+        .executeQuery(
+          dataSet.query,
+          rangeFilters.associate(transformMapEntryToPair()),
+          filtersExcludingRange.associate(transformMapEntryToPair()),
+          selectedPage,
+          pageSize,
+          validatedSortColumn,
+          sortedAsc,
+        ),
+      dataSet.schema.field,
+    )
   }
 
   fun validateAndCount(
@@ -196,5 +200,14 @@ class ConfiguredApiService(
 
   private fun transformMapEntryToPair(): (Map.Entry<String, String>) -> Pair<String, String> {
     return { (k, v) -> k to v }
+  }
+
+  private fun formatToSchemaFieldsCasing(resultRows: List<Map<String, Any>>, schemaFields: List<SchemaField>): List<Map<String, Any>> {
+    return resultRows
+      .map { row -> row.entries.associate { e -> transformKey(e.key, schemaFields) to e.value } }
+  }
+
+  private fun transformKey(key: String, schemaFields: List<SchemaField>): String {
+    return schemaFields.first { it.name.lowercase() == key.lowercase() }.name
   }
 }

@@ -16,7 +16,17 @@ class ConfiguredApiServiceTest {
   private val stubbedProductDefinitionRepository: StubbedProductDefinitionRepository = StubbedProductDefinitionRepository()
   private val configuredApiRepository: ConfiguredApiRepository = mock<ConfiguredApiRepository>()
   private val configuredApiService = ConfiguredApiService(stubbedProductDefinitionRepository, configuredApiRepository)
-  private val expectedResult = listOf(
+  private val expectedRepositoryResult = listOf(
+    mapOf("PRISONNUMBER" to "1"),
+    mapOf("NAME" to "FirstName"),
+    mapOf("DATE" to "2023-05-20"),
+    mapOf("ORIGIN" to "OriginLocation"),
+    mapOf("DESTINATION" to "DestinationLocation"),
+    mapOf("DIRECTION" to "in"),
+    mapOf("TYPE" to "trn"),
+    mapOf("REASON" to "normal transfer"),
+  )
+  private val expectedServiceResult = listOf(
     mapOf("prisonNumber" to "1"),
     mapOf("name" to "FirstName"),
     mapOf("date" to "2023-05-20"),
@@ -40,12 +50,12 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedRepositoryResult)
 
     val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
-    assertEquals(expectedResult, actual)
+    assertEquals(expectedServiceResult, actual)
   }
 
   @Test
@@ -77,12 +87,12 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedRepositoryResult)
 
     val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)
-    assertEquals(expectedResult, actual)
+    assertEquals(expectedServiceResult, actual)
   }
 
   @Test
@@ -112,12 +122,12 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedRepositoryResult)
 
     val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
-    assertEquals(expectedResult, actual)
+    assertEquals(expectedServiceResult, actual)
   }
 
   @Test
@@ -149,12 +159,12 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedRepositoryResult)
 
     val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
-    assertEquals(expectedResult, actual)
+    assertEquals(expectedServiceResult, actual)
   }
 
   @Test
@@ -179,20 +189,26 @@ class ConfiguredApiServiceTest {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
-    val expectedResult = listOf(
-      mapOf("prisonNumber" to "1"),
-    )
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
     val sortedAsc = true
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, emptyMap(), emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(
+      listOf(
+        mapOf("PRISONNUMBER" to "1"),
+      ),
+    )
 
     val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, emptyMap(), selectedPage, pageSize, sortColumn, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, emptyMap(), emptyMap(), 1, 10, "date", true)
-    assertEquals(expectedResult, actual)
+    assertEquals(
+      listOf(
+        mapOf("prisonNumber" to "1"),
+      ),
+      actual,
+    )
   }
 
   @Test
@@ -449,11 +465,11 @@ class ConfiguredApiServiceTest {
     val sortedAsc = true
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
-    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedResult)
+    whenever(configuredApiRepository.executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)).thenReturn(expectedRepositoryResult)
 
     val actual = configuredApiService.validateAndFetchData(reportId, reportVariantId, filters, selectedPage, pageSize, null, sortedAsc)
 
     verify(configuredApiRepository, times(1)).executeQuery(dataSet.query, rangeFilters, filtersExcludingRange, selectedPage, pageSize, sortColumn, sortedAsc)
-    assertEquals(expectedResult, actual)
+    assertEquals(expectedServiceResult, actual)
   }
 }

@@ -180,19 +180,19 @@ class ConfiguredApiRepositoryTest {
   @Test
   fun `should return no rows if the start date is after the latest table date`() {
     val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2025-01-01"), emptyMap(), 1, 10, "date", false)
-    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
+    Assertions.assertEquals(emptyList<Map<String, Any>>(), actual)
   }
 
   @Test
   fun `should return no rows if the end date is before the earliest table date`() {
     val actual = configuredApiRepository.executeQuery(query, mapOf("date.end" to "2015-01-01"), emptyMap(), 1, 10, "date", false)
-    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
+    Assertions.assertEquals(emptyList<Map<String, Any>>(), actual)
   }
 
   @Test
   fun `should return no rows if the start date is after the end date`() {
     val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2023-05-01", "date.end" to "2023-04-25"), emptyMap(), 1, 10, "date", false)
-    Assertions.assertEquals(emptyList<ExternalMovementPrisonerEntity>(), actual)
+    Assertions.assertEquals(emptyList<Map<String, Any>>(), actual)
   }
 
   @Test

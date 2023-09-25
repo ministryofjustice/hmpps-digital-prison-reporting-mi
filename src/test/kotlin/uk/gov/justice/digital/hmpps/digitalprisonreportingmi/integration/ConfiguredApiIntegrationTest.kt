@@ -64,9 +64,9 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-        {"PRISONNUMBER": "${movementPrisoner5[PRISON_NUMBER]}", "NAME": "${movementPrisoner5[NAME]}", "DATE": "${movementPrisoner5[DATE]}", "ORIGIN": "${movementPrisoner5[ORIGIN]}", "DESTINATION": "${movementPrisoner5[DESTINATION]}", "DIRECTION": "${movementPrisoner5[DIRECTION]}", "TYPE": "${movementPrisoner5[TYPE]}", "REASON": "${movementPrisoner5[REASON]}"},
-        {"PRISONNUMBER": "${movementPrisoner4[PRISON_NUMBER]}", "NAME": "${movementPrisoner4[NAME]}", "DATE": "${movementPrisoner4[DATE]}", "ORIGIN": "${movementPrisoner4[ORIGIN]}", "DESTINATION": "${movementPrisoner4[DESTINATION]}", "DIRECTION": "${movementPrisoner4[DIRECTION]}", "TYPE": "${movementPrisoner4[TYPE]}", "REASON": "${movementPrisoner4[REASON]}"},
-        {"PRISONNUMBER": "${movementPrisoner3[PRISON_NUMBER]}", "NAME": "${movementPrisoner3[NAME]}", "DATE": "${movementPrisoner3[DATE]}", "ORIGIN": "${movementPrisoner3[ORIGIN]}", "DESTINATION": "${movementPrisoner3[DESTINATION]}", "DIRECTION": "${movementPrisoner3[DIRECTION]}", "TYPE": "${movementPrisoner3[TYPE]}", "REASON": "${movementPrisoner3[REASON]}"}
+        {"prisonNumber": "${movementPrisoner5[PRISON_NUMBER]}", "name": "${movementPrisoner5[NAME]}", "date": "${movementPrisoner5[DATE]}", "origin": "${movementPrisoner5[ORIGIN]}", "destination": "${movementPrisoner5[DESTINATION]}", "direction": "${movementPrisoner5[DIRECTION]}", "type": "${movementPrisoner5[TYPE]}", "reason": "${movementPrisoner5[REASON]}"},
+        {"prisonNumber": "${movementPrisoner4[PRISON_NUMBER]}", "name": "${movementPrisoner4[NAME]}", "date": "${movementPrisoner4[DATE]}", "origin": "${movementPrisoner4[ORIGIN]}", "destination": "${movementPrisoner4[DESTINATION]}", "direction": "${movementPrisoner4[DIRECTION]}", "type": "${movementPrisoner4[TYPE]}", "reason": "${movementPrisoner4[REASON]}"},
+        {"prisonNumber": "${movementPrisoner3[PRISON_NUMBER]}", "name": "${movementPrisoner3[NAME]}", "date": "${movementPrisoner3[DATE]}", "origin": "${movementPrisoner3[ORIGIN]}", "destination": "${movementPrisoner3[DESTINATION]}", "direction": "${movementPrisoner3[DIRECTION]}", "type": "${movementPrisoner3[TYPE]}", "reason": "${movementPrisoner3[REASON]}"}
       ]       
       """,
       )
@@ -124,7 +124,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-         {"PRISONNUMBER": "${movementPrisoner4[PRISON_NUMBER]}", "NAME": "${movementPrisoner4[NAME]}", "DATE": "${movementPrisoner4[DATE]}", "ORIGIN": "${movementPrisoner4[ORIGIN]}", "DESTINATION": "${movementPrisoner4[DESTINATION]}", "DIRECTION": "${movementPrisoner4[DIRECTION]}", "TYPE": "${movementPrisoner4[TYPE]}", "REASON": "${movementPrisoner4[REASON]}"}
+         {"prisonNumber": "${movementPrisoner4[PRISON_NUMBER]}", "name": "${movementPrisoner4[NAME]}", "date": "${movementPrisoner4[DATE]}", "origin": "${movementPrisoner4[ORIGIN]}", "destination": "${movementPrisoner4[DESTINATION]}", "direction": "${movementPrisoner4[DIRECTION]}", "type": "${movementPrisoner4[TYPE]}", "reason": "${movementPrisoner4[REASON]}"}
       ]       
       """,
       )
@@ -146,11 +146,11 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .json(
         """
       [
-        {"PRISONNUMBER": "${movementPrisoner5[PRISON_NUMBER]}", "NAME": "${movementPrisoner5[NAME]}", "DATE": "${movementPrisoner5[DATE]}", "ORIGIN": "${movementPrisoner5[ORIGIN]}", "DESTINATION": "${movementPrisoner5[DESTINATION]}", "DIRECTION": "${movementPrisoner5[DIRECTION]}", "TYPE": "${movementPrisoner5[TYPE]}", "REASON": "${movementPrisoner5[REASON]}"},
-        {"PRISONNUMBER": "${movementPrisoner4[PRISON_NUMBER]}", "NAME": "${movementPrisoner4[NAME]}", "DATE": "${movementPrisoner4[DATE]}", "ORIGIN": "${movementPrisoner4[ORIGIN]}", "DESTINATION": "${movementPrisoner4[DESTINATION]}", "DIRECTION": "${movementPrisoner4[DIRECTION]}", "TYPE": "${movementPrisoner4[TYPE]}", "REASON": "${movementPrisoner4[REASON]}"},
-        {"PRISONNUMBER": "${movementPrisoner3[PRISON_NUMBER]}", "NAME": "${movementPrisoner3[NAME]}", "DATE": "${movementPrisoner3[DATE]}", "ORIGIN": "${movementPrisoner3[ORIGIN]}", "DESTINATION": "${movementPrisoner3[DESTINATION]}", "DIRECTION": "${movementPrisoner3[DIRECTION]}", "TYPE": "${movementPrisoner3[TYPE]}", "REASON": "${movementPrisoner3[REASON]}"},
-        {"PRISONNUMBER": "${movementPrisoner2[PRISON_NUMBER]}", "NAME": "${movementPrisoner2[NAME]}", "DATE": "${movementPrisoner2[DATE]}", "ORIGIN": "${movementPrisoner2[ORIGIN]}", "DESTINATION": "${movementPrisoner2[DESTINATION]}", "DIRECTION": "${movementPrisoner2[DIRECTION]}", "TYPE": "${movementPrisoner2[TYPE]}", "REASON": "${movementPrisoner2[REASON]}"},
-        {"PRISONNUMBER": "${movementPrisoner1[PRISON_NUMBER]}", "NAME": "${movementPrisoner1[NAME]}", "DATE": "${movementPrisoner1[DATE]}", "ORIGIN": "${movementPrisoner1[ORIGIN]}", "DESTINATION": "${movementPrisoner1[DESTINATION]}", "DIRECTION": "${movementPrisoner1[DIRECTION]}", "TYPE": "${movementPrisoner1[TYPE]}", "REASON": "${movementPrisoner1[REASON]}"}
+        {"prisonNumber": "${movementPrisoner5[PRISON_NUMBER]}", "name": "${movementPrisoner5[NAME]}", "date": "${movementPrisoner5[DATE]}", "origin": "${movementPrisoner5[ORIGIN]}", "destination": "${movementPrisoner5[DESTINATION]}", "direction": "${movementPrisoner5[DIRECTION]}", "type": "${movementPrisoner5[TYPE]}", "reason": "${movementPrisoner5[REASON]}"},
+        {"prisonNumber": "${movementPrisoner4[PRISON_NUMBER]}", "name": "${movementPrisoner4[NAME]}", "date": "${movementPrisoner4[DATE]}", "origin": "${movementPrisoner4[ORIGIN]}", "destination": "${movementPrisoner4[DESTINATION]}", "direction": "${movementPrisoner4[DIRECTION]}", "type": "${movementPrisoner4[TYPE]}", "reason": "${movementPrisoner4[REASON]}"},
+        {"prisonNumber": "${movementPrisoner3[PRISON_NUMBER]}", "name": "${movementPrisoner3[NAME]}", "date": "${movementPrisoner3[DATE]}", "origin": "${movementPrisoner3[ORIGIN]}", "destination": "${movementPrisoner3[DESTINATION]}", "direction": "${movementPrisoner3[DIRECTION]}", "type": "${movementPrisoner3[TYPE]}", "reason": "${movementPrisoner3[REASON]}"},
+        {"prisonNumber": "${movementPrisoner2[PRISON_NUMBER]}", "name": "${movementPrisoner2[NAME]}", "date": "${movementPrisoner2[DATE]}", "origin": "${movementPrisoner2[ORIGIN]}", "destination": "${movementPrisoner2[DESTINATION]}", "direction": "${movementPrisoner2[DIRECTION]}", "type": "${movementPrisoner2[TYPE]}", "reason": "${movementPrisoner2[REASON]}"},
+        {"prisonNumber": "${movementPrisoner1[PRISON_NUMBER]}", "name": "${movementPrisoner1[NAME]}", "date": "${movementPrisoner1[DATE]}", "origin": "${movementPrisoner1[ORIGIN]}", "destination": "${movementPrisoner1[DESTINATION]}", "direction": "${movementPrisoner1[DIRECTION]}", "type": "${movementPrisoner1[TYPE]}", "reason": "${movementPrisoner1[REASON]}"}
       ]
       """,
       )
@@ -183,7 +183,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
     if (direction != null) {
       results?.forEach {
-        assertThat(it[DIRECTION].toString().lowercase()).isEqualTo(direction.lowercase())
+        assertThat(it["direction"].toString().lowercase()).isEqualTo(direction.lowercase())
       }
     }
   }
