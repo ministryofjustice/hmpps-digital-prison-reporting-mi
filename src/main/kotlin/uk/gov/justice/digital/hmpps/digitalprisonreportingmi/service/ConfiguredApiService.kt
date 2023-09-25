@@ -2,6 +2,8 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service
 
 import jakarta.validation.ValidationException
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_END_SUFFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_START_SUFFIX
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
@@ -26,8 +28,6 @@ class ConfiguredApiService(
     private const val schemaRefPrefix = "\$ref:"
   }
 
-  val startSuffix = ".start"
-  val endSuffix = ".end"
   fun validateAndFetchData(
     reportId: String,
     reportVariantId: String,
@@ -39,7 +39,7 @@ class ConfiguredApiService(
   ): List<Map<String, Any>> {
     val dataSet = getDataSet(reportId, reportVariantId)
     validateFilters(reportId, reportVariantId, filters, dataSet)
-    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
+    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(RANGE_FILTER_START_SUFFIX) || k.endsWith(RANGE_FILTER_END_SUFFIX) }
     val validatedSortColumn = validateSortColumnOrGetDefault(sortColumn, reportId, dataSet, reportVariantId)
     return formatToSchemaFieldsCasing(
       configuredApiRepository
@@ -63,7 +63,7 @@ class ConfiguredApiService(
   ): Count {
     val dataSet = getDataSet(reportId, reportVariantId)
     validateFilters(reportId, reportVariantId, filters, dataSet)
-    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(startSuffix) || k.endsWith(endSuffix) }
+    val (rangeFilters, filtersExcludingRange) = filters.entries.partition { (k, _) -> k.endsWith(RANGE_FILTER_START_SUFFIX) || k.endsWith(RANGE_FILTER_END_SUFFIX) }
     return Count(
       configuredApiRepository.count(
         rangeFilters.associate(transformMapEntryToPair()),
@@ -189,10 +189,10 @@ class ConfiguredApiService(
   }
 
   private fun truncateBasedOnSuffix(k: String, v: String): Pair<String, String> {
-    return if (k.endsWith(startSuffix)) {
-      k.substring(0, k.length - startSuffix.length) to v
-    } else if (k.endsWith(endSuffix)) {
-      k.substring(0, k.length - endSuffix.length) to v
+    return if (k.endsWith(RANGE_FILTER_START_SUFFIX)) {
+      k.substring(0, k.length - RANGE_FILTER_START_SUFFIX.length) to v
+    } else if (k.endsWith(RANGE_FILTER_END_SUFFIX)) {
+      k.substring(0, k.length - RANGE_FILTER_END_SUFFIX.length) to v
     } else {
       k to v
     }

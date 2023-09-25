@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_END_SUFFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_START_SUFFIX
 import java.sql.Timestamp
 
 @Service
@@ -81,10 +83,10 @@ class ConfiguredApiRepository {
 
   private fun buildWhereRangeCondition(rangeFilters: Map<String, String>) =
     rangeFilters.keys.joinToString(" AND ") { k ->
-      if (k.endsWith(".start")) {
-        "${k.removeSuffix(".start")} >= :$k"
-      } else if (k.endsWith(".end")) {
-        "${k.removeSuffix(".end")} <= :$k"
+      if (k.endsWith("$RANGE_FILTER_START_SUFFIX")) {
+        "${k.removeSuffix("$RANGE_FILTER_START_SUFFIX")} >= :$k"
+      } else if (k.endsWith("$RANGE_FILTER_END_SUFFIX")) {
+        "${k.removeSuffix("$RANGE_FILTER_END_SUFFIX")} <= :$k"
       } else {
         throw ValidationException("Range filter does not have a .start or .end suffix: $k")
       }

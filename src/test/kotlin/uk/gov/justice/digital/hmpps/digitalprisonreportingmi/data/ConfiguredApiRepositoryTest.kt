@@ -9,6 +9,8 @@ import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_END_SUFFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_START_SUFFIX
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.movementPrisoner1
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.movementPrisoner2
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.movementPrisoner3
@@ -57,9 +59,6 @@ class ConfiguredApiRepositoryTest {
 
   @Test
   fun `should return 2 external movements for the selected page 2 and pageSize 2 sorted by date in ascending order`() {
-//    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
-//    val filtersExcludingRange = mapOf("direction" to "In")
-
     val actual = configuredApiRepository.executeQuery(query, emptyMap(), emptyMap(), 2, 2, "date", true)
     Assertions.assertEquals(listOf(movementPrisoner3, movementPrisoner4), actual)
     Assertions.assertEquals(2, actual.size)
@@ -155,43 +154,43 @@ class ConfiguredApiRepositoryTest {
 
   @Test
   fun `should return all the rows on or after the provided start date`() {
-    val actual = configuredApiRepository.executeQuery(query, Collections.singletonMap("date.start", "2023-04-30"), emptyMap(), 1, 10, "date", false)
+    val actual = configuredApiRepository.executeQuery(query, Collections.singletonMap("date$RANGE_FILTER_START_SUFFIX", "2023-04-30"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(listOf(movementPrisoner5, movementPrisoner4, movementPrisoner3), actual)
   }
 
   @Test
   fun `should return all the rows on or before the provided end date`() {
-    val actual = configuredApiRepository.executeQuery(query, Collections.singletonMap("date.end", "2023-04-25"), emptyMap(), 1, 10, "date", false)
+    val actual = configuredApiRepository.executeQuery(query, Collections.singletonMap("date$RANGE_FILTER_END_SUFFIX", "2023-04-25"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(listOf(movementPrisoner2, movementPrisoner1), actual)
   }
 
   @Test
   fun `should return all the rows between the provided start and end dates`() {
-    val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2023-04-25", "date.end" to "2023-05-20"), emptyMap(), 1, 10, "date", false)
+    val actual = configuredApiRepository.executeQuery(query, mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-05-20"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(listOf(movementPrisoner5, movementPrisoner4, movementPrisoner3, movementPrisoner2), actual)
   }
 
   @Test
   fun `should return all the rows between the provided start and end dates matching the direction filter`() {
-    val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2023-04-25", "date.end" to "2023-05-20"), mapOf("direction" to "in"), 1, 10, "date", false)
+    val actual = configuredApiRepository.executeQuery(query, mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-05-20"), mapOf("direction" to "in"), 1, 10, "date", false)
     Assertions.assertEquals(listOf(movementPrisoner5, movementPrisoner3, movementPrisoner2), actual)
   }
 
   @Test
   fun `should return no rows if the start date is after the latest table date`() {
-    val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2025-01-01"), emptyMap(), 1, 10, "date", false)
+    val actual = configuredApiRepository.executeQuery(query, mapOf("date$RANGE_FILTER_START_SUFFIX" to "2025-01-01"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(emptyList<Map<String, Any>>(), actual)
   }
 
   @Test
   fun `should return no rows if the end date is before the earliest table date`() {
-    val actual = configuredApiRepository.executeQuery(query, mapOf("date.end" to "2015-01-01"), emptyMap(), 1, 10, "date", false)
+    val actual = configuredApiRepository.executeQuery(query, mapOf("date$RANGE_FILTER_END_SUFFIX" to "2015-01-01"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(emptyList<Map<String, Any>>(), actual)
   }
 
   @Test
   fun `should return no rows if the start date is after the end date`() {
-    val actual = configuredApiRepository.executeQuery(query, mapOf("date.start" to "2023-05-01", "date.end" to "2023-04-25"), emptyMap(), 1, 10, "date", false)
+    val actual = configuredApiRepository.executeQuery(query, mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-05-01", "date$RANGE_FILTER_END_SUFFIX" to "2023-04-25"), emptyMap(), 1, 10, "date", false)
     Assertions.assertEquals(emptyList<Map<String, Any>>(), actual)
   }
 
@@ -233,7 +232,7 @@ class ConfiguredApiRepositoryTest {
       prisonerRepository.save(prisoner9846)
       val actual = configuredApiRepository.executeQuery(
         query,
-        mapOf("date.start" to "2050-06-01", "date.end" to "2050-06-01"),
+        mapOf("date$RANGE_FILTER_START_SUFFIX" to "2050-06-01", "date$RANGE_FILTER_END_SUFFIX" to "2050-06-01"),
         emptyMap(),
         1,
         1,
@@ -268,37 +267,37 @@ class ConfiguredApiRepositoryTest {
 
   @Test
   fun `should return a count of rows with a startDate filter`() {
-    val actual = configuredApiRepository.count(Collections.singletonMap("date.start", "2023-05-01"), emptyMap(), query)
+    val actual = configuredApiRepository.count(Collections.singletonMap("date$RANGE_FILTER_START_SUFFIX", "2023-05-01"), emptyMap(), query)
     Assertions.assertEquals(2, actual)
   }
 
   @Test
   fun `should return a count of rows with an endDate filter`() {
-    val actual = configuredApiRepository.count(Collections.singletonMap("date.end", "2023-01-31"), emptyMap(), query)
+    val actual = configuredApiRepository.count(Collections.singletonMap("date$RANGE_FILTER_END_SUFFIX", "2023-01-31"), emptyMap(), query)
     Assertions.assertEquals(1, actual)
   }
 
   @Test
   fun `should return a count of movements with a startDate and an endDate filter`() {
-    val actual = configuredApiRepository.count(mapOf("date.start" to "2023-04-30", "date.end" to "2023-05-01"), emptyMap(), query)
+    val actual = configuredApiRepository.count(mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-30", "date$RANGE_FILTER_END_SUFFIX" to "2023-05-01"), emptyMap(), query)
     Assertions.assertEquals(2, actual)
   }
 
   @Test
   fun `should return a count of zero with a date start greater than the latest movement date`() {
-    val actual = configuredApiRepository.count(Collections.singletonMap("date.start", "2025-04-30"), emptyMap(), query)
+    val actual = configuredApiRepository.count(Collections.singletonMap("date$RANGE_FILTER_START_SUFFIX", "2025-04-30"), emptyMap(), query)
     Assertions.assertEquals(0, actual)
   }
 
   @Test
   fun `should return a count of zero with a date end less than the earliest movement date`() {
-    val actual = configuredApiRepository.count(Collections.singletonMap("date.end", "2019-04-30"), emptyMap(), query)
+    val actual = configuredApiRepository.count(Collections.singletonMap("date$RANGE_FILTER_END_SUFFIX", "2019-04-30"), emptyMap(), query)
     Assertions.assertEquals(0, actual)
   }
 
   @Test
   fun `should return a count of zero if the start date is after the end date`() {
-    val actual = configuredApiRepository.count(mapOf("date.start" to "2023-04-30", "date.end" to "2019-05-01"), emptyMap(), query)
+    val actual = configuredApiRepository.count(mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-30", "date$RANGE_FILTER_END_SUFFIX" to "2019-05-01"), emptyMap(), query)
     Assertions.assertEquals(0, actual)
   }
 

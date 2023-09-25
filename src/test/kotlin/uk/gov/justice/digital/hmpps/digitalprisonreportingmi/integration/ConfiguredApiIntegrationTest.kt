@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.web.util.UriBuilder
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.FILTERS_PREFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_END_SUFFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_START_SUFFIX
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.DATE
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.DESTINATION
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepositoryTest.AllMovementPrisoners.DIRECTION
@@ -112,8 +114,8 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/reports/external-movements/last-month")
-          .queryParam("${FILTERS_PREFIX}date.start", "2023-04-25")
-          .queryParam("${FILTERS_PREFIX}date.end", "2023-05-20")
+          .queryParam("${FILTERS_PREFIX}date$RANGE_FILTER_START_SUFFIX", "2023-04-25")
+          .queryParam("${FILTERS_PREFIX}date$RANGE_FILTER_END_SUFFIX", "2023-05-20")
           .queryParam("${FILTERS_PREFIX}direction", "out")
           .build()
       }
@@ -235,12 +237,12 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
   @Test
   fun `Configured API returns 400 for invalid startDate query param`() {
-    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.start", "abc", "/reports/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}date$RANGE_FILTER_START_SUFFIX", "abc", "/reports/external-movements/last-month")
   }
 
   @Test
   fun `External movements returns 400 for invalid endDate query param`() {
-    requestWithQueryAndAssert400("${FILTERS_PREFIX}date.end", "b", "/reports/external-movements/last-month")
+    requestWithQueryAndAssert400("${FILTERS_PREFIX}date$RANGE_FILTER_END_SUFFIX", "b", "/reports/external-movements/last-month")
   }
 
   @Test

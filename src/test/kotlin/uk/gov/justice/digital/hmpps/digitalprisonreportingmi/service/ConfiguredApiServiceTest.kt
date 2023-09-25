@@ -8,6 +8,8 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_END_SUFFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_START_SUFFIX
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ConfiguredApiRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.StubbedProductDefinitionRepository
@@ -41,9 +43,9 @@ class ConfiguredApiServiceTest {
   fun `should call the repository with the corresponding arguments and get a list of rows when both range and non range filters are provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val filtersExcludingRange = mapOf("direction" to "in")
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val rangeFilters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -62,9 +64,9 @@ class ConfiguredApiServiceTest {
   fun `should call the repository with the corresponding arguments and get a count of rows when both range and non range filters are provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val filtersExcludingRange = mapOf("direction" to "in")
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val rangeFilters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
     whenever(configuredApiRepository.count(rangeFilters, filtersExcludingRange, dataSet.query)).thenReturn(4)
@@ -79,8 +81,8 @@ class ConfiguredApiServiceTest {
   fun `should call the repository with the corresponding arguments and get a list of rows when only range filters are provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
+    val rangeFilters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -99,8 +101,8 @@ class ConfiguredApiServiceTest {
   fun `should call the repository with the corresponding arguments and get a count of rows when only range filters are provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
+    val rangeFilters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
     whenever(configuredApiRepository.count(rangeFilters, emptyMap(), dataSet.query)).thenReturn(4)
@@ -150,9 +152,9 @@ class ConfiguredApiServiceTest {
   fun `should call the repository with the corresponding arguments and get a list of rows regardless of the casing of the values of the non range filters`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "In", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "In", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val filtersExcludingRange = mapOf("direction" to "In")
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val rangeFilters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -171,9 +173,9 @@ class ConfiguredApiServiceTest {
   fun `should call the repository with the corresponding arguments and get a count of rows regardless of the casing of the values of the non range filters`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "In", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "In", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val filtersExcludingRange = mapOf("direction" to "In")
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val rangeFilters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val dataSet = stubbedProductDefinitionRepository.getProductDefinitions().first().dataSet.first()
 
     whenever(configuredApiRepository.count(rangeFilters, filtersExcludingRange, dataSet.query)).thenReturn(4)
@@ -229,7 +231,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndFetchData should throw an exception for invalid report id`() {
     val reportId = "random report id"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -246,7 +248,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndCount should throw an exception for invalid report id`() {
     val reportId = "random report id"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
       configuredApiService.validateAndCount(reportId, reportVariantId, filters)
@@ -259,7 +261,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndFetchData should throw an exception for invalid report variant`() {
     val reportId = "external-movements"
     val reportVariantId = "non existent variant"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -276,7 +278,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndCount should throw an exception for invalid report variant`() {
     val reportId = "external-movements"
     val reportVariantId = "non existent variant"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
       configuredApiService.validateAndCount(reportId, reportVariantId, filters)
@@ -289,7 +291,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndFetchData should throw an exception for invalid sort column`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "abc"
@@ -336,7 +338,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndFetchData should throw an exception when having a valid and an invalid filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("non existent filter" to "blah", "date.start" to "2023-01-01")
+    val filters = mapOf("non existent filter" to "blah", "date$RANGE_FILTER_START_SUFFIX" to "2023-01-01")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -353,7 +355,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndCount should throw an exception when having a valid and an invalid filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("non existent filter" to "blah", "date.start" to "2023-01-01")
+    val filters = mapOf("non existent filter" to "blah", "date$RANGE_FILTER_START_SUFFIX" to "2023-01-01")
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
       configuredApiService.validateAndCount(reportId, reportVariantId, filters)
@@ -366,7 +368,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndFetchData should throw an exception when having invalid static options for a filter and a valid range filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "randomValue", "date.start" to "2023-01-01")
+    val filters = mapOf("direction" to "randomValue", "date$RANGE_FILTER_START_SUFFIX" to "2023-01-01")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -383,7 +385,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndCount should throw an exception when having invalid static options for a filter and a valid range filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "randomValue", "date.start" to "2023-01-01")
+    val filters = mapOf("direction" to "randomValue", "date$RANGE_FILTER_START_SUFFIX" to "2023-01-01")
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
       configuredApiService.validateAndCount(reportId, reportVariantId, filters)
@@ -426,7 +428,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndFetchData should throw an exception when having an invalid range filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("date.start" to "abc")
+    val filters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "abc")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"
@@ -443,7 +445,7 @@ class ConfiguredApiServiceTest {
   fun `validateAndCount should throw an exception when having an invalid range filter`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("date.start" to "abc")
+    val filters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "abc")
 
     val e = org.junit.jupiter.api.assertThrows<ValidationException> {
       configuredApiService.validateAndCount(reportId, reportVariantId, filters)
@@ -456,9 +458,9 @@ class ConfiguredApiServiceTest {
   fun `should call the configuredApiRepository with the default sort column if none is provided`() {
     val reportId = "external-movements"
     val reportVariantId = "last-month"
-    val filters = mapOf("direction" to "in", "date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val filters = mapOf("direction" to "in", "date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val filtersExcludingRange = mapOf("direction" to "in")
-    val rangeFilters = mapOf("date.start" to "2023-04-25", "date.end" to "2023-09-10")
+    val rangeFilters = mapOf("date$RANGE_FILTER_START_SUFFIX" to "2023-04-25", "date$RANGE_FILTER_END_SUFFIX" to "2023-09-10")
     val selectedPage = 1L
     val pageSize = 10L
     val sortColumn = "date"

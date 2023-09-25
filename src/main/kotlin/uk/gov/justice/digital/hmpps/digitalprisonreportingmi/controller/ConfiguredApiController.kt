@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.FILTERS_PREFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.FILTERS_QUERY_DESCRIPTION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.ConfiguredApiController.FiltersPrefix.FILTERS_QUERY_EXAMPLE
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller.model.Count
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ConfiguredApiService
 
@@ -20,6 +22,15 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ConfiguredA
 class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
   object FiltersPrefix {
     const val FILTERS_PREFIX = "filters."
+    const val RANGE_FILTER_START_SUFFIX = ".start"
+    const val RANGE_FILTER_END_SUFFIX = ".end"
+    const val FILTERS_QUERY_DESCRIPTION = """The filter query parameters have to start with the prefix "$FILTERS_PREFIX" followed by the name of the filter.
+      |For range filters, like date for instance, these need to be followed by a $RANGE_FILTER_START_SUFFIX or $RANGE_FILTER_END_SUFFIX suffix accordingly.
+    """
+    const val FILTERS_QUERY_EXAMPLE = """{
+        "filters.date$RANGE_FILTER_START_SUFFIX": "2023-04-25",
+        "filters.date$RANGE_FILTER_END_SUFFIX": "2023-05-30"
+        }"""
   }
 
   @GetMapping("/reports/{reportId}/{reportVariantId}")
@@ -37,15 +48,15 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
     @RequestParam sortColumn: String?,
     @RequestParam(defaultValue = "false") sortedAsc: Boolean,
     @Parameter(
-      description = "The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
-      example = "filters.date.start=2023-04-25",
+      description = FILTERS_QUERY_DESCRIPTION,
+      example = FILTERS_QUERY_EXAMPLE,
     )
     @RequestParam
-    allQueryParams: Map<String, String>,
+    filters: Map<String, String>,
     @PathVariable("reportId") reportId: String,
     @PathVariable("reportVariantId") reportVariantId: String,
   ): List<Map<String, Any>> {
-    return configuredApiService.validateAndFetchData(reportId, reportVariantId, filtersOnly(allQueryParams), selectedPage, pageSize, sortColumn, sortedAsc)
+    return configuredApiService.validateAndFetchData(reportId, reportVariantId, filtersOnly(filters), selectedPage, pageSize, sortColumn, sortedAsc)
   }
 
   @GetMapping("/reports/{reportId}/{reportVariantId}/count")
@@ -55,15 +66,15 @@ class ConfiguredApiController(val configuredApiService: ConfiguredApiService) {
   )
   fun configuredApiCount(
     @Parameter(
-      description = "The filter query parameters have to start with the prefix \"$FILTERS_PREFIX\" followed by the name of the filter.",
-      example = "filters.date.start=2023-04-25",
+      description = FILTERS_QUERY_DESCRIPTION,
+      example = FILTERS_QUERY_EXAMPLE,
     )
     @RequestParam
-    allQueryParams: Map<String, String>,
+    filters: Map<String, String>,
     @PathVariable("reportId") reportId: String,
     @PathVariable("reportVariantId") reportVariantId: String,
   ): Count {
-    return configuredApiService.validateAndCount(reportId, reportVariantId, filtersOnly(allQueryParams))
+    return configuredApiService.validateAndCount(reportId, reportVariantId, filtersOnly(filters))
   }
 
   private fun filtersOnly(filters: Map<String, String>): Map<String, String> {
