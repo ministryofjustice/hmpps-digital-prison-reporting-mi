@@ -20,6 +20,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:1.0.0")
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
@@ -43,7 +44,8 @@ tasks {
 }
 
 repositories {
-  mavenCentral()
+  mavenLocal()
+//  mavenCentral()
   maven("https://s3.amazonaws.com/redshift-maven-repository/release")
 }
 

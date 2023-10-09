@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class OpenApiConfig {
+class OpenApiConfiguration {
   @Bean
-  fun openAPI(): OpenAPI? {
+  fun openAPIConfiguration(): OpenAPI? {
     return OpenAPI()
       .info(
         Info().title("Digital Prison Reporting MI API")
