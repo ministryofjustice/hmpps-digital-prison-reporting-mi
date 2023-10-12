@@ -20,13 +20,13 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:1.0.0-rc.2")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:1.0.0-rc.3")
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
   // Testing
-  testImplementation("com.h2database:h2")
+  implementation("com.h2database:h2")
   testImplementation("io.jsonwebtoken:jjwt:0.12.2")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
 }

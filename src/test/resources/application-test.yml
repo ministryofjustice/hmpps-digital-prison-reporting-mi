@@ -22,3 +22,7 @@ spring:
 management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
+
+hmpps:
+  auth:
+    name: bearer-jwt
