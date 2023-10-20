@@ -67,3 +67,6 @@ management:
 
 springdoc:
   default-produces-media-type: application/json
+caseloads:
+  host: ${ME_CASELOADS_API_HOST}
+  path: me/caseloads

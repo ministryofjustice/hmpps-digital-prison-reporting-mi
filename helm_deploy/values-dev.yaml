@@ -12,6 +12,7 @@ generic-service:
     REDSHIFT_JDBC_URL: jdbc:redshift://dpr-redshift-development.ctf9dwuxkfvc.eu-west-2.redshift.amazonaws.com:5439/datamart
     HMPPS_AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
+    ME_CASELOADS_API_HOST: https://nomis-user-roles-api-dev.prison.service.justice.gov.uk
 
   allowlist:
     office: "217.33.148.210/32"
