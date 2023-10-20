@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.constraints.Min
+import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -63,7 +64,10 @@ class ExternalMovementsController(val externalMovementService: ExternalMovementS
     @Parameter(description = "The end date (inclusive) up to which to filter, in the format of yyyy-mm-dd.", example = "2023-04-25")
     @RequestParam
     endDate: LocalDate?,
+    authentication: Authentication,
   ): List<ExternalMovementModel> {
+//    val a = authentication as AuthAwareAuthenticationToken
+    // Do we need to support caseloads for the legacy external movements?
     return externalMovementService.list(
       selectedPage = selectedPage,
       pageSize = pageSize,

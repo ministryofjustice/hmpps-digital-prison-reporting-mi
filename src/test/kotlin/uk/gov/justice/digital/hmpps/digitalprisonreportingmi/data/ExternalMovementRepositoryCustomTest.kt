@@ -27,7 +27,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMov
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.service.ExternalMovementService.SortingColumns.type
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.Collections
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -96,11 +96,11 @@ class ExternalMovementRepositoryCustomTest {
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'origin' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = origin, expectedForAscending = movementPrisoner4, expectedForDescending = movementPrisoner3)
+    assertExternalMovements(sortColumn = origin, expectedForAscending = movementPrisoner3, expectedForDescending = movementPrisoner1)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'destination' when sortedAsc is true and when it is false`() =
-    assertExternalMovements(sortColumn = destination, expectedForAscending = movementPrisoner3, expectedForDescending = movementPrisoner2)
+    assertExternalMovements(sortColumn = destination, expectedForAscending = movementPrisoner5, expectedForDescending = movementPrisoner4)
 
   @TestFactory
   fun `should return all external movements for the selected page and pageSize sorted by 'direction' when sortedAsc is true and when it is false`() =
@@ -305,8 +305,8 @@ class ExternalMovementRepositoryCustomTest {
       8894,
       LocalDateTime.of(2023, 1, 31, 0, 0, 0),
       LocalDateTime.of(2023, 1, 31, 3, 1, 0),
-      "Ranby",
-      "Kirkham",
+      "PTI",
+      "TCI",
       "In",
       "Admission",
       "Unconvicted Remand",
@@ -316,8 +316,8 @@ class ExternalMovementRepositoryCustomTest {
       5207,
       LocalDateTime.of(2023, 4, 25, 0, 0, 0),
       LocalDateTime.of(2023, 4, 25, 12, 19, 0),
-      "Elmley",
-      "Pentonville",
+      "LEICCC",
+      "LCI",
       "In",
       "Transfer",
       "Transfer In from Other Establishment",
@@ -327,8 +327,8 @@ class ExternalMovementRepositoryCustomTest {
       4800,
       LocalDateTime.of(2023, 4, 30, 0, 0, 0),
       LocalDateTime.of(2023, 4, 30, 13, 19, 0),
-      "Wakefield",
-      "Dartmoor",
+      "BFI",
+      "NSI",
       "In",
       "Transfer",
       "Transfer In from Other Establishment",
@@ -338,8 +338,8 @@ class ExternalMovementRepositoryCustomTest {
       7849,
       LocalDateTime.of(2023, 5, 1, 0, 0, 0),
       LocalDateTime.of(2023, 5, 1, 15, 19, 0),
-      "Cardiff",
-      "Maidstone",
+      "LWSTMC",
+      "WWI",
       "Out",
       "Transfer",
       "Transfer Out to Other Establishment",
@@ -349,8 +349,8 @@ class ExternalMovementRepositoryCustomTest {
       6851,
       LocalDateTime.of(2023, 5, 20, 0, 0, 0),
       LocalDateTime.of(2023, 5, 20, 14, 0, 0),
-      "Isle of Wight",
-      "Northumberland",
+      "BOLTCC",
+      "HEI",
       "In",
       "Transfer",
       "Transfer In from Other Establishment",

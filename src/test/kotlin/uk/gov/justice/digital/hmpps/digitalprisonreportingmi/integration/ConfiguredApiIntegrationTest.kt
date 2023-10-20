@@ -23,11 +23,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.Configu
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.PRISON_NUMBER
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.REASON
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.TYPE
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.movementPrisoner1
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.movementPrisoner2
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.movementPrisoner3
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.movementPrisoner4
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.movementPrisoner5
 
 class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
@@ -38,7 +34,8 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
   lateinit var prisonerRepository: PrisonerRepository
 
   @BeforeEach
-  fun setup() {
+  override fun setup() {
+    super.setup()
     ExternalMovementRepositoryCustomTest.AllMovements.allExternalMovements.forEach {
       externalMovementRepository.save(it)
     }
@@ -66,9 +63,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-        {"prisonNumber": "${movementPrisoner5[PRISON_NUMBER]}", "name": "${movementPrisoner5[NAME]}", "date": "${movementPrisoner5[DATE]}", "origin": "${movementPrisoner5[ORIGIN]}", "destination": "${movementPrisoner5[DESTINATION]}", "direction": "${movementPrisoner5[DIRECTION]}", "type": "${movementPrisoner5[TYPE]}", "reason": "${movementPrisoner5[REASON]}"},
-        {"prisonNumber": "${movementPrisoner4[PRISON_NUMBER]}", "name": "${movementPrisoner4[NAME]}", "date": "${movementPrisoner4[DATE]}", "origin": "${movementPrisoner4[ORIGIN]}", "destination": "${movementPrisoner4[DESTINATION]}", "direction": "${movementPrisoner4[DIRECTION]}", "type": "${movementPrisoner4[TYPE]}", "reason": "${movementPrisoner4[REASON]}"},
-        {"prisonNumber": "${movementPrisoner3[PRISON_NUMBER]}", "name": "${movementPrisoner3[NAME]}", "date": "${movementPrisoner3[DATE]}", "origin": "${movementPrisoner3[ORIGIN]}", "destination": "${movementPrisoner3[DESTINATION]}", "direction": "${movementPrisoner3[DIRECTION]}", "type": "${movementPrisoner3[TYPE]}", "reason": "${movementPrisoner3[REASON]}"}
+        {"prisonNumber": "${movementPrisoner4[PRISON_NUMBER]}", "name": "${movementPrisoner4[NAME]}", "date": "${movementPrisoner4[DATE]}", "origin": "${movementPrisoner4[ORIGIN]}", "destination": "${movementPrisoner4[DESTINATION]}", "direction": "${movementPrisoner4[DIRECTION]}", "type": "${movementPrisoner4[TYPE]}", "reason": "${movementPrisoner4[REASON]}"}
       ]       
       """,
       )
@@ -83,14 +78,14 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .expectStatus()
       .isOk
       .expectBody()
-      .jsonPath("count").isEqualTo("5")
+      .jsonPath("count").isEqualTo("1")
   }
 
   @ParameterizedTest
   @CsvSource(
-    "In,  4",
+    "In,  0",
     "Out, 1",
-    ",    5",
+    ",    1",
   )
   fun `Configured API count returns filtered value`(direction: String?, numberOfResults: Int) {
     webTestClient.get()
@@ -148,11 +143,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
       .json(
         """
       [
-        {"prisonNumber": "${movementPrisoner5[PRISON_NUMBER]}", "name": "${movementPrisoner5[NAME]}", "date": "${movementPrisoner5[DATE]}", "origin": "${movementPrisoner5[ORIGIN]}", "destination": "${movementPrisoner5[DESTINATION]}", "direction": "${movementPrisoner5[DIRECTION]}", "type": "${movementPrisoner5[TYPE]}", "reason": "${movementPrisoner5[REASON]}"},
-        {"prisonNumber": "${movementPrisoner4[PRISON_NUMBER]}", "name": "${movementPrisoner4[NAME]}", "date": "${movementPrisoner4[DATE]}", "origin": "${movementPrisoner4[ORIGIN]}", "destination": "${movementPrisoner4[DESTINATION]}", "direction": "${movementPrisoner4[DIRECTION]}", "type": "${movementPrisoner4[TYPE]}", "reason": "${movementPrisoner4[REASON]}"},
-        {"prisonNumber": "${movementPrisoner3[PRISON_NUMBER]}", "name": "${movementPrisoner3[NAME]}", "date": "${movementPrisoner3[DATE]}", "origin": "${movementPrisoner3[ORIGIN]}", "destination": "${movementPrisoner3[DESTINATION]}", "direction": "${movementPrisoner3[DIRECTION]}", "type": "${movementPrisoner3[TYPE]}", "reason": "${movementPrisoner3[REASON]}"},
-        {"prisonNumber": "${movementPrisoner2[PRISON_NUMBER]}", "name": "${movementPrisoner2[NAME]}", "date": "${movementPrisoner2[DATE]}", "origin": "${movementPrisoner2[ORIGIN]}", "destination": "${movementPrisoner2[DESTINATION]}", "direction": "${movementPrisoner2[DIRECTION]}", "type": "${movementPrisoner2[TYPE]}", "reason": "${movementPrisoner2[REASON]}"},
-        {"prisonNumber": "${movementPrisoner1[PRISON_NUMBER]}", "name": "${movementPrisoner1[NAME]}", "date": "${movementPrisoner1[DATE]}", "origin": "${movementPrisoner1[ORIGIN]}", "destination": "${movementPrisoner1[DESTINATION]}", "direction": "${movementPrisoner1[DIRECTION]}", "type": "${movementPrisoner1[TYPE]}", "reason": "${movementPrisoner1[REASON]}"}
+        {"prisonNumber": "${movementPrisoner4[PRISON_NUMBER]}", "name": "${movementPrisoner4[NAME]}", "date": "${movementPrisoner4[DATE]}", "origin": "${movementPrisoner4[ORIGIN]}", "destination": "${movementPrisoner4[DESTINATION]}", "direction": "${movementPrisoner4[DIRECTION]}", "type": "${movementPrisoner4[TYPE]}", "reason": "${movementPrisoner4[REASON]}"}
       ]
       """,
       )
@@ -160,11 +151,11 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
 
   @ParameterizedTest
   @CsvSource(
-    "in,  4",
-    "In,  4",
+    "in,  0",
+    "In,  0",
     "out, 1",
     "Out, 1",
-    ",    5",
+    ",    1",
   )
   fun `Configured API returns filtered values`(direction: String?, numberOfResults: Int) {
     val results = webTestClient.get()
@@ -279,14 +270,14 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     const val DESTINATION = "DESTINATION"
     const val REASON = "REASON"
 
-    val movementPrisoner1 = mapOf(PRISON_NUMBER to "G2504UV", NAME to "LastName1, F", DATE to "2023-01-31", DIRECTION to "In", TYPE to "Admission", ORIGIN to "Ranby", DESTINATION to "Kirkham", REASON to "Unconvicted Remand")
+    val movementPrisoner1 = mapOf(PRISON_NUMBER to "G2504UV", NAME to "LastName1, F", DATE to "2023-01-31", DIRECTION to "In", TYPE to "Admission", ORIGIN to "PTI", DESTINATION to "TCI", REASON to "Unconvicted Remand")
 
-    val movementPrisoner2 = mapOf(PRISON_NUMBER to "G2927UV", NAME to "LastName1, F", DATE to "2023-04-25", DIRECTION to "In", TYPE to "Transfer", ORIGIN to "Elmley", DESTINATION to "Pentonville", REASON to "Transfer In from Other Establishment")
+    val movementPrisoner2 = mapOf(PRISON_NUMBER to "G2927UV", NAME to "LastName1, F", DATE to "2023-04-25", DIRECTION to "In", TYPE to "Transfer", ORIGIN to "LEICCC", DESTINATION to "LCI", REASON to "Transfer In from Other Establishment")
 
-    val movementPrisoner3 = mapOf(PRISON_NUMBER to "G3418VR", NAME to "LastName3, F", DATE to "2023-04-30", DIRECTION to "In", TYPE to "Transfer", ORIGIN to "Wakefield", DESTINATION to "Dartmoor", REASON to "Transfer In from Other Establishment")
+    val movementPrisoner3 = mapOf(PRISON_NUMBER to "G3418VR", NAME to "LastName3, F", DATE to "2023-04-30", DIRECTION to "In", TYPE to "Transfer", ORIGIN to "BFI", DESTINATION to "NSI", REASON to "Transfer In from Other Establishment")
 
-    val movementPrisoner4 = mapOf(PRISON_NUMBER to "G3411VR", NAME to "LastName5, F", DATE to "2023-05-01", DIRECTION to "Out", TYPE to "Transfer", ORIGIN to "Cardiff", DESTINATION to "Maidstone", REASON to "Transfer Out to Other Establishment")
+    val movementPrisoner4 = mapOf(PRISON_NUMBER to "G3411VR", NAME to "LastName5, F", DATE to "2023-05-01", DIRECTION to "Out", TYPE to "Transfer", ORIGIN to "LWSTMC", DESTINATION to "WWI", REASON to "Transfer Out to Other Establishment")
 
-    val movementPrisoner5 = mapOf(PRISON_NUMBER to "G3154UG", NAME to "LastName5, F", DATE to "2023-05-20", DIRECTION to "In", TYPE to "Transfer", ORIGIN to "Isle of Wight", DESTINATION to "Northumberland", REASON to "Transfer In from Other Establishment")
+    val movementPrisoner5 = mapOf(PRISON_NUMBER to "G3154UG", NAME to "LastName5, F", DATE to "2023-05-20", DIRECTION to "In", TYPE to "Transfer", ORIGIN to "BOLTCC", DESTINATION to "HEI", REASON to "Transfer In from Other Establishment")
   }
 }

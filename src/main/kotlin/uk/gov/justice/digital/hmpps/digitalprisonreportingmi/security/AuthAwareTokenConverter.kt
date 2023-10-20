@@ -5,10 +5,11 @@ import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.jwt.Jwt
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.AuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.CaseloadService
 
-class AuthAwareTokenConverter : Converter<Jwt, AbstractAuthenticationToken> {
+class AuthAwareTokenConverter(private val caseloadService: CaseloadService) : Converter<Jwt, AbstractAuthenticationToken> {
   private val jwtGrantedAuthoritiesConverter: Converter<Jwt, Collection<GrantedAuthority>> =
     JwtGrantedAuthoritiesConverter()
 
@@ -17,7 +18,7 @@ class AuthAwareTokenConverter : Converter<Jwt, AbstractAuthenticationToken> {
     val principal = findPrincipal(claims)
     val authorities = extractAuthorities(jwt)
 
-    return AuthAwareAuthenticationToken(jwt, principal, authorities)
+    return AuthAwareAuthenticationToken(jwt, principal, authorities, listOf(caseloadService.getActiveCaseloadId(jwt)))
   }
 
   private fun findPrincipal(claims: Map<String, Any?>): String {
@@ -51,15 +52,5 @@ class AuthAwareTokenConverter : Converter<Jwt, AbstractAuthenticationToken> {
     const val CLAIM_USER_ID = "user_id"
     const val CLAIM_CLIENT_ID = "client_id"
     const val CLAIM_AUTHORITY = "authorities"
-  }
-}
-
-class AuthAwareAuthenticationToken(
-  jwt: Jwt,
-  private val aPrincipal: String,
-  authorities: Collection<GrantedAuthority>,
-) : JwtAuthenticationToken(jwt, authorities) {
-  override fun getPrincipal(): String {
-    return aPrincipal
   }
 }

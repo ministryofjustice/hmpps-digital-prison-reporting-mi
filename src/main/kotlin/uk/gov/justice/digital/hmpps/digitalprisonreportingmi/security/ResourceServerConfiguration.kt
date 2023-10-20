@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.CaseloadService
 
 @Configuration
 class ResourceServerConfiguration {
@@ -16,7 +17,7 @@ class ResourceServerConfiguration {
 
   @Bean
   @Throws(Exception::class)
-  fun filterChain(http: HttpSecurity): SecurityFilterChain? {
+  fun filterChain(http: HttpSecurity, caseloadService: CaseloadService): SecurityFilterChain? {
     http {
       headers { frameOptions { sameOrigin = true } }
       sessionManagement { sessionCreationPolicy = SessionCreationPolicy.STATELESS }
@@ -39,7 +40,7 @@ class ResourceServerConfiguration {
       }
       oauth2ResourceServer {
         jwt {
-          jwtAuthenticationConverter = AuthAwareTokenConverter()
+          jwtAuthenticationConverter = AuthAwareTokenConverter(caseloadService)
         }
       }
     }

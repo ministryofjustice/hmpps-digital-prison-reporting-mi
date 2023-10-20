@@ -28,7 +28,8 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
   lateinit var prisonerRepository: PrisonerRepository
 
   @BeforeEach
-  fun setup() {
+  override fun setup() {
+    super.setup()
     ExternalMovementRepositoryCustomTest.AllMovements.allExternalMovements.forEach {
       externalMovementRepository.save(it)
     }
@@ -90,9 +91,9 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-        {"prisonNumber":"${prisoner6851.number}","firstName": "${prisoner6851.firstName}", "lastName": "${prisoner6851.lastName}","date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"${prisoner7849.number}","firstName": "${prisoner7849.firstName}", "lastName": "${prisoner7849.lastName}","date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"${prisoner4800.number}","firstName": "${prisoner4800.firstName}", "lastName": "${prisoner4800.lastName}","date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
+        {"prisonNumber":"${prisoner6851.number}","firstName": "${prisoner6851.firstName}", "lastName": "${prisoner6851.lastName}","date":"2023-05-20","time":"14:00:00","from":"BOLTCC","to":"HEI","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"${prisoner7849.number}","firstName": "${prisoner7849.firstName}", "lastName": "${prisoner7849.lastName}","date":"2023-05-01","time":"15:19:00","from":"LWSTMC","to":"WWI","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"prisonNumber":"${prisoner4800.number}","firstName": "${prisoner4800.firstName}", "lastName": "${prisoner4800.lastName}","date":"2023-04-30","time":"13:19:00","from":"BFI","to":"NSI","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"}
       ]       
       """,
       )
@@ -114,11 +115,11 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .json(
         """
       [
-        {"prisonNumber":"${prisoner6851.number}", "firstName": "${prisoner6851.firstName}", "lastName": "${prisoner6851.lastName}", "date":"2023-05-20","time":"14:00:00","from":"Isle of Wight","to":"Northumberland","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"${prisoner7849.number}", "firstName": "${prisoner7849.firstName}", "lastName": "${prisoner7849.lastName}", "date":"2023-05-01","time":"15:19:00","from":"Cardiff","to":"Maidstone","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
-        {"prisonNumber":"${prisoner4800.number}", "firstName": "${prisoner4800.firstName}", "lastName": "${prisoner4800.lastName}", "date":"2023-04-30","time":"13:19:00","from":"Wakefield","to":"Dartmoor","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"${prisoner5207.number}", "firstName": "${prisoner5207.firstName}", "lastName": "${prisoner5207.lastName}", "date": "2023-04-25","time":"12:19:00","from":"Elmley","to":"Pentonville","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
-        {"prisonNumber":"${prisoner8894.number}", "firstName": "${prisoner8894.firstName}", "lastName": "${prisoner8894.lastName}", "date": "2023-01-31","time":"03:01:00","from":"Ranby","to":"Kirkham","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
+        {"prisonNumber":"${prisoner6851.number}", "firstName": "${prisoner6851.firstName}", "lastName": "${prisoner6851.lastName}", "date":"2023-05-20","time":"14:00:00","from":"BOLTCC","to":"HEI","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"${prisoner7849.number}", "firstName": "${prisoner7849.firstName}", "lastName": "${prisoner7849.lastName}", "date":"2023-05-01","time":"15:19:00","from":"LWSTMC","to":"WWI","direction":"Out","type":"Transfer","reason":"Transfer Out to Other Establishment"},
+        {"prisonNumber":"${prisoner4800.number}", "firstName": "${prisoner4800.firstName}", "lastName": "${prisoner4800.lastName}", "date":"2023-04-30","time":"13:19:00","from":"BFI","to":"NSI","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"${prisoner5207.number}", "firstName": "${prisoner5207.firstName}", "lastName": "${prisoner5207.lastName}", "date": "2023-04-25","time":"12:19:00","from":"LEICCC","to":"LCI","direction":"In","type":"Transfer","reason":"Transfer In from Other Establishment"},
+        {"prisonNumber":"${prisoner8894.number}", "firstName": "${prisoner8894.firstName}", "lastName": "${prisoner8894.lastName}", "date": "2023-01-31","time":"03:01:00","from":"PTI","to":"TCI","direction":"In","type":"Admission","reason":"Unconvicted Remand"}
       ]
       """,
       )
@@ -217,7 +218,7 @@ class ExternalMovementsIntegrationTest : IntegrationTestBase() {
       .expectBody()
       .json(
         """[
-         {"prisonNumber": "${prisoner7849.number}", "firstName": "${prisoner7849.firstName}", "lastName": "${prisoner7849.lastName}", "date": "2023-05-01", "time": "15:19:00", "from": "Cardiff", "to": "Maidstone", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
+         {"prisonNumber": "${prisoner7849.number}", "firstName": "${prisoner7849.firstName}", "lastName": "${prisoner7849.lastName}", "date": "2023-05-01", "time": "15:19:00", "from": "LWSTMC", "to": "WWI", "direction": "Out", "type": "Transfer", "reason": "Transfer Out to Other Establishment"}
       ]       
       """,
       )

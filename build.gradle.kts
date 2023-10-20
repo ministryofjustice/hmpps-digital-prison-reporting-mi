@@ -20,7 +20,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:1.0.0-rc.2")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:1.0.0-rc.3-SNAPSHOT")
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
@@ -29,6 +29,8 @@ dependencies {
   testImplementation("com.h2database:h2")
   testImplementation("io.jsonwebtoken:jjwt:0.12.3")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+  // https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock
+  testImplementation("com.github.tomakehurst:wiremock:3.0.1")
 }
 
 java {

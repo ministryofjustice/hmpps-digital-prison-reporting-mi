@@ -22,3 +22,6 @@ spring:
 management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
+caseloads:
+  host: http://localhost:9999
+  path: me/caseloads
