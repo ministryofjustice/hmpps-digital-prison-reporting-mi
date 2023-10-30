@@ -23,7 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 @ActiveProfiles("test")
 abstract class IntegrationTestBase {
 
-  @Value("\${spring.security.user.roles}")
+  @Value("\${dpr.lib.user.role}")
   lateinit var authorisedRole: String
 
   @Autowired
@@ -33,6 +33,8 @@ abstract class IntegrationTestBase {
   lateinit var jwtAuthHelper: JwtAuthHelper
 
   companion object {
+
+    const val activeCaseloadId: String = "WWI"
 
     private lateinit var wireMockServer: WireMockServer
 
@@ -53,7 +55,7 @@ abstract class IntegrationTestBase {
 
   @BeforeEach
   fun setup() {
-    stubMeCaseloadsResponse(createCaseloadJsonResponse("WWI"))
+    stubMeCaseloadsResponse(createCaseloadJsonResponse())
   }
 
   protected fun stubMeCaseloadsResponse(jsonNode: JsonNode) {
@@ -62,12 +64,12 @@ abstract class IntegrationTestBase {
         WireMock.aResponse()
           .withStatus(HttpStatus.OK.value())
           .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-          .withJsonBody(createCaseloadJsonResponse("WWI")),
+          .withJsonBody(createCaseloadJsonResponse()),
       ),
     )
   }
 
-  protected fun createCaseloadJsonResponse(activeCaseloadId: String): JsonNode = ObjectMapper().readTree(
+  protected fun createCaseloadJsonResponse(): JsonNode = ObjectMapper().readTree(
     """
           {
             "username": "TESTUSER1",

@@ -30,8 +30,6 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
-    user:
-      roles: ${AUTHORISED_ROLES}
 
 server:
   port: 8080
@@ -67,6 +65,13 @@ management:
 
 springdoc:
   default-produces-media-type: application/json
-caseloads:
-  host: ${ME_CASELOADS_API_HOST}
-  path: me/caseloads
+
+
+dpr:
+  lib:
+    caseloads:
+      host: ${ME_CASELOADS_API_HOST}
+    user:
+      role: ${AUTHORISED_ROLES}
+    definition:
+      location: definitions.json

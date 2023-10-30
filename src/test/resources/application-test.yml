@@ -15,13 +15,15 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
-    user:
-      roles: ROLE_PRISONS_REPORTING_USER
+          jwk-set-uri: test
 
 management.endpoint:
   health.cache.time-to-live: 0
   info.cache.time-to-live: 0
-caseloads:
-  host: http://localhost:9999
-  path: me/caseloads
+
+dpr:
+  lib:
+    caseloads:
+      host: http://localhost:9999
+    user:
+      role: ROLE_PRISONS_REPORTING_USER
