@@ -34,8 +34,6 @@ abstract class IntegrationTestBase {
 
   companion object {
 
-    const val activeCaseloadId: String = "WWI"
-
     private lateinit var wireMockServer: WireMockServer
 
     @BeforeAll @JvmStatic
@@ -55,7 +53,7 @@ abstract class IntegrationTestBase {
 
   @BeforeEach
   fun setup() {
-    stubMeCaseloadsResponse(createCaseloadJsonResponse())
+    stubMeCaseloadsResponse(createCaseloadJsonResponse("LWSTMC"))
   }
 
   protected fun stubMeCaseloadsResponse(jsonNode: JsonNode) {
@@ -64,12 +62,12 @@ abstract class IntegrationTestBase {
         WireMock.aResponse()
           .withStatus(HttpStatus.OK.value())
           .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-          .withJsonBody(createCaseloadJsonResponse()),
+          .withJsonBody(jsonNode),
       ),
     )
   }
 
-  protected fun createCaseloadJsonResponse(): JsonNode = ObjectMapper().readTree(
+  protected fun createCaseloadJsonResponse(activeCaseloadId: String): JsonNode = ObjectMapper().readTree(
     """
           {
             "username": "TESTUSER1",
