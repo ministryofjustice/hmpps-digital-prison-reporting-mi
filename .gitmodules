@@ -1,0 +1,3 @@
+[submodule "digital-prison-reporting-data-product-definitions"]
+	path = digital-prison-reporting-data-product-definitions
+	url = git@github.com:ministryofjustice/digital-prison-reporting-data-product-definitions.git
