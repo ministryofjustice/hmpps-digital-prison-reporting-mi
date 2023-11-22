@@ -24,6 +24,8 @@ jobs:
             - gradle-{{ checksum "build.gradle.kts" }}
             - gradle-
       - run:
+          command: git submodule sync --recursive && git submodule update --recursive --init && git submodule foreach git pull origin main
+      - run:
           command: ./gradlew check
       - save_cache:
           paths:
