@@ -37,7 +37,7 @@ jobs:
           command: git submodule sync --recursive && git submodule update --recursive --init && git submodule foreach git pull origin main
       - run:
           command: |
-            ls -lsrt; pwd; ls -lsrt digital-prison-reporting-data-product-definitions; ls -lsrt src/*          
+            ls -lsrt digital-prison-reporting-data-product-definitions;         
       - run:
           command: ./gradlew check
       - save_cache:
