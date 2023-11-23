@@ -70,7 +70,7 @@ jobs:
       - hmpps/create_app_version
       - run:
           command: |
-            ls -lsrt; pwd; ls -lsrt digital-prison-reporting-data-product-definitions; ls -lsrt src/*; echo "__SUBMODULE__"; ls -lsrt submodule/*; 
+            ls -lsrt; pwd; ls -lsrt digital-prison-reporting-data-product-definitions; ls -lsrt src/*; echo "__SUBMODULE__"; ls -lsrt submodule/*; ls -lsrt submodule/prisons/ 
       - run:
           name: Create IMAGE_NAME env var
           command: |
