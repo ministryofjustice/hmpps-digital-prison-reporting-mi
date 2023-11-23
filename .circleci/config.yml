@@ -51,7 +51,7 @@ jobs:
       - persist_to_workspace:
           root: << pipeline.parameters.workingdir >>
           paths:
-            - digital-prison-reporting-data-product-definitions     
+            - .     
 
   build_multiplatform_docker_job:
     docker:
