@@ -19,7 +19,6 @@ RUN apt-get update && \
 
 ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
-RUN echo "___list files___"; ls -lsrt; pwd
 ADD ./digital-prison-reporting-data-product-definitions/prisons/orphanage/external-movements-1.0.0.json .
 ENV DPR_LIB_DEFINITION_LOCATION=./external-movements-1.0.0.json
 
