@@ -11,6 +11,9 @@ parameters:
   releases-slack-channel:
     type: string
     default: dpr_cicd_approvals
+  workingdir:
+    type: string
+    default: '.'
 
 jobs:
   validate:
@@ -35,6 +38,10 @@ jobs:
           path: build/test-results
       - store_artifacts:
           path: build/reports/tests
+      - persist_to_workspace:
+          root: << pipeline.parameters.workingdir >>
+          paths:
+            - .         
 
 workflows:
   version: 2
@@ -47,6 +54,8 @@ workflows:
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_multiplatform_docker:
+          attach_workspace:
+            at: << pipeline.parameters.workingdir >>   
           name: build_docker
 #          filters:
 #            branches:
