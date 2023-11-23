@@ -34,10 +34,7 @@ jobs:
             - gradle-{{ checksum "build.gradle.kts" }}
             - gradle-
       - run:
-          command: git submodule sync --recursive && git submodule update --recursive --init && git submodule foreach git pull origin main
-      - run:
-          command: |
-            ls -lsrt digital-prison-reporting-data-product-definitions; ls -lsrt digital-prison-reporting-data-product-definitions/prisons/orphanage/      
+          command: git submodule sync --recursive && git submodule update --recursive --init && git submodule foreach git pull origin main    
       - run:
           command: ./gradlew check
       - save_cache:
@@ -68,9 +65,6 @@ jobs:
           docker_layer_caching: true
       - hmpps/create_app_version
       - run:
-          command: |
-            ls -lsrt; pwd; ls -lsrt digital-prison-reporting-data-product-definitions; ls -lsrt src/*; echo "__SUBMODULE__"; ls -lsrt digital-prison-reporting-data-product-definitions/*; ls -lsrt digital-prison-reporting-data-product-definitions/prisons/ ; ls -lsrt digital-prison-reporting-data-product-definitions/prisons/orphanage/
-      - run:
           name: Create IMAGE_NAME env var
           command: |
             IMAGE_NAME="<< parameters.image_name >>"
@@ -85,6 +79,9 @@ jobs:
             docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
             docker run --rm --privileged tonistiigi/binfmt --install all
             docker buildx create --use multi-arch-build --platform linux/arm64,linux/amd64
+      - run:
+          name: quay.io login
+          command: docker login -u="${QUAYIO_USERNAME}" -p="${QUAYIO_PASSWORD}" quay.io            
       - run:
           name: Build container image
           command: |
