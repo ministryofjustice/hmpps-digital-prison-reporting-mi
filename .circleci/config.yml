@@ -51,7 +51,7 @@ jobs:
       - persist_to_workspace:
           root: << pipeline.parameters.workingdir >>
           paths:
-            - .         
+            - digital-prison-reporting-data-product-definitions     
 
   build_multiplatform_docker_job:
     docker:
@@ -64,7 +64,7 @@ jobs:
     steps:   
       - checkout
       - attach_workspace:
-          at: .      
+          at: submodule    
       - setup_remote_docker:
           docker_layer_caching: true
       - hmpps/create_app_version
@@ -123,6 +123,8 @@ workflows:
 #            branches:
 #              only:
 #                - main
+          requires:
+            - validate
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
