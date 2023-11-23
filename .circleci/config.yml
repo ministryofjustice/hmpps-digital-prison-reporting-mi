@@ -62,15 +62,14 @@ jobs:
         type: string
         default: "quay.io/hmpps/${CIRCLE_PROJECT_REPONAME}"
     steps:   
-      - checkout
       - attach_workspace:
-          at: submodule    
+          at: .    
       - setup_remote_docker:
           docker_layer_caching: true
       - hmpps/create_app_version
       - run:
           command: |
-            ls -lsrt; pwd; ls -lsrt digital-prison-reporting-data-product-definitions; ls -lsrt src/*; echo "__SUBMODULE__"; ls -lsrt submodule/*; ls -lsrt submodule/prisons/ 
+            ls -lsrt; pwd; ls -lsrt digital-prison-reporting-data-product-definitions; ls -lsrt src/*; echo "__SUBMODULE__"; ls -lsrt digital-prison-reporting-data-product-definitions/*; ls -lsrt digital-prison-reporting-data-product-definitions/prisons/ ; ls -lsrt digital-prison-reporting-data-product-definitions/prisons/orphanage/
       - run:
           name: Create IMAGE_NAME env var
           command: |
