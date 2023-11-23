@@ -115,11 +115,12 @@ workflows:
           name: helm_lint
       - build_multiplatform_docker_job:  
           name: build_docker
-#          filters:
-#            branches:
-#              only:
-#                - main
+          filters:
+            branches:
+              only:
+                - main
           requires:
+            - helm_lint
             - validate
       - hmpps/deploy_env:
           name: deploy_dev
