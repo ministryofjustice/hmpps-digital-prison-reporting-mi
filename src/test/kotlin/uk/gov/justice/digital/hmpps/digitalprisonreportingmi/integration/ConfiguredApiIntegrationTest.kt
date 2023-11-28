@@ -35,8 +35,7 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
   lateinit var prisonerRepository: PrisonerRepository
 
   @BeforeEach
-  override fun setup() {
-    super.setup()
+  fun setup() {
     AllMovements.allExternalMovements.forEach {
       externalMovementRepository.save(it)
     }
