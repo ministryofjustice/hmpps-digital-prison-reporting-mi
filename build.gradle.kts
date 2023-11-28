@@ -29,7 +29,6 @@ dependencies {
   testImplementation("com.h2database:h2")
   testImplementation("io.jsonwebtoken:jjwt:0.12.3")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
-  testImplementation("com.github.tomakehurst:wiremock:3.0.1")
 }
 
 java {
