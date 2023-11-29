@@ -74,4 +74,4 @@ dpr:
     user:
       role: ${AUTHORISED_ROLES}
     definition:
-      location: external-movements-1.0.0.json
+      locations: external-movements-1.0.0.json
