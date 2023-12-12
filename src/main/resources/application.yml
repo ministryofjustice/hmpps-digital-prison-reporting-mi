@@ -74,4 +74,4 @@ dpr:
     user:
       role: ${AUTHORISED_ROLES}
     definition:
-      locations: external-movements-1.0.0.json,hospital-and-court-movements-1.0.3.json
+      locations: external-movements.json,dpd001-court-hospital-movements.json

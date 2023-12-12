@@ -19,9 +19,9 @@ RUN apt-get update && \
 
 ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
-ADD ./digital-prison-reporting-data-product-definitions/prisons/orphanage/external-movements-1.0.0.json .
-ADD ./digital-prison-reporting-data-product-definitions/prisons/orphanage/hospital-and-court-movements-1.0.3.json .
-ENV DPR_LIB_DEFINITION_LOCATIONS=/external-movements-1.0.0.json,/hospital-and-court-movements-1.0.3.json
+ADD ./digital-prison-reporting-data-product-definitions/prisons/orphanage/external-movements.json .
+ADD ./digital-prison-reporting-data-product-definitions/prisons/orphanage/dpd001-court-hospital-movements.json .
+ENV DPR_LIB_DEFINITION_LOCATIONS=/external-movements.json,/dpd001-court-hospital-movements.json
 
 RUN addgroup --gid 2000 --system appgroup && \
     adduser --uid 2000 --system appuser --gid 2000
