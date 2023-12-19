@@ -118,3 +118,23 @@ Example of applying the secret to an environment:
 ```
 kubectl -n hmpps-digital-prison-reporting-mi-dev apply -f redshift-jdbc-secret.yaml
 ```
+
+## Deploying new data product definition files
+The data product definition files are in [digital-prison-reporting-data-product-definitions](digital-prison-reporting-data-product-definitions) directory
+which is a git submodule.
+In order to deploy new files from this repository to the reporting mi application you would need to pull the latest changes from the submodule's main branch.
+Then create symlinks from the new json files in the submodule to the main resources directory.  
+And finally these new files would need to be added to the Dockerfile.
+
+- `cd digital-prison-reporting-data-product-definitions` 
+- `git checkout main` 
+- `git pull`
+- `cd ../src/main/resources`
+- `ln -s ../../../digital-prison-reporting-data-product-definitions/prisons/orphanage/external-movements.json`  
+- The last step is to add the file to Dockerfile by adding this line to Dockerfile below line 21: `ADD ./digital-prison-reporting-data-product-definitions/prisons/orphanage/external-movements.json .`
+- And finally add this file location to the env variable DPR_LIB_DEFINITION_LOCATIONS by appending the file name to the comma separated list of files
+here: `ENV DPR_LIB_DEFINITION_LOCATIONS=`
+- So for example for a new file called external movements assuming you already had dpd001-court-hospital-movements.json you would have:
+`ENV DPR_LIB_DEFINITION_LOCATIONS=/external-movements.json,/dpd001-court-hospital-movements.json`
+- Following the above steps the same can be done for any file.
+- If an existing file has changed then a new deployment of the reporting mi application will pick up these changes as this happens through the circleci pipeline. 
