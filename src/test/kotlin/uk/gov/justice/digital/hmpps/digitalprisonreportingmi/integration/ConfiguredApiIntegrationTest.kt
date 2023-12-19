@@ -346,11 +346,11 @@ class ConfiguredApiIntegrationTest : IntegrationTestBase() {
     val prisoner6851 = mapOf("id" to 6851, "number" to "G3154UG", "firstName" to "FirstName5", "lastName" to "LastName5", "livingUnitReference" to null)
 
     val allPrisoners = listOf(
-      PrisonerEntity(8894, "G2504UV", "FirstName2", "LastName1", null),
-      PrisonerEntity(5207, "G2927UV", "FirstName1", "LastName1", null),
-      PrisonerEntity(4800, "G3418VR", "FirstName3", "LastName3", null),
-      PrisonerEntity(7849, "G3411VR", "FirstName4", "LastName5", 142595),
-      PrisonerEntity(6851, "G3154UG", "FirstName5", "LastName5", null),
+      PrisonerEntity(8894, "G2504UV", "FirstName2", "LastName1", "LastName1, F", null),
+      PrisonerEntity(5207, "G2927UV", "FirstName1", "LastName1", "LastName1, F", null),
+      PrisonerEntity(4800, "G3418VR", "FirstName3", "LastName3", "LastName3, F", null),
+      PrisonerEntity(7849, "G3411VR", "FirstName4", "LastName5", "LastName5, F", 142595),
+      PrisonerEntity(6851, "G3154UG", "FirstName5", "LastName5", "LastName5, F", null),
     )
   }
 

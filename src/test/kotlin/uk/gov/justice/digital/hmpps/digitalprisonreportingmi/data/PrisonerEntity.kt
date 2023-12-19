@@ -15,6 +15,8 @@ class PrisonerEntity(
   val firstName: String,
   @Column(name = "lastname")
   val lastName: String,
+  @Column(name = "name")
+  val name: String,
   @Column(name = "living_unit_reference")
   val livingUnitReference: Long?,
 )
