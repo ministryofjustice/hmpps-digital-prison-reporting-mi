@@ -8,7 +8,6 @@ generic-service:
 
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
-    REDSHIFT_JDBC_URL: jdbc:redshift://dpr-redshift-test.ctrlffniiwwc.eu-west-2.redshift.amazonaws.com:5439/datamart
     HMPPS_AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
     ME_CASELOADS_API_HOST: https://nomis-user-roles-api-dev.prison.service.justice.gov.uk
