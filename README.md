@@ -61,18 +61,6 @@ run the tests.
     ./gradlew clean test
 ```
 
-### Integration Tests
-
-```
-    TBD
-```
-
-### Acceptance Tests
-
-```
-    TBD
-```
-
 ## Contributing
 
 Please adhere to the following guidelines when making contributions to the

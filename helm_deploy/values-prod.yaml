@@ -6,7 +6,6 @@ generic-service:
     host: digital-prison-reporting-mi.hmpps.service.justice.gov.uk
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
-    REDSHIFT_JDBC_URL: jdbc:redshift://dpr-redshift-production.ckonpspsn1ld.eu-west-2.redshift.amazonaws.com:5439/datamart
     HMPPS_AUTH_URL: https://sign-in.hmpps.service.justice.gov.uk/auth
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
     ME_CASELOADS_API_HOST: https://nomis-user.aks-live-1.studio-hosting.service.justice.gov.uk
