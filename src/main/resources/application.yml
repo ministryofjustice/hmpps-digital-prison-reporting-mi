@@ -73,5 +73,5 @@ dpr:
       host: ${ME_CASELOADS_API_HOST}
     user:
       role: ${AUTHORISED_ROLES}
-    definition:
-      locations: external-movements.json,dpd001-court-hospital-movements.json
+    dataProductDefinitions:
+      host: http://hmpps-dpr-data-product-definitions:9120
