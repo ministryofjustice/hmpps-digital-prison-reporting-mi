@@ -18,9 +18,6 @@ parameters:
   dockerfile_dir:
     type: string
     default: "."
-  additional_docker_build_args:
-    type: string
-    default: ""    
 
 jobs:
   validate:
@@ -61,7 +58,9 @@ jobs:
           at: .    
       - setup_remote_docker:
           docker_layer_caching: true
-      - hmpps/create_app_version
+      - mem/remember:
+          env_var: APP_VERSION
+          value: "Build.${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Create IMAGE_NAME env var
           command: |
@@ -98,8 +97,16 @@ jobs:
               --label "build.number=${CIRCLE_BUILD_NUM}" \
               --label "build.url=${CIRCLE_BUILD_URL}" \
               --label "build.gitref=${CIRCLE_SHA1}" \
-              --push \
-              << pipeline.parameters.additional_docker_build_args >>      
+              --push 
+
+  remember-app-version:
+    executor:
+      name: hmpps/java
+      tag: "19.0"
+    steps:
+      - mem/remember:
+          env_var: APP_VERSION
+          value: "Build.${CIRCLE_WORKFLOW_ID}"
 
 workflows:
   version: 2
@@ -141,6 +148,10 @@ workflows:
           type: approval
           requires:
             - deploy_dev
+      - remember-app-version:
+          name: remember-version-for-test
+          requires:
+            - request-test-approval
       - hmpps/deploy_env:
           name: deploy_test
           env: "test"
@@ -154,12 +165,16 @@ workflows:
               only:
                 - main
           requires:
-            - request-test-approval
+            - remember-version-for-test
           helm_timeout: 5m
       - request-preprod-approval:
           type: approval
           requires:
             - deploy_dev
+      - remember-app-version:
+          name: remember-version-for-preprod
+          requires:
+            - request-preprod-approval
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
@@ -170,12 +185,16 @@ workflows:
             - hmpps-common-vars
             - hmpps-digital-prison-reporting-mi-preprod
           requires:
-            - request-preprod-approval
+            - remember-version-for-preprod
           helm_timeout: 5m
       - request-prod-approval:
           type: approval
           requires:
             - deploy_preprod
+      - remember-app-version:
+          name: remember-version-for-prod
+          requires:
+            - request-prod-approval
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
@@ -188,7 +207,7 @@ workflows:
             - hmpps-common-vars
             - hmpps-digital-prison-reporting-mi-prod
           requires:
-            - request-prod-approval
+            - remember-version-for-prod
           helm_timeout: 5m
 
   security:
