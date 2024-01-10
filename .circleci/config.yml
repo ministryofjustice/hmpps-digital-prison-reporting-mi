@@ -101,6 +101,15 @@ jobs:
               --push \
               << pipeline.parameters.additional_docker_build_args >>      
 
+  remember-app-version:
+    executor:
+      name: hmpps/node
+      tag: << pipeline.parameters.node-version >>
+    steps:
+      - mem/remember:
+          env_var: APP_VERSION
+          value: "Build.${CIRCLE_WORKFLOW_ID}"
+
 workflows:
   version: 2
   build-test-and-deploy:
@@ -113,13 +122,18 @@ workflows:
           name: helm_lint
       - build_multiplatform_docker_job:  
           name: build_docker
-          filters:
-            branches:
-              only:
-                - main
+          additional_docker_build_args: --tag "quay.io/hmpps/${CIRCLE_PROJECT_REPONAME}:Build.${CIRCLE_WORKFLOW_ID}"
+#          filters:
+#            branches:
+#              only:
+#                - main
           requires:
             - helm_lint
             - validate
+      - remember-app-version:
+          name: remember-version-for-dev
+          requires:
+            - build_docker
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -128,19 +142,23 @@ workflows:
           context:
             - hmpps-common-vars
             - hmpps-digital-prison-reporting-mi-dev
-          filters:
-            branches:
-              only:
-                - main
+#          filters:
+#            branches:
+#              only:
+#                - main
           requires:
             - validate
-            - build_docker
+            - remember-version-for-dev
             - helm_lint
           helm_timeout: 5m
       - request-test-approval:
           type: approval
           requires:
             - deploy_dev
+      - remember-app-version:
+          name: remember-version-for-test
+          requires:
+            - request-test-approval
       - hmpps/deploy_env:
           name: deploy_test
           env: "test"
@@ -154,12 +172,16 @@ workflows:
               only:
                 - main
           requires:
-            - request-test-approval
+            - remember-version-for-test
           helm_timeout: 5m
       - request-preprod-approval:
           type: approval
           requires:
             - deploy_dev
+      - remember-app-version:
+          name: remember-version-for-preprod
+          requires:
+            - request-preprod-approval
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
@@ -170,12 +192,16 @@ workflows:
             - hmpps-common-vars
             - hmpps-digital-prison-reporting-mi-preprod
           requires:
-            - request-preprod-approval
+            - remember-version-for-preprod
           helm_timeout: 5m
       - request-prod-approval:
           type: approval
           requires:
             - deploy_preprod
+      - remember-app-version:
+          name: remember-version-for-prod
+          requires:
+            - request-prod-approval
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
@@ -188,7 +214,7 @@ workflows:
             - hmpps-common-vars
             - hmpps-digital-prison-reporting-mi-prod
           requires:
-            - request-prod-approval
+            - remember-version-for-prod
           helm_timeout: 5m
 
   security:
