@@ -74,4 +74,4 @@ dpr:
     user:
       role: ${AUTHORISED_ROLES}
     dataProductDefinitions:
-      host: http://hmpps-dpr-data-product-definitions-dev.hmpps-digital-prison-reporting-mi-dev.svc.cluster.local
+      host: ${DEFINITIONS_HOST}

@@ -11,6 +11,7 @@ generic-service:
     HMPPS_AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
     ME_CASELOADS_API_HOST: https://nomis-user-roles-api-dev.prison.service.justice.gov.uk
+    DEFINITIONS_HOST: http://hmpps-dpr-data-product-definitions-dev.hmpps-digital-prison-reporting-mi-dev.svc.cluster.local
 
   allowlist:
     groups:
