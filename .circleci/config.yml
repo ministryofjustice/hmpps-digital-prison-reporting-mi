@@ -123,10 +123,10 @@ workflows:
       - build_multiplatform_docker_job:  
           name: build_docker
           additional_docker_build_args: --tag "quay.io/hmpps/${CIRCLE_PROJECT_REPONAME}:Build.${CIRCLE_WORKFLOW_ID}"
-#          filters:
-#            branches:
-#              only:
-#                - main
+          filters:
+            branches:
+              only:
+                - main
           requires:
             - helm_lint
             - validate
@@ -142,10 +142,10 @@ workflows:
           context:
             - hmpps-common-vars
             - hmpps-digital-prison-reporting-mi-dev
-#          filters:
-#            branches:
-#              only:
-#                - main
+          filters:
+            branches:
+              only:
+                - main
           requires:
             - validate
             - remember-version-for-dev
