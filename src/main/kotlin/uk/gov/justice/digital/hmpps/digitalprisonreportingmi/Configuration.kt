@@ -14,7 +14,7 @@ class Configuration(
   @Value("\${spring.datasource.driver-class-name}") private val driver: String,
 ) {
 
-  @Bean("datamart")
+  @Bean("activities")
   fun createCustomDataSource(): DataSource {
     return DataSourceBuilder.create()
       .url(url)
