@@ -20,10 +20,10 @@ spring:
         - "stdout"
 
   datasource:
-    url: ${REDSHIFT_JDBC_URL}
-    username: ${REDSHIFT_JDBC_USER}
-    password: ${REDSHIFT_JDBC_PASSWORD}
-    driver-class-name: com.amazon.redshift.jdbc.Driver
+    url: ${POSTGRES_JDBC_URL}
+    username: ${POSTGRES_JDBC_USER}
+    password: ${POSTGRES_JDBC_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
   security:
     oauth2:
