@@ -58,6 +58,7 @@ abstract class IntegrationTestBase {
   protected fun stubDefinitionsResponse() {
     val externalMovementsDefinitionJson = this::class.java.classLoader.getResource("external-movements.json")?.readText()
     val courtDefinitionJson = this::class.java.classLoader.getResource("dpd001-court-hospital-movements.json")?.readText()
+
     wireMockServer.stubFor(
       WireMock.get("/definitions/prisons/orphanage").willReturn(
         WireMock.aResponse()
