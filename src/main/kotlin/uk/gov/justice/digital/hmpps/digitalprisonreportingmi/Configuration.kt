@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import javax.sql.DataSource
 
-
 @Configuration
 class Configuration() {
 
@@ -29,7 +28,7 @@ class Configuration() {
       .build()
   }
 
-  @Bean(name=["datamart", "redshift"])
+  @Bean(name = ["datamart", "redshift"])
   fun redshiftDataSource(): DataSource? {
     return redshiftDataSourceProperties()
       .initializeDataSourceBuilder()

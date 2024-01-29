@@ -7,10 +7,16 @@ spring:
     hibernate:
       ddl-auto: create-drop
   datasource:
-    url: jdbc:h2:mem:datamart;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS domain\;
-    username: sa
-    password: sa
-    driver-class-name: org.h2.Driver
+    redshift:
+      url: jdbc:h2:mem:datamart;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS domain\;
+      username: sa
+      password: sa
+      driver-class-name: org.h2.Driver
+    activities:
+      url: jdbc:h2:mem:datamart;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS domain\;
+      username: sa
+      password: sa
+      driver-class-name: org.h2.Driver
   security:
     oauth2:
       resourceserver:
