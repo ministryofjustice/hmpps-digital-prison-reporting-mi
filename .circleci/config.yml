@@ -60,7 +60,7 @@ jobs:
           docker_layer_caching: true
       - mem/remember:
           env_var: APP_VERSION
-          value: "Build.${CIRCLE_WORKFLOW_ID}"
+          value: "Build.${CIRCLE_SHA1}"
       - run:
           name: Create IMAGE_NAME env var
           command: |
@@ -106,7 +106,7 @@ jobs:
     steps:
       - mem/remember:
           env_var: APP_VERSION
-          value: "Build.${CIRCLE_WORKFLOW_ID}"
+          value: "Build.${CIRCLE_SHA1}"
 
 workflows:
   version: 2
