@@ -1,12 +1,19 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.web.util.UriBuilder
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.ReportDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.ReportDefinitionSummary
 
 class ReportDefinitionIntegrationTest : IntegrationTestBase() {
+
+  @BeforeEach
+  fun setUp() {
+    super.setup()
+  }
 
   @Test
   fun `Stubbed definition is returned as expected`() {
@@ -16,7 +23,7 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
       .exchange()
       .expectStatus()
       .isOk
-      .expectBodyList<ReportDefinition>()
+      .expectBodyList<ReportDefinitionSummary>()
       .returnResult()
 
     assertThat(result.responseBody).isNotNull
@@ -34,19 +41,13 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
     val lastMonthVariant = definition.variants[0]
 
     assertThat(lastMonthVariant.id).isEqualTo("last-month")
-    assertThat(lastMonthVariant.resourceName).isEqualTo("reports/external-movements/last-month")
     assertThat(lastMonthVariant.name).isEqualTo("Last month")
     assertThat(lastMonthVariant.description).isEqualTo("All movements in the past month")
-    assertThat(lastMonthVariant.specification).isNotNull
-    assertThat(lastMonthVariant.specification?.fields).hasSize(8)
 
     val lastWeekVariant = definition.variants[1]
     assertThat(lastWeekVariant.id).isEqualTo("last-week")
-    assertThat(lastWeekVariant.resourceName).isEqualTo("reports/external-movements/last-week")
     assertThat(lastWeekVariant.description).isEqualTo("All movements in the past week")
     assertThat(lastWeekVariant.name).isEqualTo("Last week")
-    assertThat(lastWeekVariant.specification).isNotNull
-    assertThat(lastWeekVariant.specification?.fields).hasSize(8)
   }
 
   @Test
@@ -62,7 +63,7 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
       .exchange()
       .expectStatus()
       .isOk
-      .expectBodyList<ReportDefinition>()
+      .expectBodyList<ReportDefinitionSummary>()
       .returnResult()
 
     assertThat(result.responseBody).isNotNull
