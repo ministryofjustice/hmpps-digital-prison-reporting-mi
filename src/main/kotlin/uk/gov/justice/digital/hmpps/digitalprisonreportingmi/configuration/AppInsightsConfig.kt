@@ -48,11 +48,11 @@ class ClientTrackingInterceptor(val tokenConverter: DprAuthAwareTokenConverter) 
           .issuedAt(issueTime)
           .expiresAt(expirationTime)
           .build()
-        val dprParsedToken = tokenConverter.convert(parsedToken) as DprAuthAwareAuthenticationToken
         val user = parsedToken.subject
         user?.let {
           Span.current().setAttribute("username", it) // username in customDimensions
         }
+        val dprParsedToken = tokenConverter.convert(parsedToken) as DprAuthAwareAuthenticationToken
         Span.current().setAttribute("activeCaseLoadId", dprParsedToken.getCaseLoads().first().toString())
       } catch (e: ParseException) {
         log.warn("problem decoding jwt public key for application insights", e)
