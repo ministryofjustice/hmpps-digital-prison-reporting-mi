@@ -1,7 +1,5 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 
-// import com.microsoft.applicationinsights.web.internal.internalThreadContext
-
 import com.nimbusds.jwt.JWT
 import com.nimbusds.jwt.JWTClaimsSet
 import com.nimbusds.jwt.SignedJWT
@@ -19,9 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareTokenConverter
 import java.text.ParseException
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.*
 
 @Configuration
 class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInterceptor) : WebMvcConfigurer {
@@ -44,22 +39,21 @@ class ClientTrackingInterceptor(val tokenConverter: DprAuthAwareTokenConverter) 
         val parsed: JWT = SignedJWT.parse(token.replace("Bearer ", ""))
         val headers = LinkedHashMap(parsed.header.toJSONObject())
         val claims = parsed.jwtClaimsSet.claims
-        val issuedAt: Instant = Instant.now().truncatedTo(ChronoUnit.SECONDS)
-        val expiration = issuedAt.plus(3, ChronoUnit.MINUTES)
-        val parsedToken1 = Jwt.withTokenValue(token)
+        val jwtBody = getClaimsFromJWT(token)
+        val issueTime = jwtBody.issueTime?.toInstant()
+        val expirationTime = jwtBody.expirationTime?.toInstant()
+        val parsedToken = Jwt.withTokenValue(token)
           .headers { h -> h.putAll(headers) }
           .claims { c -> c.putAll(claims) }
-          .issuedAt(issuedAt)
-          .expiresAt(expiration)
+          .issuedAt(issueTime)
+          .expiresAt(expirationTime)
           .build()
-        val parsedToken = tokenConverter.convert(parsedToken1) as DprAuthAwareAuthenticationToken
-//        val jwtBody = getClaimsFromJWT(token)
-//        val user = Optional.ofNullable(jwtBody.subject)
-        val user = Optional.ofNullable(parsedToken1.subject)
-        user.map { it.toString() }.ifPresent {
+        val dprParsedToken = tokenConverter.convert(parsedToken) as DprAuthAwareAuthenticationToken
+        val user = parsedToken.subject
+        user?.let {
           Span.current().setAttribute("username", it) // username in customDimensions
         }
-        Span.current().setAttribute("activeCaseLoadId", parsedToken.getCaseLoads().first().toString())
+        Span.current().setAttribute("activeCaseLoadId", dprParsedToken.getCaseLoads().first().toString())
       } catch (e: ParseException) {
         log.warn("problem decoding jwt public key for application insights", e)
       }
