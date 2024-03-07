@@ -25,10 +25,12 @@ class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInt
 @Configuration
 class ClientTrackingInterceptor : HandlerInterceptor {
   override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-    val token = SecurityContextHolder.getContext().authentication as DprAuthAwareAuthenticationToken
-    val user = token.jwt.subject
-    Span.current().setAttribute("username", user) // username in customDimensions
-    Span.current().setAttribute("activeCaseLoadId", token.getCaseLoads().first().toString())
+    if (SecurityContextHolder.getContext().authentication is DprAuthAwareAuthenticationToken) {
+      val token = SecurityContextHolder.getContext().authentication as DprAuthAwareAuthenticationToken
+      val user = token.jwt.subject
+      Span.current().setAttribute("username", user) // username in customDimensions
+      Span.current().setAttribute("activeCaseLoadId", token.getCaseLoads().first().toString())
+    }
     return true
   }
 }
