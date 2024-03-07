@@ -15,7 +15,10 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAw
 class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInterceptor) : WebMvcConfigurer {
   override fun addInterceptors(registry: InterceptorRegistry) {
     log.info("Adding application insights client tracking interceptor")
-    registry.addInterceptor(clientTrackingInterceptor).addPathPatterns("/**")
+    registry.addInterceptor(clientTrackingInterceptor)
+      .addPathPatterns("/**")
+      .excludePathPatterns("/swagger-ui/**")
+      .excludePathPatterns("/health/**")
   }
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
