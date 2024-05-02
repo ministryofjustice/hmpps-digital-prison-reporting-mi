@@ -13,6 +13,8 @@ generic-service:
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
     ME_CASELOADS_API_HOST: https://nomis-user-pp.aks-live-1.studio-hosting.service.justice.gov.uk
     DEFINITIONS_HOST: http://hmpps-dpr-data-product-definitions-preprod.hmpps-digital-prison-reporting-mi-preprod.svc.cluster.local
+    REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-preproduction
+    REDSHIFT_DATA_DB: datamart
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
