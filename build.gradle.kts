@@ -24,7 +24,7 @@ dependencies {
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-
+  implementation("software.amazon.awssdk:secretsmanager:2.25.42")
   // Testing
   testImplementation("com.h2database:h2")
   testImplementation("io.jsonwebtoken:jjwt:0.12.5")
