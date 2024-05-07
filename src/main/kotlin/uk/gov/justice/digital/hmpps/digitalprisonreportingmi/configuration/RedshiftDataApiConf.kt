@@ -15,7 +15,8 @@ class RedshiftDataApiConf(
 ) {
   @Bean
   fun redshiftDataClient(): RedshiftDataClient {
-    return RedshiftDataClient.builder()
+    return RedshiftDataClient
+      .builder()
       .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKeyId, secretAccessKey)))
       .region(Region.EU_WEST_2)
       .build()
