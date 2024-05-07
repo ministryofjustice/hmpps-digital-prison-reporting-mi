@@ -36,6 +36,9 @@ generic-service:
     hmpps-auth:
       SYSTEM_CLIENT_ID: "system_client_id"
       SYSTEM_CLIENT_SECRET: "system_client_secret"
+    redshift-data:
+      REDSHIFT_DATA_SECRETACCESSKEY: "accesskey"
+      REDSHIFT_DATA_ACCESSKEYID: "accessid"
 
   allowlist:
     cloudplatform-live1-1: 35.178.209.113/32
