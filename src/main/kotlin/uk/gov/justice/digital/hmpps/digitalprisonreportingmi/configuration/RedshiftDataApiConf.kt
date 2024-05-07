@@ -12,7 +12,6 @@ class RedshiftDataApiConf {
   fun redshiftDataClient(): RedshiftDataClient {
     return RedshiftDataClient.builder()
       .region(Region.EU_WEST_2)
-      .credentialsProvider(DefaultCredentialsProvider.create())
       .build()
   }
 }
