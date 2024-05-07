@@ -29,3 +29,6 @@ dpr:
       role: ROLE_PRISONS_REPORTING_USER
     dataProductDefinitions:
       host: http://localhost:9999
+    redshiftdataapi:
+      secretaccesskey: REDSHIFT_DATA_SECRETACCESSKEY
+      accesskeyid: REDSHIFT_DATA_ACCESSKEYID
