@@ -39,6 +39,7 @@ class TestRedshiftDataAPiController(
 //      .build()
 //    val valueResponse: GetSecretValueResponse = secretsClient.getSecretValue(valueRequest)
     val statementRequest: ExecuteStatementRequest = executeStatementRequestBuilder
+      .database("datamart")
       .sql(
         "SELECT * FROM datamart.domain.movement_movement where id=:id",
       )
