@@ -40,6 +40,8 @@ class TestRedshiftDataAPiController(
 //    val valueResponse: GetSecretValueResponse = secretsClient.getSecretValue(valueRequest)
     val statementRequest: ExecuteStatementRequest = executeStatementRequestBuilder
       .database("datamart")
+      .clusterIdentifier("dpr-redshift-development")
+      .secretArn("arn:aws:secretsmanager:eu-west-2:771283872747:secret:dpr-redshift-secret-development-rLHcQZ")
       .sql(
         "SELECT * FROM datamart.domain.movement_movement where id=:id",
       )
