@@ -30,7 +30,6 @@ class RedshiftDataApiConf(
 //      .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(credentials.accessKeyId(), credentials.secretAccessKey())))
       .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(credentials.accessKeyId(), credentials.secretAccessKey())))
       //      .credentialsProvider(WebIdentityTokenFileCredentialsProvider.builder().webIdentityTokenFile(Path.of(""))
-//        .roleArn("")
 //        .build())
       .region(Region.EU_WEST_2)
       .build()
