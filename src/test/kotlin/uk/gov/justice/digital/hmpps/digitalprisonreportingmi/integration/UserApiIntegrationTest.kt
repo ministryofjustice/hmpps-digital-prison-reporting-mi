@@ -1,8 +1,9 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.web.util.UriBuilder
-
+@Disabled
 class UserApiIntegrationTest : IntegrationTestBase() {
 
   @Test

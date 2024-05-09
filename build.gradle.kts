@@ -27,6 +27,7 @@ dependencies {
   implementation("software.amazon.awssdk:secretsmanager:2.25.42")
 
   implementation("software.amazon.awssdk:redshiftdata:2.25.44")
+  implementation("software.amazon.awssdk:sts:2.25.48")
 
   // Testing
   testImplementation("com.h2database:h2")
