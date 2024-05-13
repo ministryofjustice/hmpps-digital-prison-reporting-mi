@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
@@ -20,13 +19,9 @@ class RedshiftDataApiConf(
 ) {
   @Bean
   fun redshiftDataClient(): RedshiftDataClient {
-    val devProfile = ProfileCredentialsProvider.builder()
-      .profileName("dev")
-      .build()
     val region = Region.US_WEST_2
     val stsClient: StsClient = StsClient.builder()
       .region(region)
-      .credentialsProvider(devProfile)
       .build()
 
     val credentials = assumeGivenRole(stsClient, "arn:aws:iam::771283872747:role/dpr-cross-account-role-demo", "dpr-cross-account-role-session")
