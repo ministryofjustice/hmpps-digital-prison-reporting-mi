@@ -71,7 +71,6 @@ class ReportDefinitionIntegrationTest : IntegrationTestBase() {
     assertThat(result.responseBody).first().isNotNull
 
     val definition = result.responseBody!!.first()
-
     assertThat(definition.variants).hasSize(2)
   }
 
