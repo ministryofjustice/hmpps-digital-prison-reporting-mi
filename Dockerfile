@@ -23,9 +23,6 @@ RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezo
 RUN addgroup --gid 2000 --system appgroup && \
     adduser --uid 2000 --system appuser --gid 2000
 
-RUN apk update && \
-    apk add aws-cli
-
 WORKDIR /app
 COPY --from=builder --chown=appuser:appgroup /app/build/libs/hmpps-digital-prison-reporting-mi*.jar /app/app.jar
 COPY --from=builder --chown=appuser:appgroup /app/build/libs/applicationinsights-agent*.jar /app/agent.jar
