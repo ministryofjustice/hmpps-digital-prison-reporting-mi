@@ -39,6 +39,7 @@ generic-service:
     redshift-data:
       REDSHIFT_DATA_SECRETACCESSKEY: "secretaccesskey"
       REDSHIFT_DATA_ACCESSKEYID: "accesskeyid"
+      REDSHIFT_DATA_SECRETARN: "secretarn"
 
   allowlist:
     cloudplatform-live1-1: 35.178.209.113/32
