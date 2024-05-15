@@ -24,7 +24,7 @@ class RedshiftDataApiConf(
 
   @Bean
   fun redshiftDataClient(): RedshiftDataClient {
-    val region = Region.US_WEST_2
+    val region = Region.EU_WEST_2
     val stsClient: StsClient = StsClient.builder()
       .region(region)
       .build()
@@ -39,7 +39,7 @@ class RedshiftDataApiConf(
       .credentialsProvider(staticCredentialsProvider)
       //      .credentialsProvider(WebIdentityTokenFileCredentialsProvider.builder().webIdentityTokenFile(Path.of(""))
 //        .build())
-      .region(Region.US_WEST_2)
+      .region(Region.EU_WEST_2)
       .build()
   }
 
