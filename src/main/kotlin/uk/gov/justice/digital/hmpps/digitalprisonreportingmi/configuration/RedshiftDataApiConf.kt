@@ -9,9 +9,9 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
 import software.amazon.awssdk.services.sts.StsClient
+import software.amazon.awssdk.services.sts.auth.StsAssumeRoleCredentialsProvider
 import software.amazon.awssdk.services.sts.model.AssumeRoleRequest
-import software.amazon.awssdk.services.sts.model.AssumeRoleResponse
-import software.amazon.awssdk.services.sts.model.Credentials
+import kotlin.jvm.optionals.getOrElse
 
 @Configuration
 class RedshiftDataApiConf(
@@ -30,7 +30,7 @@ class RedshiftDataApiConf(
       .build()
 
     val credentials = assumeGivenRole(stsClient, "arn:aws:iam::771283872747:role/dpr-cross-account-role-demo", "dpr-cross-account-role-session")
-    stsClient.close()
+//    stsClient.close()
     val staticCredentialsProvider = StaticCredentialsProvider.create(
       AwsSessionCredentials.create(credentials.accessKeyId(), credentials.secretAccessKey(), credentials.sessionToken()),
     )
@@ -43,19 +43,27 @@ class RedshiftDataApiConf(
       .build()
   }
 
-  fun assumeGivenRole(stsClient: StsClient, roleArn: String?, roleSessionName: String?): Credentials {
+  fun assumeGivenRole(stsClient: StsClient, roleArn: String?, roleSessionName: String?): AwsSessionCredentials {
     val roleRequest: AssumeRoleRequest = AssumeRoleRequest.builder()
       .roleArn(roleArn)
       .roleSessionName(roleSessionName)
+      .durationSeconds(120)
       .build()
+    val stsAssumeRoleCredentialsProvider = StsAssumeRoleCredentialsProvider
+      .builder()
+      .stsClient(stsClient)
+      .refreshRequest(roleRequest)
+      .asyncCredentialUpdateEnabled(true)
+      .build()
+    val resolveCredentials: AwsSessionCredentials = stsAssumeRoleCredentialsProvider.resolveCredentials() as AwsSessionCredentials
     log.info("Caller Identinty Account: {}", stsClient.callerIdentity.account())
     log.info("Caller Identinty Arn: {}", stsClient.callerIdentity.arn())
     log.info("Caller Identinty User Id: {}", stsClient.callerIdentity.userId())
-    val roleResponse: AssumeRoleResponse = stsClient.assumeRole(roleRequest)
-    val myCreds: Credentials = roleResponse.credentials()
-//      val exTime: Instant = myCreds.expiration()
-//      val tokenInfo: String = myCreds.sessionToken()
+    log.info("Credentials Duration: {}", resolveCredentials.expirationTime().getOrElse { "Unknown duration." })
+//    val roleResponse: AssumeRoleResponse = stsClient.assumeRole(roleRequest)
+//    val roleResponse: AssumeRoleResponse = stsClient.assumeRole(roleRequest)
+//    val myCreds: Credentials = roleResponse.credentials()
 
-    return myCreds
+    return resolveCredentials
   }
 }

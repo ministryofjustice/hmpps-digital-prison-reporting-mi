@@ -2,7 +2,6 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -29,7 +28,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.Configu
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.movementPrisoner4
 import java.time.LocalDateTime
 
-@Disabled
 class ConfiguredApiIntegrationTest : IntegrationTestBase() {
   companion object {
     @JvmStatic
