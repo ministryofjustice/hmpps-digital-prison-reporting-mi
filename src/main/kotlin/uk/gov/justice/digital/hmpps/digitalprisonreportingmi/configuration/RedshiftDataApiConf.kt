@@ -20,16 +20,17 @@ class RedshiftDataApiConf(
   @Bean
   fun redshiftDataClient(): RedshiftDataClient {
     val region = Region.US_WEST_2
-//    val stsClient: StsClient = StsClient.builder()
-//      .region(region)
-//      .build()
+    val stsClient: StsClient = StsClient.builder()
+      .region(region)
+      .build()
 
-//    val credentials = assumeGivenRole(stsClient, "arn:aws:iam::771283872747:role/dpr-cross-account-role-demo", "dpr-cross-account-role-session")
-//    stsClient.close()
+    val credentials = assumeGivenRole(stsClient, "arn:aws:iam::771283872747:role/dpr-cross-account-role-demo", "dpr-cross-account-role-session")
+    stsClient.close()
     return RedshiftDataClient.builder()
 //      .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(credentials.accessKeyId(), credentials.secretAccessKey())))
-      .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKeyId, secretAccessKey)))
+      .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(credentials.accessKeyId(), credentials.secretAccessKey())))
       //      .credentialsProvider(WebIdentityTokenFileCredentialsProvider.builder().webIdentityTokenFile(Path.of(""))
+//        .build())
       .region(Region.EU_WEST_2)
       .build()
   }
