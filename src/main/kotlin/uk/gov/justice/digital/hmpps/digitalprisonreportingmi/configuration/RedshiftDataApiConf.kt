@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,6 +18,9 @@ class RedshiftDataApiConf(
   @Value("\${dpr.lib.redshiftdataapi.secretaccesskey}") private val secretAccessKey: String,
   @Value("\${dpr.lib.redshiftdataapi.accesskeyid}") private val accessKeyId: String,
 ) {
+  companion object {
+    private val log = LoggerFactory.getLogger(this::class.java)
+  }
   @Bean
   fun redshiftDataClient(): RedshiftDataClient {
     val region = Region.EU_WEST_2
@@ -41,8 +45,10 @@ class RedshiftDataApiConf(
       .roleSessionName(roleSessionName)
       .build()
     val roleResponse: AssumeRoleResponse = stsClient.assumeRole(roleRequest)
+    log.info("Caller Identinty Account: {}", stsClient.callerIdentity.account())
+    log.info("Caller Identinty Arn: {}", stsClient.callerIdentity.arn())
+    log.info("Caller Identinty User Id: {}", stsClient.callerIdentity.userId())
     val myCreds: Credentials = roleResponse.credentials()
-
 //      val exTime: Instant = myCreds.expiration()
 //      val tokenInfo: String = myCreds.sessionToken()
 
