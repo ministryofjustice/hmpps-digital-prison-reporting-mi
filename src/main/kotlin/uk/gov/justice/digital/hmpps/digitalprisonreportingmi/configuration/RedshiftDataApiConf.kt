@@ -47,7 +47,7 @@ class RedshiftDataApiConf(
     val roleRequest: AssumeRoleRequest = AssumeRoleRequest.builder()
       .roleArn(roleArn)
       .roleSessionName(roleSessionName)
-      .durationSeconds(120)
+      .durationSeconds(900)
       .build()
     val stsAssumeRoleCredentialsProvider = StsAssumeRoleCredentialsProvider
       .builder()
