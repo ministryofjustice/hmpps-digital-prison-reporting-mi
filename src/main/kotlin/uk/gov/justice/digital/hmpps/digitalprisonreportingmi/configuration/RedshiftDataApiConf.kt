@@ -29,9 +29,9 @@ class RedshiftDataApiConf(
   @Bean
   fun executeStatementRequestBuilder(): ExecuteStatementRequest.Builder {
     return ExecuteStatementRequest.builder()
-      .clusterIdentifier(clusterId)
-      .database(database)
-      .secretArn(secretArn)
+      .clusterIdentifier("dpr-redshift-development")
+      .database("datamart")
+      .secretArn("arn:aws:secretsmanager:eu-west-2:771283872747:secret:dpr-redshift-secret-development-rLHcQZ")
   }
 
   @Bean
