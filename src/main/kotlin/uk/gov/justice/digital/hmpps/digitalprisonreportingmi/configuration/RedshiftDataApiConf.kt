@@ -21,6 +21,7 @@ class RedshiftDataApiConf(
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
   }
+
   @Bean
   fun redshiftDataClient(): RedshiftDataClient {
     val region = Region.EU_WEST_2
