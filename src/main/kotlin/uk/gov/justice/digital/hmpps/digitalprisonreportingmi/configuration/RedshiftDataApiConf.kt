@@ -8,6 +8,7 @@ import software.amazon.awssdk.auth.credentials.AwsSessionCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
+import software.amazon.awssdk.services.redshiftdata.model.ExecuteStatementRequest
 import software.amazon.awssdk.services.sts.StsClient
 import software.amazon.awssdk.services.sts.auth.StsAssumeRoleCredentialsProvider
 import software.amazon.awssdk.services.sts.model.AssumeRoleRequest
@@ -17,9 +18,20 @@ import kotlin.jvm.optionals.getOrElse
 class RedshiftDataApiConf(
   @Value("\${dpr.lib.redshiftdataapi.secretaccesskey}") private val secretAccessKey: String,
   @Value("\${dpr.lib.redshiftdataapi.accesskeyid}") private val accessKeyId: String,
+  @Value("\${dpr.lib.redshiftdataapi.database}") private val database: String,
+  @Value("\${dpr.lib.redshiftdataapi.clusterid}") private val clusterId: String,
+  @Value("\${dpr.lib.redshiftdataapi.secretarn}") private val secretArn: String,
 ) {
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
+  }
+
+  @Bean
+  fun executeStatementRequestBuilder(): ExecuteStatementRequest.Builder {
+    return ExecuteStatementRequest.builder()
+      .clusterIdentifier(clusterId)
+      .database(database)
+      .secretArn(secretArn)
   }
 
   @Bean

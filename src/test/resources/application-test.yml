@@ -32,3 +32,6 @@ dpr:
     redshiftdataapi:
       secretaccesskey: REDSHIFT_DATA_SECRETACCESSKEY
       accesskeyid: REDSHIFT_DATA_ACCESSKEYID
+      secretarn: REDSHIFT_DATA_SECRETARN
+      clusterid: REDSHIFT_DATA_CLUSTER_ID
+      database: REDSHIFT_DATA_DB
