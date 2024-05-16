@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController
 import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
 import software.amazon.awssdk.services.redshiftdata.model.ExecuteStatementRequest
 import software.amazon.awssdk.services.redshiftdata.model.ExecuteStatementResponse
-import software.amazon.awssdk.services.redshiftdata.model.SqlParameter
 
 @Validated
 @RestController
