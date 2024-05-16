@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,9 +19,6 @@ class RedshiftDataApiConf(
   @Value("\${dpr.lib.redshiftdataapi.rolearn}") private val roleArn: String,
   @Value("\${dpr.lib.redshiftdataapi.rolesessionname}") private val roleSessionName: String,
 ) {
-  companion object {
-    private val log = LoggerFactory.getLogger(this::class.java)
-  }
 
   @Bean
   fun executeStatementRequestBuilder(): ExecuteStatementRequest.Builder {
