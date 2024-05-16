@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
+import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
@@ -48,6 +50,9 @@ abstract class IntegrationTestBase {
 
   @Autowired
   lateinit var jwtAuthHelper: JwtAuthHelper
+
+  @MockBean
+  lateinit var redshiftDataClient: RedshiftDataClient
 
   internal fun setAuthorisation(
     user: String = "AUTH_ADM",

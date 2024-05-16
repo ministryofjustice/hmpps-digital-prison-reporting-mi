@@ -2,7 +2,6 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 
 import org.junit.jupiter.api.Test
 import org.springframework.web.util.UriBuilder
-
 class UserApiIntegrationTest : IntegrationTestBase() {
 
   @Test
