@@ -21,6 +21,7 @@ class RedshiftDataApiConf(
   @Value("\${dpr.lib.redshiftdataapi.database}") private val database: String,
   @Value("\${dpr.lib.redshiftdataapi.clusterid}") private val clusterId: String,
   @Value("\${dpr.lib.redshiftdataapi.secretarn}") private val secretArn: String,
+  @Value("\${dpr.lib.redshiftdataapi.tokenRefreshDurationSec}") private val tokenRefreshDurationSec: Int,
 ) {
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -60,7 +61,7 @@ class RedshiftDataApiConf(
     val roleRequest: AssumeRoleRequest = AssumeRoleRequest.builder()
       .roleArn(roleArn)
       .roleSessionName(roleSessionName)
-      .durationSeconds(900)
+      .durationSeconds(tokenRefreshDurationSec)
       .build()
     val stsAssumeRoleCredentialsProvider = StsAssumeRoleCredentialsProvider
       .builder()
@@ -84,7 +85,7 @@ class RedshiftDataApiConf(
     val roleRequest: AssumeRoleRequest = AssumeRoleRequest.builder()
       .roleArn(roleArn)
       .roleSessionName(roleSessionName)
-      .durationSeconds(900)
+      .durationSeconds(tokenRefreshDurationSec)
       .build()
     return StsAssumeRoleCredentialsProvider
       .builder()
