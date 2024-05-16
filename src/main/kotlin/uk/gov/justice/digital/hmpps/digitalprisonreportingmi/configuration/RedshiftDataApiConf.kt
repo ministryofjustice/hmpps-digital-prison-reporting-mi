@@ -46,9 +46,10 @@ class RedshiftDataApiConf(
     val staticCredentialsProvider = StaticCredentialsProvider.create(
       AwsSessionCredentials.create(credentials.accessKeyId(), credentials.secretAccessKey(), credentials.sessionToken()),
     )
+    val stsAssumeRoleCredentialsProvider = createStsAssumeRoleCredentialsProvider(stsClient, "arn:aws:iam::771283872747:role/dpr-cross-account-role-demo", "dpr-cross-account-role-session")
     return RedshiftDataClient.builder()
 //      .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(credentials.accessKeyId(), credentials.secretAccessKey())))
-      .credentialsProvider(staticCredentialsProvider)
+      .credentialsProvider(stsAssumeRoleCredentialsProvider)
       //      .credentialsProvider(WebIdentityTokenFileCredentialsProvider.builder().webIdentityTokenFile(Path.of(""))
 //        .build())
       .region(Region.EU_WEST_2)
@@ -77,5 +78,19 @@ class RedshiftDataApiConf(
 //    val myCreds: Credentials = roleResponse.credentials()
 
     return resolveCredentials
+  }
+
+  fun createStsAssumeRoleCredentialsProvider(stsClient: StsClient, roleArn: String?, roleSessionName: String?): StsAssumeRoleCredentialsProvider {
+    val roleRequest: AssumeRoleRequest = AssumeRoleRequest.builder()
+      .roleArn(roleArn)
+      .roleSessionName(roleSessionName)
+      .durationSeconds(900)
+      .build()
+    return StsAssumeRoleCredentialsProvider
+      .builder()
+      .stsClient(stsClient)
+      .refreshRequest(roleRequest)
+      .asyncCredentialUpdateEnabled(true)
+      .build()
   }
 }
