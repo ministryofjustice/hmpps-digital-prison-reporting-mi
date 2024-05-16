@@ -33,6 +33,6 @@ dpr:
       secretarn: REDSHIFT_DATA_SECRETARN
       clusterid: REDSHIFT_DATA_CLUSTER_ID
       database: REDSHIFT_DATA_DB
-      tokenrefreshdurationsec: 900
+      tokenrefreshdurationsec: 3600
       rolearn: arn:aws:iam::771283872747:role/dpr-cross-account-role-demo
       rolesessionname: dpr-cross-account-role-session
