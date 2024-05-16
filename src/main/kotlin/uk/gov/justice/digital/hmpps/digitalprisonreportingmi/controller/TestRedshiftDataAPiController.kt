@@ -42,7 +42,7 @@ class TestRedshiftDataAPiController(
       .clusterIdentifier("dpr-redshift-development")
       .secretArn("arn:aws:secretsmanager:eu-west-2:771283872747:secret:dpr-redshift-secret-development-rLHcQZ")
       .sql(
-        "SELECT direction FROM datamart.domain.movement_movement where lower(direction)='out' limit 1",
+        "SELECT direction FROM datamart.domain.movement_movement where id='1'",
       )
 //      .parameters(SqlParameter.builder().name("id").value("405713.94").build())
       .build()
