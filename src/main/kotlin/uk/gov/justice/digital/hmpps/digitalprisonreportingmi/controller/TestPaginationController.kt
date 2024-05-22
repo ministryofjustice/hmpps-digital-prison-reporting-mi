@@ -49,7 +49,9 @@ class TestPaginationController(val redshiftDataClient: RedshiftDataClient) {
     val rowsPerPage = mutableListOf<Long>()
     for (getStatementResultResponse in resultStatementResponse) {
       pageNum++
-      rowsPerPage.add(getStatementResultResponse.totalNumRows())
+      if (pageNum < 20) {
+        rowsPerPage.add(getStatementResultResponse.totalNumRows())
+      }
     }
     return ResponseEntity
       .status(HttpStatus.OK)
