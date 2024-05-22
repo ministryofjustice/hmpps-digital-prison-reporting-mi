@@ -52,6 +52,7 @@ class TestPaginationController(val redshiftDataClient: RedshiftDataClient) {
       if (pageNum < 20) {
         rowsPerPage.add(getStatementResultResponse.totalNumRows())
       }
+      resultStatementResponse.remove()
     }
     return ResponseEntity
       .status(HttpStatus.OK)
