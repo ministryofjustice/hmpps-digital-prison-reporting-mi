@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.controller
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -27,6 +28,10 @@ import java.time.format.DateTimeFormatter
 @Hidden
 class TestPaginationController(val redshiftDataClient: RedshiftDataClient) {
 
+  companion object {
+    private val log = LoggerFactory.getLogger(this::class.java)
+  }
+
   @Hidden
   @GetMapping("/test/pagination/statements/{statementId}")
   @Operation(
@@ -46,6 +51,7 @@ class TestPaginationController(val redshiftDataClient: RedshiftDataClient) {
     val overrideConfig: AwsRequestOverrideConfiguration.Builder = AwsRequestOverrideConfiguration.builder()
     overrideConfig.putExecutionAttribute(ExecutionAttribute("maxResults"), 2)
     requestBuilder.overrideConfiguration(overrideConfig.build())
+    log.info("Execution Attributes: {}", requestBuilder.overrideConfiguration().executionAttributes())
     val statementRequest: GetStatementResultRequest = requestBuilder
       .build()
     val resultStatementResponse: GetStatementResultResponse = redshiftDataClient
