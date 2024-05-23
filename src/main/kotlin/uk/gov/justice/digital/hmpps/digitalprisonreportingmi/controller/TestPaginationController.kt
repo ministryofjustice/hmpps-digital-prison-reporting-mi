@@ -44,7 +44,7 @@ class TestPaginationController(val redshiftDataClient: RedshiftDataClient) {
     requestBuilder.id(statementId)
     nextToken?.let { requestBuilder.nextToken(it) }
     val overrideConfig: AwsRequestOverrideConfiguration.Builder = AwsRequestOverrideConfiguration.builder()
-    overrideConfig.putExecutionAttribute(ExecutionAttribute("MaxResults"), 2)
+    overrideConfig.putExecutionAttribute(ExecutionAttribute("maxResults"), 2)
     requestBuilder.overrideConfiguration(overrideConfig.build())
     val statementRequest: GetStatementResultRequest = requestBuilder
       .build()
@@ -54,11 +54,11 @@ class TestPaginationController(val redshiftDataClient: RedshiftDataClient) {
     return ResponseEntity
       .status(HttpStatus.OK)
       .body(
-        Response(resultStatementResponse.totalNumRows(), resultStatementResponse.records().size, resultStatementResponse.nextToken()),
+        Response(resultStatementResponse.totalNumRows(), resultStatementResponse.hasRecords(), resultStatementResponse.nextToken()),
       )
   }
 
-  data class Response(val totalNumRows: Long, val recordsSize: Int, val nextToken: String)
+  data class Response(val totalNumRows: Long, val hasRecords: Boolean, val nextToken: String)
 
   private fun extractRecords(resultStatementResponse: GetStatementResultResponse) =
     resultStatementResponse.records().map { record ->
