@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import software.amazon.awssdk.awscore.AwsRequestOverrideConfiguration
+import software.amazon.awssdk.core.interceptor.ExecutionAttribute
 import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
 import software.amazon.awssdk.services.redshiftdata.model.ColumnMetadata
 import software.amazon.awssdk.services.redshiftdata.model.Field
@@ -41,27 +43,22 @@ class TestPaginationController(val redshiftDataClient: RedshiftDataClient) {
     val requestBuilder = GetStatementResultRequest.builder()
     requestBuilder.id(statementId)
     nextToken?.let { requestBuilder.nextToken(it) }
+    val overrideConfig: AwsRequestOverrideConfiguration.Builder = AwsRequestOverrideConfiguration.builder()
+    overrideConfig.putExecutionAttribute(ExecutionAttribute("MaxResults"), 2)
+    requestBuilder.overrideConfiguration(overrideConfig.build())
     val statementRequest: GetStatementResultRequest = requestBuilder
       .build()
-    val resultStatementResponse: MutableIterator<GetStatementResultResponse> = redshiftDataClient
-      .getStatementResultPaginator(statementRequest).iterator()
-    var pageNum = 0L
-    val rowsPerPage = mutableListOf<Long>()
-    for (getStatementResultResponse in resultStatementResponse) {
-      pageNum++
-      if (pageNum < 20) {
-        rowsPerPage.add(getStatementResultResponse.totalNumRows())
-      }
-      resultStatementResponse.remove()
-    }
+    val resultStatementResponse: GetStatementResultResponse = redshiftDataClient
+      .getStatementResult(statementRequest)
+
     return ResponseEntity
       .status(HttpStatus.OK)
       .body(
-        Response(pageNum, rowsPerPage),
+        Response(resultStatementResponse.totalNumRows(), resultStatementResponse.records().size, resultStatementResponse.nextToken()),
       )
   }
 
-  data class Response(val numberOfPages: Long, val rowsPerPage: List<Long>)
+  data class Response(val totalNumRows: Long, val recordsSize: Int, val nextToken: String)
 
   private fun extractRecords(resultStatementResponse: GetStatementResultResponse) =
     resultStatementResponse.records().map { record ->
