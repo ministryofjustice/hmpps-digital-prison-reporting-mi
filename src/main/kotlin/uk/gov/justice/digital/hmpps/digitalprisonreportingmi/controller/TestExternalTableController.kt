@@ -23,8 +23,6 @@ import java.util.concurrent.ConcurrentHashMap
 class TestExternalTableController(
   val redshiftDataClient: RedshiftDataClient,
   val executeStatementRequestBuilder: ExecuteStatementRequest.Builder,
-  @Value("\${dpr.lib.redshiftdataapi.rolearn}")
-  val roleArn: String,
 ) {
 
   companion object {
@@ -45,7 +43,7 @@ class TestExternalTableController(
       .sql(
         "CREATE EXTERNAL SCHEMA IF NOT EXISTS reports from data catalog " +
           "database 'reports' " +
-          "iam_role '$roleArn' " +
+          "iam_role 'arn:aws:iam::771283872747:role/dpr-redshift-spectrum-role' " +
           "create external database if not exists; " +
           "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
           "STORED AS parquet " +
