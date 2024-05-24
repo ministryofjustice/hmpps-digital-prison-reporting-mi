@@ -42,6 +42,7 @@ class TestExternalTableController(
       .sql(
         "CREATE EXTERNAL SCHEMA IF NOT EXISTS reports from data catalog " +
           "database 'reports' " +
+          "iam_role 'arn:aws:iam::771283872747:role/redshift-spectrum-role' " +
           "create external database if not exists; " +
           "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
           "STORED AS parquet " +
