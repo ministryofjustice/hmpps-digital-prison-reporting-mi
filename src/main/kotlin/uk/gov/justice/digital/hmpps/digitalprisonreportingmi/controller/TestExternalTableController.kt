@@ -40,6 +40,7 @@ class TestExternalTableController(
     val tableId = UUID.randomUUID().toString()
     val requestBuilder = executeStatementRequestBuilder
       .sql(
+        "CREATE EXTERNAL SCHEMA IF NOT EXISTS reports from data catalog; " +
         "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
           "STORED AS parquet " +
           "LOCATION 'S3://dpr-report-spill-dev/$tableId/' " +
