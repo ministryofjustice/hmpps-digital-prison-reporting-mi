@@ -11,8 +11,9 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
+import software.amazon.awssdk.services.redshiftdata.model.BatchExecuteStatementRequest
+import software.amazon.awssdk.services.redshiftdata.model.BatchExecuteStatementResponse
 import software.amazon.awssdk.services.redshiftdata.model.ExecuteStatementRequest
-import software.amazon.awssdk.services.redshiftdata.model.ExecuteStatementResponse
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -22,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap
 class TestExternalTableController(
   val redshiftDataClient: RedshiftDataClient,
   val executeStatementRequestBuilder: ExecuteStatementRequest.Builder,
+  val batchExecuteStatementRequestBuilder: BatchExecuteStatementRequest.Builder,
 ) {
 
   companion object {
@@ -38,20 +40,21 @@ class TestExternalTableController(
   )
   fun createExternalTable(authentication: Authentication): ResponseEntity<Response> {
     val tableId = UUID.randomUUID().toString()
-    val requestBuilder = executeStatementRequestBuilder
-      .sql(
-        "CREATE EXTERNAL SCHEMA IF NOT EXISTS reports from data catalog " +
-          "database 'reports' " +
-          "iam_role 'arn:aws:iam::771283872747:role/dpr-redshift-spectrum-role' " +
-          "create external database if not exists; " +
-          "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
+    val createSchema = "CREATE EXTERNAL SCHEMA IF NOT EXISTS reports from data catalog " +
+      "database 'reports' " +
+      "iam_role 'arn:aws:iam::771283872747:role/dpr-redshift-spectrum-role' " +
+      "create external database if not exists;"
+    val requestBuilder = batchExecuteStatementRequestBuilder
+      .sqls(
+        createSchema,
+        "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
           "STORED AS parquet " +
           "LOCATION 'S3://dpr-report-spill-dev/$tableId/' " +
           "AS (SELECT * FROM datamart.domain.movement_movement limit 300000)",
       )
-    val statementRequest: ExecuteStatementRequest = requestBuilder.build()
+    val statementRequest: BatchExecuteStatementRequest = requestBuilder.build()
 
-    val response: ExecuteStatementResponse = redshiftDataClient.executeStatement(statementRequest)
+    val response: BatchExecuteStatementResponse = redshiftDataClient.batchExecuteStatement(statementRequest)
     cache[tableId] = response.id()
     log.info("Execution ID: {}", response.id())
     log.info("External table ID: {}", tableId)
