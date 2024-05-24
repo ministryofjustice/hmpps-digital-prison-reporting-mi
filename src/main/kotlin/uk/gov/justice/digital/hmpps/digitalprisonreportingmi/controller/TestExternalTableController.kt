@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -22,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap
 class TestExternalTableController(
   val redshiftDataClient: RedshiftDataClient,
   val executeStatementRequestBuilder: ExecuteStatementRequest.Builder,
+  @Value("\${dpr.lib.redshiftdataapi.rolearn}")
+  val roleArn: String,
 ) {
 
   companion object {
@@ -42,7 +45,7 @@ class TestExternalTableController(
       .sql(
         "CREATE EXTERNAL SCHEMA IF NOT EXISTS reports from data catalog " +
           "database 'reports' " +
-          "iam_role 'arn:aws:iam::771283872747:role/redshift-spectrum-role' " +
+          "iam_role '$roleArn' " +
           "create external database if not exists; " +
           "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
           "STORED AS parquet " +
