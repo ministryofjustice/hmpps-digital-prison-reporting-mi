@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
-import software.amazon.awssdk.services.redshiftdata.model.BatchExecuteStatementRequest
 import software.amazon.awssdk.services.redshiftdata.model.ExecuteStatementRequest
 import software.amazon.awssdk.services.sts.StsClient
 import software.amazon.awssdk.services.sts.auth.StsAssumeRoleCredentialsProvider
@@ -24,14 +23,6 @@ class RedshiftDataApiConf(
   @Bean
   fun executeStatementRequestBuilder(): ExecuteStatementRequest.Builder {
     return ExecuteStatementRequest.builder()
-      .clusterIdentifier(clusterId)
-      .database(database)
-      .secretArn(secretArn)
-  }
-
-  @Bean
-  fun batchExecuteStatementRequestBuilder(): BatchExecuteStatementRequest.Builder {
-    return BatchExecuteStatementRequest.builder()
       .clusterIdentifier(clusterId)
       .database(database)
       .secretArn(secretArn)
