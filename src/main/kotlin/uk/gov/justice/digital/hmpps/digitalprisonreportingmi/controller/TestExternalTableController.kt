@@ -44,7 +44,7 @@ class TestExternalTableController(
         "CREATE EXTERNAL TABLE reports.$tableId " +
           "STORED AS parquet " +
           "LOCATION 's3://dpr-working-development/reports/$tableId/' " +
-          "AS (SELECT * FROM datamart.domain.movement_movement limit 300000)",
+          "AS (SELECT * FROM datamart.domain.movement_movement)",
       )
     val statementRequest: ExecuteStatementRequest = requestBuilder.build()
 
