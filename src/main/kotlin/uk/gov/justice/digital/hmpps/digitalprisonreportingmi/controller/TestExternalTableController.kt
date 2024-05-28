@@ -38,6 +38,7 @@ class TestExternalTableController(
   )
   fun createExternalTable(authentication: Authentication): ResponseEntity<Response> {
     val tableId = UUID.randomUUID().toString()
+
     val requestBuilder = executeStatementRequestBuilder
       .sql(
         "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
