@@ -37,13 +37,13 @@ class TestExternalTableController(
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
   fun createExternalTable(authentication: Authentication): ResponseEntity<Response> {
-    val tableId = UUID.randomUUID().toString()
+    val tableId = "_" + UUID.randomUUID().toString().replace("-", "_")
 
     val requestBuilder = executeStatementRequestBuilder
       .sql(
         "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
           "STORED AS parquet " +
-          "LOCATION 'S3://dpr-report-spill-dev/$tableId/' " +
+          "LOCATION 's3://dpr-working-development/reports/$tableId/' " +
           "AS (SELECT * FROM datamart.domain.movement_movement limit 300000)",
       )
     val statementRequest: ExecuteStatementRequest = requestBuilder.build()
