@@ -40,10 +40,6 @@ class TestExternalTableController(
     val tableId = UUID.randomUUID().toString()
     val requestBuilder = executeStatementRequestBuilder
       .sql(
-        "CREATE EXTERNAL SCHEMA IF NOT EXISTS reports from data catalog " +
-          "database 'reports' " +
-          "iam_role 'arn:aws:iam::771283872747:role/dpr-redshift-spectrum-role' " +
-          "create external database if not exists; " +
           "CREATE EXTERNAL TABLE \"reports.$tableId\" " +
           "STORED AS parquet " +
           "LOCATION 'S3://dpr-report-spill-dev/$tableId/' " +
