@@ -54,7 +54,7 @@ class TestExternalTableController(
           "STORED AS parquet 
           "LOCATION 's3://dpr-working-development/reports/$tableId/' 
           "AS (SELECT * FROM datamart.domain.movement_movement);
-          """,
+        """.trimIndent(),
       )
     val statementRequest: ExecuteStatementRequest = requestBuilder.build()
 
