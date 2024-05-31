@@ -28,6 +28,8 @@ dependencies {
   implementation("software.amazon.awssdk:redshiftdata:2.25.44")
   implementation("software.amazon.awssdk:sts:2.25.48")
 
+  implementation("software.amazon.awssdk:athena:2.25.61")
+
   // Testing
   testImplementation("com.h2database:h2")
   testImplementation("io.jsonwebtoken:jjwt:0.12.5")
