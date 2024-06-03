@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import software.amazon.awssdk.services.athena.AthenaClient
 import software.amazon.awssdk.services.athena.model.AthenaException
+import software.amazon.awssdk.services.athena.model.GetQueryExecutionRequest
 import software.amazon.awssdk.services.athena.model.QueryExecutionContext
 import software.amazon.awssdk.services.athena.model.ResultConfiguration
 import software.amazon.awssdk.services.athena.model.StartQueryExecutionRequest
-import java.util.*
+import java.util.UUID
 
 @Validated
 @RestController
@@ -45,10 +46,7 @@ class TestAthenaExternalTableController(
       """
           CREATE TABLE AwsDataCatalog.reports.$tableId 
           WITH (
-            format = 'PARQUET',
-            created = '2024-05-31T16:00',
-            expires = '2024-06-01T16:00',
-            user = 'testUser'
+            format = 'PARQUET'
           )
           AS (
             SELECT * FROM TABLE(system.query(query => 'SELECT * FROM OMS_OWNER.AGENCY_INTERNAL_LOCATIONS WHERE ROWNUM <= 5'))
@@ -62,6 +60,27 @@ class TestAthenaExternalTableController(
       .status(HttpStatus.OK)
       .body(
         Response(tableId, queryExecutionId),
+      )
+  }
+
+  @Hidden
+  @GetMapping("/test/athena/async/{statementId}/status")
+  @Operation(
+    description = "Test external table creation.",
+    security = [ SecurityRequirement(name = "bearer-jwt") ],
+  )
+  fun getTestAthenaStatementStatus(statementId: String, authentication: Authentication): ResponseEntity<TestStatus> {
+    val getQueryExecutionRequest = GetQueryExecutionRequest.builder()
+      .queryExecutionId(statementId)
+      .build()
+
+    val getQueryExecutionResponse = athenaClient.getQueryExecution(getQueryExecutionRequest)
+    val queryState = getQueryExecutionResponse.queryExecution().status().state()
+
+    return ResponseEntity
+      .status(HttpStatus.OK)
+      .body(
+        TestStatus(queryState.toString()),
       )
   }
 
@@ -92,4 +111,5 @@ class TestAthenaExternalTableController(
   }
 
   data class Response(val tableId: String, val statementId: String)
+  data class TestStatus(val status: String)
 }
