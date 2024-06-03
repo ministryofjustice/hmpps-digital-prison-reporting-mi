@@ -78,7 +78,7 @@ class TestAthenaExternalTableController(
     val getQueryExecutionResponse = athenaClient.getQueryExecution(getQueryExecutionRequest)
     val queryState = getQueryExecutionResponse.queryExecution().status().state()
     val stateChangeReason = getQueryExecutionResponse
-      .queryExecution().status().stateChangeReason()
+      .queryExecution().status().stateChangeReason() ?: ""
     val error = getQueryExecutionResponse
       .queryExecution().status().athenaError()
     val errorMessage = if (error != null) error.errorMessage() else ""
