@@ -77,11 +77,14 @@ class TestAthenaExternalTableController(
 
     val getQueryExecutionResponse = athenaClient.getQueryExecution(getQueryExecutionRequest)
     val queryState = getQueryExecutionResponse.queryExecution().status().state()
-
+    val stateChangeReason = getQueryExecutionResponse
+      .queryExecution().status().stateChangeReason()
+    val error = getQueryExecutionResponse
+      .queryExecution().status().athenaError()
     return ResponseEntity
       .status(HttpStatus.OK)
       .body(
-        TestStatus(queryState.toString()),
+        TestStatus(queryState.toString(), stateChangeReason, error.errorMessage()),
       )
   }
 
@@ -112,5 +115,5 @@ class TestAthenaExternalTableController(
   }
 
   data class Response(val tableId: String, val statementId: String)
-  data class TestStatus(val status: String)
+  data class TestStatus(val status: String, val stateChangeReason: String, val error: String)
 }
