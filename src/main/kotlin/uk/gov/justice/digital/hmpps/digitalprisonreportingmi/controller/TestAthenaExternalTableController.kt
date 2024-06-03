@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 import software.amazon.awssdk.services.athena.AthenaClient
 import software.amazon.awssdk.services.athena.model.AthenaException
@@ -69,7 +70,7 @@ class TestAthenaExternalTableController(
     description = "Test external table creation.",
     security = [ SecurityRequirement(name = "bearer-jwt") ],
   )
-  fun getTestAthenaStatementStatus(statementId: String, authentication: Authentication): ResponseEntity<TestStatus> {
+  fun getTestAthenaStatementStatus(@PathVariable("statementId") statementId: String, authentication: Authentication): ResponseEntity<TestStatus> {
     val getQueryExecutionRequest = GetQueryExecutionRequest.builder()
       .queryExecutionId(statementId)
       .build()
