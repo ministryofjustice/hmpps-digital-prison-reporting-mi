@@ -81,10 +81,11 @@ class TestAthenaExternalTableController(
       .queryExecution().status().stateChangeReason()
     val error = getQueryExecutionResponse
       .queryExecution().status().athenaError()
+    val errorMessage = if (error != null) error.errorMessage() else ""
     return ResponseEntity
       .status(HttpStatus.OK)
       .body(
-        TestStatus(queryState.toString(), stateChangeReason, error.errorMessage()),
+        TestStatus(queryState.toString(), stateChangeReason, errorMessage),
       )
   }
 
