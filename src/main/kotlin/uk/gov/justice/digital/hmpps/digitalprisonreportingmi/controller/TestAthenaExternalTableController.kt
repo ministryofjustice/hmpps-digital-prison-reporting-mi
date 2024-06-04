@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import software.amazon.awssdk.services.athena.AthenaClient
 import software.amazon.awssdk.services.athena.model.AthenaException
@@ -65,6 +66,35 @@ class TestAthenaExternalTableController(
   }
 
   @Hidden
+  @GetMapping("/test/athena/async/param/execute")
+  @Operation(
+    description = "Test external table creation.",
+    security = [ SecurityRequirement(name = "bearer-jwt") ],
+  )
+  fun createParameterisedExternalTable(@RequestParam param: String?, authentication: Authentication): ResponseEntity<Response> {
+    val tableId = "_" + UUID.randomUUID().toString().replace("-", "_")
+    val queryString =
+      """
+          CREATE TABLE AwsDataCatalog.reports.$tableId 
+          WITH (
+            format = 'PARQUET'
+          )
+          AS (
+            SELECT * FROM TABLE(system.query(query => 'SELECT * FROM OMS_OWNER.AGENCY_INTERNAL_LOCATIONS WHERE ROWNUM <= ?'))
+          ) 
+      """.trimIndent()
+    val queryExecutionId = submitAthenaQuery(tableId, queryString, param)
+    log.info("Athena Execution ID: {}", queryExecutionId)
+    log.info("Athena External table ID: {}", tableId)
+
+    return ResponseEntity
+      .status(HttpStatus.OK)
+      .body(
+        Response(tableId, queryExecutionId),
+      )
+  }
+
+  @Hidden
   @GetMapping("/test/athena/async/{statementId}/status")
   @Operation(
     description = "Test external table creation.",
@@ -89,7 +119,7 @@ class TestAthenaExternalTableController(
       )
   }
 
-  fun submitAthenaQuery(tableId: String, queryString: String): String {
+  fun submitAthenaQuery(tableId: String, queryString: String, params: String? = null): String {
     try {
       // The QueryExecutionContext allows us to set the database.
       val queryExecutionContext = QueryExecutionContext.builder()
@@ -101,10 +131,12 @@ class TestAthenaExternalTableController(
       val resultConfiguration = ResultConfiguration.builder()
         .outputLocation("s3://dpr-working-development/reports/$tableId/")
         .build()
-      val startQueryExecutionRequest = StartQueryExecutionRequest.builder()
+      val startQueryExecutionRequestBuilder = StartQueryExecutionRequest.builder()
         .queryString(queryString)
         .queryExecutionContext(queryExecutionContext)
         .resultConfiguration(resultConfiguration)
+      params?.let { startQueryExecutionRequestBuilder.executionParameters(it) }
+      val startQueryExecutionRequest = startQueryExecutionRequestBuilder
         .build()
       val startQueryExecutionResponse = athenaClient
         .startQueryExecution(startQueryExecutionRequest)
