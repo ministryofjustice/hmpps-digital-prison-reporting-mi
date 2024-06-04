@@ -114,7 +114,6 @@ class TestAthenaExternalTableController(
     }
     return ""
   }
-
   data class Response(val tableId: String, val statementId: String)
   data class TestStatus(val status: String, val stateChangeReason: String, val error: String)
 }
