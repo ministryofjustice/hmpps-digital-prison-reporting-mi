@@ -83,5 +83,5 @@ dpr:
       clusterid: ${REDSHIFT_DATA_CLUSTER_ID}
       database: ${REDSHIFT_DATA_DB}
       tokenrefreshdurationsec: 3600
-      rolearn: arn:aws:iam::771283872747:role/dpr-cross-account-role-demo
+      rolearn: ${REDSHIFT_DATA_ROLE_ARN}
       rolesessionname: dpr-cross-account-role-session
