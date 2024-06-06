@@ -19,6 +19,7 @@ class AthenaConf(
   @Bean
   fun athenaClient(stsAssumeRoleCredentialsProvider: StsAssumeRoleCredentialsProvider): AthenaClient {
     val region = Region.EU_WEST_2
+
     return AthenaClient.builder()
       .region(region)
       .credentialsProvider(stsAssumeRoleCredentialsProvider)
