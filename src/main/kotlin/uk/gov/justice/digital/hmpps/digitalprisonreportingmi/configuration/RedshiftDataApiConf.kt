@@ -12,21 +12,10 @@ import software.amazon.awssdk.services.sts.model.AssumeRoleRequest
 
 @Configuration
 class RedshiftDataApiConf(
-  @Value("\${dpr.lib.redshiftdataapi.database}") private val database: String,
-  @Value("\${dpr.lib.redshiftdataapi.clusterid}") private val clusterId: String,
-  @Value("\${dpr.lib.redshiftdataapi.secretarn}") private val secretArn: String,
   @Value("\${dpr.lib.redshiftdataapi.tokenrefreshdurationsec}") private val tokenRefreshDurationSec: Int,
   @Value("\${dpr.lib.redshiftdataapi.rolearn}") private val roleArn: String,
   @Value("\${dpr.lib.redshiftdataapi.rolesessionname}") private val roleSessionName: String,
 ) {
-
-  @Bean
-  fun executeStatementRequestBuilder(): ExecuteStatementRequest.Builder {
-    return ExecuteStatementRequest.builder()
-      .clusterIdentifier(clusterId)
-      .database(database)
-      .secretArn(secretArn)
-  }
 
   @Bean
   fun redshiftDataClient(): RedshiftDataClient {
