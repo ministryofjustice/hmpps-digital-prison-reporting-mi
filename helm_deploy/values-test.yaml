@@ -2,6 +2,7 @@
 
 generic-service:
   replicaCount: 2
+  serviceAccountName: "dpr-reporting-mi-test-cross-iam"
 
   ingress:
     host: digital-prison-reporting-mi-test.hmpps.service.justice.gov.uk
