@@ -16,6 +16,7 @@ generic-service:
     REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-development
     REDSHIFT_DATA_DB: datamart
     REDSHIFT_DATA_ROLE_ARN: arn:aws:iam::771283872747:role/dpr-data-api-cross-account-role
+    REDSHIFT_DATA_S3_LOCATION: dpr-working-development/reports
 
   allowlist:
     groups:

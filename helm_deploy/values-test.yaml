@@ -16,6 +16,7 @@ generic-service:
     REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-test
     REDSHIFT_DATA_DB: datamart
     REDSHIFT_DATA_ROLE_ARN: arn:aws:iam::203591025782:role/dpr-data-api-cross-account-role
+    REDSHIFT_DATA_S3_LOCATION: dpr-working-test/reports
 
   allowlist:
     groups:
