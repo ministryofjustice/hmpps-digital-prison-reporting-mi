@@ -2,6 +2,7 @@
 # Per environment values which override defaults in hmpps-digital-prison-reporting-mi/values.yaml
 
 generic-service:
+  serviceAccountName: "dpr-reporting-mi-production-cross-iam"
   ingress:
     host: digital-prison-reporting-mi.hmpps.service.justice.gov.uk
   env:
