@@ -10,25 +10,25 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.reactive.server.expectBodyList
 import org.springframework.web.util.UriBuilder
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ConfiguredApiController.FiltersPrefix.FILTERS_PREFIX
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_END_SUFFIX
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ConfiguredApiController.FiltersPrefix.RANGE_FILTER_START_SUFFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.DataApiSyncController.FiltersPrefix.FILTERS_PREFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.DataApiSyncController.FiltersPrefix.RANGE_FILTER_END_SUFFIX
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.DataApiSyncController.FiltersPrefix.RANGE_FILTER_START_SUFFIX
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementEntity
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerEntity
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.DATE
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.DESTINATION
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.DIRECTION
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.NAME
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.ORIGIN
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.PRISON_NUMBER
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.REASON
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.TYPE
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.ConfiguredApiIntegrationTest.AllMovementPrisoners.movementPrisoner4
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.DATE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.DESTINATION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.DIRECTION
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.NAME
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.ORIGIN
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.PRISON_NUMBER
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.REASON
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.TYPE
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration.DataApiIntegrationTest.AllMovementPrisoners.movementPrisoner4
 import java.time.LocalDateTime
 
-class ConfiguredApiIntegrationTest : IntegrationTestBase() {
+class DataApiIntegrationTest : IntegrationTestBase() {
   companion object {
     @JvmStatic
     @DynamicPropertySource
