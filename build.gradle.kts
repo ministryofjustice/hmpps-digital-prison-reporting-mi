@@ -2,7 +2,7 @@ plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.15.6"
   kotlin("jvm") version "2.0.0"
   kotlin("plugin.spring") version "2.0.0"
-  kotlin("plugin.jpa") version "1.9.23"
+  kotlin("plugin.jpa") version "2.0.0"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "3.1.0"
 }
@@ -26,7 +26,7 @@ dependencies {
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
   implementation("software.amazon.awssdk:redshiftdata:2.25.44")
-  implementation("software.amazon.awssdk:athena:2.25.61")
+  implementation("software.amazon.awssdk:athena:2.26.22")
   implementation("software.amazon.awssdk:sts:2.25.48")
 
   // Testing
