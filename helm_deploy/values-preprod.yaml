@@ -18,7 +18,6 @@ generic-service:
     REDSHIFT_DATA_DB: datamart
     REDSHIFT_DATA_ROLE_ARN: arn:aws:iam::972272129531:role/dpr-data-api-cross-account-role
     REDSHIFT_DATA_S3_LOCATION: dpr-working-preproduction/reports
-    ATHENA_WORKGROUP_LOCATION: arn:aws:athena:eu-west-2:972272129531:workgroup/dpr-generic-athena-workgroup
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
