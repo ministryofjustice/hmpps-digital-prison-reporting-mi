@@ -86,3 +86,4 @@ dpr:
       rolearn: ${REDSHIFT_DATA_ROLE_ARN}
       rolesessionname: dpr-cross-account-role-session
       s3location: ${REDSHIFT_DATA_S3_LOCATION}
+      athenaworkgroup: ${ATHENA_WORKGROUP_LOCATION}
