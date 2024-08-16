@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.15.6"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "6.0.2"
   kotlin("jvm") version "2.0.0"
   kotlin("plugin.spring") version "2.0.0"
   kotlin("plugin.jpa") version "2.0.0"
@@ -15,7 +15,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:5.1.5")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:6.0.0")
 
   // Security
   implementation("org.springframework.boot:spring-boot-starter-security")
@@ -37,15 +37,7 @@ dependencies {
 }
 
 java {
-  toolchain.languageVersion.set(JavaLanguageVersion.of(19))
-}
-
-tasks {
-  withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-      jvmTarget = "19"
-    }
-  }
+  toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 repositories {
@@ -55,7 +47,7 @@ repositories {
 }
 
 kotlin {
-  jvmToolchain(19)
+  jvmToolchain(21)
 }
 
 tasks.test {
