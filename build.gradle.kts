@@ -26,7 +26,7 @@ dependencies {
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
   implementation("software.amazon.awssdk:redshiftdata:2.26.27")
-  implementation("software.amazon.awssdk:athena:2.26.22")
+  implementation("software.amazon.awssdk:athena:2.27.15")
   implementation("software.amazon.awssdk:sts:2.27.5")
 
   // Testing
