@@ -64,7 +64,7 @@ class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionSer
         pageNumber?.let { Span.current().setAttribute("page", pageNumber) } //page number in customDimensions
       }
     } catch (e: Exception) {
-      log.error("Failed to log product name, variant name or selected page on App Insights: {}", e.message)
+      log.error("Failed to log product name, variant name or selected page to App Insights: {}", e.message)
     }
   }
 
