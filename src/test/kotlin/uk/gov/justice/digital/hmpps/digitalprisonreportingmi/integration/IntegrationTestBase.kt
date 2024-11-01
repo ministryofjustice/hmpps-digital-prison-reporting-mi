@@ -84,11 +84,11 @@ abstract class IntegrationTestBase {
       WireMock.get("/definitions/prisons/orphanage")
         .withHeader(HttpHeaders.AUTHORIZATION, WireMock.equalTo("Bearer $TEST_TOKEN"))
         .willReturn(
-        WireMock.aResponse()
-          .withStatus(HttpStatus.OK.value())
-          .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-          .withBody("""[$externalMovementsDefinitionJson, $courtDefinitionJson]"""),
-      ),
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody("""[$externalMovementsDefinitionJson, $courtDefinitionJson]"""),
+        ),
     )
   }
 
