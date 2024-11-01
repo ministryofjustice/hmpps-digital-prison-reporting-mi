@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 
 import io.opentelemetry.api.trace.Span
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
@@ -34,25 +35,31 @@ class ClientTrackingInterceptorTest {
       jwt = Jwt(
         "abc",
         Instant.now(),
-        Instant.now(),
+        Instant.now().plusMillis(100),
         mapOf("Authentication" to "Bearer token"),
         mapOf("sub" to "userA"),
       ),
-      aPrincipal = "",
+      aPrincipal = "principal",
       authorities = emptyList(),
       caseloadProvider = FakeCaseloadProvider(),
     )
+    private val staticSecurityContextHolderMockUtil: MockedStatic<SecurityContextHolder> = Mockito.mockStatic(SecurityContextHolder::class.java)
     val span: Span = mock()
 
     @JvmStatic
     @BeforeAll
     fun setUp() {
-      val staticSecurityContextHolderMockUtil: MockedStatic<SecurityContextHolder> = Mockito.mockStatic(SecurityContextHolder::class.java)
       val securityContext = mock<SecurityContext>()
       staticSecurityContextHolderMockUtil.`when`<SecurityContext> { SecurityContextHolder.getContext() }.thenReturn(securityContext)
       whenever(securityContext.authentication).thenReturn(token)
       val staticSpanMockUtil: MockedStatic<Span> = Mockito.mockStatic(Span::class.java)
       staticSpanMockUtil.`when`<Span> { Span.current() }.thenReturn(span)
+    }
+
+    @JvmStatic
+    @AfterAll
+    fun tearDown() {
+      staticSecurityContextHolderMockUtil.close()
     }
   }
 
