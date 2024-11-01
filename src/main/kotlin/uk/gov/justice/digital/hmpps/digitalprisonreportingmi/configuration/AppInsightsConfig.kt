@@ -59,9 +59,9 @@ class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionSer
           ?: ReportDefinitionController.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
         val pageNumber = request.parameterMap["selectedPage"]?.get(0)
         val definition = reportDefinitionService.getDefinition(productId!!, reportVariantId!!, token, dataProductDefinitionsPath)
-        Span.current().setAttribute("product", definition.name) //product name in customDimensions
-        Span.current().setAttribute("reportName", definition.variant.name) //variant name in customDimensions
-        pageNumber?.let { Span.current().setAttribute("page", pageNumber) } //page number in customDimensions
+        Span.current().setAttribute("product", definition.name) // product name in customDimensions
+        Span.current().setAttribute("reportName", definition.variant.name) // variant name in customDimensions
+        pageNumber?.let { Span.current().setAttribute("page", pageNumber) } // page number in customDimensions
       }
     } catch (e: Exception) {
       log.error("Failed to log product name, variant name or selected page to App Insights: {}", e.message)

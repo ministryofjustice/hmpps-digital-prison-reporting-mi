@@ -9,7 +9,12 @@ import org.mockito.MockedStatic
 import org.mockito.Mockito
 import org.mockito.Mockito.anyString
 import org.mockito.Mockito.mock
-import org.mockito.kotlin.*
+import org.mockito.kotlin.clearInvocations
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.whenever
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.core.context.SecurityContext
@@ -23,7 +28,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.ReportDefi
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security.FakeCaseloadProvider
 import java.time.Instant
 
-
 class ClientTrackingInterceptorTest {
   companion object {
     val token = DprAuthAwareAuthenticationToken(
@@ -32,13 +36,14 @@ class ClientTrackingInterceptorTest {
         Instant.now(),
         Instant.now(),
         mapOf("Authentication" to "Bearer token"),
-        mapOf("sub" to "userA")
+        mapOf("sub" to "userA"),
       ),
       aPrincipal = "",
       authorities = emptyList(),
-      caseloadProvider = FakeCaseloadProvider()
+      caseloadProvider = FakeCaseloadProvider(),
     )
     val span: Span = mock()
+
     @JvmStatic
     @BeforeAll
     fun setUp() {
@@ -57,16 +62,18 @@ class ClientTrackingInterceptorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = [
-    "/reports/external-movements/last-month",
-    "/reports/external-movements/last-month/fieldid",
-    "/reports/external-movements/last-month/count",
-    "/async/reports/external-movements/last-month",
-    "/reports/external-movements/last-month/tables/tableId/result",
-    "/reports/external-movements/last-month/tables/tableId/result/summary/summaryId",
-    "/reports/external-movements/last-month/statements/statementId/status",
-    "/reports/external-movements/last-month/statements/statementId"
-  ])
+  @ValueSource(
+    strings = [
+      "/reports/external-movements/last-month",
+      "/reports/external-movements/last-month/fieldid",
+      "/reports/external-movements/last-month/count",
+      "/async/reports/external-movements/last-month",
+      "/reports/external-movements/last-month/tables/tableId/result",
+      "/reports/external-movements/last-month/tables/tableId/result/summary/summaryId",
+      "/reports/external-movements/last-month/statements/statementId/status",
+      "/reports/external-movements/last-month/statements/statementId",
+    ],
+  )
   fun `should call app insights with product name, variant name and selected page`(uri: String) {
     val reportDefinitionService = mock<ReportDefinitionService>()
     val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService)
@@ -77,13 +84,17 @@ class ClientTrackingInterceptorTest {
     val variantId = "last-month"
     val productName = "External Movements"
     val variantName = "Last Month"
-    val definition = SingleVariantReportDefinition(id = productId, name = productName, variant = VariantDefinition(
-      id = variantId,
-      name = variantName,
-      resourceName = "a"
-    ))
+    val definition = SingleVariantReportDefinition(
+      id = productId,
+      name = productName,
+      variant = VariantDefinition(
+        id = variantId,
+        name = variantName,
+        resourceName = "a",
+      ),
+    )
     whenever(
-      reportDefinitionService.getDefinition(productId, variantId, token, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE)
+      reportDefinitionService.getDefinition(productId, variantId, token, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE),
     ).thenReturn(definition)
 
     clientTrackingInterceptor.preHandle(request, response, mock())
@@ -103,11 +114,13 @@ class ClientTrackingInterceptorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = [
-    "/reports/external-movements/metrics/metricId",
-    "/report/tables/tableId/count",
-    "/definitions/external-movements/last-month"
-  ])
+  @ValueSource(
+    strings = [
+      "/reports/external-movements/metrics/metricId",
+      "/report/tables/tableId/count",
+      "/definitions/external-movements/last-month",
+    ],
+  )
   fun `should not call app insights with product name, variant name and selected page for non matching uris`(uri: String) {
     val reportDefinitionService = mock<ReportDefinitionService>()
     val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService)
