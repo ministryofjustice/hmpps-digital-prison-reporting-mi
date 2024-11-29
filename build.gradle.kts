@@ -27,7 +27,7 @@ dependencies {
 
   implementation("software.amazon.awssdk:redshiftdata:2.29.20")
   implementation("software.amazon.awssdk:athena:2.29.20")
-  implementation("software.amazon.awssdk:sts:2.29.20")
+  implementation("software.amazon.awssdk:sts:2.29.23")
 
   // Testing
   testImplementation("com.h2database:h2")
