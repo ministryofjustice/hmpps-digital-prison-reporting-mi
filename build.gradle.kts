@@ -25,7 +25,7 @@ dependencies {
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 
-  implementation("software.amazon.awssdk:redshiftdata:2.29.20")
+  implementation("software.amazon.awssdk:redshiftdata:2.29.24")
   implementation("software.amazon.awssdk:athena:2.29.20")
   implementation("software.amazon.awssdk:sts:2.29.20")
 
