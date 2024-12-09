@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 import io.opentelemetry.api.trace.Span
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.core.context.SecurityContextHolder
@@ -12,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.ReportDefinitionService
-import kotlinx.coroutines.runBlocking
 
 @Configuration
 class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInterceptor) : WebMvcConfigurer {
