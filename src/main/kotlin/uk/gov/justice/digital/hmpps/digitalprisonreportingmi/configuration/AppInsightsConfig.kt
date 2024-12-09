@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.ReportDefinitionService
+import kotlinx.coroutines.runBlocking
 
 @Configuration
 class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInterceptor) : WebMvcConfigurer {
@@ -48,7 +49,7 @@ class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionSer
   private fun captureDpdAndPageDetails(
     request: HttpServletRequest,
     token: DprAuthAwareAuthenticationToken,
-  ) {
+  ): Unit = runBlocking {
     try {
       val regex = Regex("""/reports/([^/]+)/(?!metrics(/|$))([^/]+)""")
       val resultMatched = regex.find(request.requestURI)
