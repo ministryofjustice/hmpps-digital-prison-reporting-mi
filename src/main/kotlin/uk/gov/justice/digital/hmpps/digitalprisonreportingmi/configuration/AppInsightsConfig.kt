@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 import io.opentelemetry.api.trace.Span
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.core.context.SecurityContextHolder
@@ -48,7 +49,7 @@ class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionSer
   private fun captureDpdAndPageDetails(
     request: HttpServletRequest,
     token: DprAuthAwareAuthenticationToken,
-  ) {
+  ): Unit = runBlocking {
     try {
       val regex = Regex("""/reports/([^/]+)/(?!metrics(/|$))([^/]+)""")
       val resultMatched = regex.find(request.requestURI)

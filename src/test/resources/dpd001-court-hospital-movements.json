@@ -160,6 +160,16 @@
           ]
         }
       ]
+    },
+    {
+      "id": "all",
+      "type": "access",
+      "rule": [
+        {
+          "effect": "permit",
+          "condition": []
+        }
+      ]
     }
   ],
   "report": [
