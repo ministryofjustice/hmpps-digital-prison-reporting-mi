@@ -78,6 +78,7 @@ dpr:
       cache:
         enabled: true
         durationMinutes: 10
+      dynamoDbTable: dpr-data-product-definition
     redshiftdataapi:
       secretarn: ${REDSHIFT_DATA_SECRETARN}
       clusterid: ${REDSHIFT_DATA_CLUSTER_ID}
