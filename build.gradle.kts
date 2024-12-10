@@ -29,7 +29,7 @@ dependencies {
   // AWS
   implementation("software.amazon.awssdk:redshiftdata:2.29.20")
   implementation("software.amazon.awssdk:athena:2.29.20")
-  implementation("software.amazon.awssdk:sts:2.29.20")
+  implementation("software.amazon.awssdk:sts:2.29.30")
 
   // Fix dependency mismatch
   runtimeOnly("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
