@@ -74,7 +74,7 @@ dpr:
     user:
       role: ${AUTHORISED_ROLES}
     dataProductDefinitions:
-      host: ${DEFINITIONS_HOST}
+      host: ${DEFINITIONS_HOST:}
       cache:
         enabled: true
         durationMinutes: 10
