@@ -11,7 +11,7 @@ class DynamoDbConfig {
 
   @Bean
   fun dynamoDbClient(stsAssumeRoleCredentialsProvider: StsAssumeRoleCredentialsProvider): DynamoDbClient {
-    return   DynamoDbClient {
+    return DynamoDbClient {
       region = StsCredentialsProviderConfig.REGION.toString()
       credentialsProvider = stsAssumeRoleCredentialsProvider as CredentialsProvider
     }
