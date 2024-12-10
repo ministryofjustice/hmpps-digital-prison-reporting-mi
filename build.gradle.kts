@@ -28,7 +28,7 @@ dependencies {
 
   // AWS
   implementation("software.amazon.awssdk:redshiftdata:2.29.20")
-  implementation("software.amazon.awssdk:athena:2.29.20")
+  implementation("software.amazon.awssdk:athena:2.29.30")
   implementation("software.amazon.awssdk:sts:2.29.20")
 
   // Fix dependency mismatch
