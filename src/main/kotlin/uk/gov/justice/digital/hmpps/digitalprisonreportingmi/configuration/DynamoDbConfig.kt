@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
+import aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
 import aws.smithy.kotlin.runtime.auth.awscredentials.CredentialsProvider
 import aws.smithy.kotlin.runtime.collections.Attributes
 import org.springframework.context.annotation.Bean
@@ -15,8 +16,8 @@ class DynamoDbConfig {
     return DynamoDbClient {
       region = StsCredentialsProviderConfig.REGION.toString()
       credentialsProvider = object : CredentialsProvider {
-        override suspend fun resolve(attributes: Attributes): aws.smithy.kotlin.runtime.auth.awscredentials.Credentials {
-          return stsAssumeRoleCredentialsProvider.resolveCredentials() as aws.smithy.kotlin.runtime.auth.awscredentials.Credentials
+        override suspend fun resolve(attributes: Attributes): Credentials {
+          return stsAssumeRoleCredentialsProvider.resolveCredentials() as Credentials
         }
       }
     }
