@@ -28,7 +28,7 @@ dependencies {
 
   // AWS
   implementation("software.amazon.awssdk:redshiftdata:2.29.20")
-  implementation("software.amazon.awssdk:athena:2.29.20")
+  implementation("software.amazon.awssdk:athena:2.29.31")
   implementation("software.amazon.awssdk:sts:2.29.20")
   implementation("aws.sdk.kotlin:dynamodb:1.3.90")
 
