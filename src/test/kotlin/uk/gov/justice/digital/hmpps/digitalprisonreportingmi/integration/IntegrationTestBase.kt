@@ -19,7 +19,6 @@ import org.springframework.http.MediaType
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import software.amazon.awssdk.services.redshiftdata.RedshiftDataClient
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.AuthenticationHelper
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
 
@@ -57,9 +56,6 @@ abstract class IntegrationTestBase {
 
   @Autowired
   lateinit var jwtAuthHelper: JwtAuthHelper
-
-  @MockBean
-  lateinit var redshiftDataClient: RedshiftDataClient
 
   @MockBean
   lateinit var authenticationHelper: AuthenticationHelper
