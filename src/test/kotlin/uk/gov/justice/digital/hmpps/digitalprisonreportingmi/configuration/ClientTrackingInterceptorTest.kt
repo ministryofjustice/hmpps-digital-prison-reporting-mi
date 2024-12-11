@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 
 import io.opentelemetry.api.trace.Span
-import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -82,7 +81,7 @@ class ClientTrackingInterceptorTest {
       "/reports/external-movements/last-month/statements/statementId",
     ],
   )
-  fun `should call app insights with product name, variant name and selected page`(uri: String): Unit = runBlocking {
+  fun `should call app insights with product name, variant name and selected page`(uri: String) {
     val reportDefinitionService = mock<ReportDefinitionService>()
     val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService)
     val request = MockHttpServletRequest("GET", uri)
