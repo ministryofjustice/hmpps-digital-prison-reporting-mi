@@ -14,9 +14,7 @@ configurations {
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
   implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:7.3.5")
-  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1")
 
   // Security
   implementation("org.springframework.boot:spring-boot-starter-security")
@@ -25,10 +23,6 @@ dependencies {
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-
-  // Fix dependency mismatch
-  runtimeOnly("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
-  runtimeOnly("com.squareup.okhttp3:okhttp-coroutines:5.0.0-alpha.14")
 
   // Testing
   testImplementation("com.h2database:h2")
