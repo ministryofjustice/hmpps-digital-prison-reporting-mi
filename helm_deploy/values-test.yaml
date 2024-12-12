@@ -15,7 +15,6 @@ generic-service:
     DEFINITIONS_HOST: http://hmpps-dpr-data-product-definitions-test.hmpps-digital-prison-reporting-mi-test.svc.cluster.local
     REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-test
     REDSHIFT_DATA_DB: datamart
-    REDSHIFT_DATA_ROLE_ARN: arn:aws:iam::203591025782:role/dpr-data-api-cross-account-role
     REDSHIFT_DATA_S3_LOCATION: dpr-working-test/reports
     DPR_LIB_AWS_ACCOUNTID: "203591025782"
 
