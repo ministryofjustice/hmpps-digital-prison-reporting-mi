@@ -12,7 +12,6 @@ generic-service:
     HMPPS_AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
     ME_CASELOADS_API_HOST: https://nomis-user-roles-api-dev.prison.service.justice.gov.uk
-    DEFINITIONS_HOST: http://hmpps-dpr-data-product-definitions-test.hmpps-digital-prison-reporting-mi-test.svc.cluster.local
     REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-test
     REDSHIFT_DATA_DB: datamart
     REDSHIFT_DATA_S3_LOCATION: dpr-working-test/reports
