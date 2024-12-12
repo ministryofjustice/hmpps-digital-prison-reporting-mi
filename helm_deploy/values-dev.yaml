@@ -16,8 +16,6 @@ generic-service:
     REDSHIFT_DATA_DB: datamart
     REDSHIFT_DATA_ROLE_ARN: arn:aws:iam::771283872747:role/dpr-data-api-cross-account-role
     REDSHIFT_DATA_S3_LOCATION: dpr-working-development/reports
-    DPR_LIB_AWS_STS_ENABLED: true
-    DPR_LIB_AWS_DYNAMODB_ENABLED: true
     DPR_LIB_AWS_ACCOUNTID: "771283872747"
 
   allowlist:
