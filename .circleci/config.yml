@@ -134,7 +134,7 @@ workflows:
           release_name: PROJECT_NAME_ENV_NAME
           context:
             - hmpps-common-vars
-            - hmpps-digital-prison-reporting-mi-dev
+            - hmpps-digital-prison-reporting-mi-test
 #          filters:
 #            branches:
 #              only:
