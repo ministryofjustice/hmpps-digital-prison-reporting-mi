@@ -17,7 +17,6 @@ generic-service:
     REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-preproduction
     REDSHIFT_DATA_DB: datamart
     REDSHIFT_DATA_S3_LOCATION: dpr-working-preproduction/reports
-    DPR_LIB_AWS_DYNAMODB_ENABLED: false
     DPR_LIB_AWS_ACCOUNTID: "972272129531"
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
