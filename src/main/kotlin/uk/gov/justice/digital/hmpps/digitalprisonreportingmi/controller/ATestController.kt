@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @Validated
 @RestController
 @Tag(name = "Test Endpoint")
-@ConditionalOnProperty("dpr.lib.aws.sts.enabled", havingValue = "true")
+@ConditionalOnProperty("dpr.lib.test.enabled", havingValue = "true")
 class ATestController {
   @GetMapping("/test/endpoint")
   @Operation(
