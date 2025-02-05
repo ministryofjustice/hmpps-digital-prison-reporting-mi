@@ -38,6 +38,6 @@ jobs:
           tagging_message: Lib-v${{ steps.get-version.outputs.current_version }}
 
       - name: create pull request
-        run: gh pr create -B main -H 'feature/bump-lib-to-v${{ steps.get-version.outputs.current_version }}' --title 'Bump library version to ${{ steps.get-version.outputs.current_version }}'
+        run: gh pr create -B main -H 'feature/bump-lib-to-v${{ steps.get-version.outputs.current_version }}' --title 'Bump library version to ${{ steps.get-version.outputs.current_version }}' --body ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
