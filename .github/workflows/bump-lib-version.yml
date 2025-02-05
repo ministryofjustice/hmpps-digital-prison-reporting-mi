@@ -34,4 +34,10 @@ jobs:
         with:
           commit_message: Bump library version to ${{ steps.get-version.outputs.current_version }}
           create_branch: true
-          branch: feature/bump-lib-to-${{ steps.get-version.outputs.current_version }}
+          branch: feature/bump-lib-to-v${{ steps.get-version.outputs.current_version }}
+          tagging_message: Lib-v${{ steps.get-version.outputs.current_version }}
+
+      - name: create pull request
+        run: gh pr create -B main -H 'feature/bump-lib-to-v${{ steps.get-version.outputs.current_version }}' --title 'Bump library version to ${{ steps.get-version.outputs.current_version }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
