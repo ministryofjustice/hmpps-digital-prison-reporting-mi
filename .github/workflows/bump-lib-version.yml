@@ -1,0 +1,37 @@
+name: PR preparation
+
+on:
+  push:
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get library version
+        id: get-version
+        run: |
+          CURRENT_VERSION=$(curl -s --request GET https://s01.oss.sonatype.org/service/local/repositories/releases/content/uk/gov/justice/service/hmpps/hmpps-digital-prison-reporting-lib/maven-metadata.xml | grep "latest" | grep -oP "\d+\.\d+\.\d+")
+          echo "Current version: $CURRENT_VERSION"
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Find and Replace library version
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: 'implementation\("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:\d+\.\d+\.\d+"\)'
+          replace: 'implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:${{ steps.get-version.outputs.current_version }}")'
+          include: build.gradle.kts
+          regex: true
+
+      - name: Commit version bump
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Bump library version to ${{ steps.get-version.outputs.current_version }}
+          create_branch: true
+          branch: feature/bump-lib-to-${{ steps.get-version.outputs.current_version }}
