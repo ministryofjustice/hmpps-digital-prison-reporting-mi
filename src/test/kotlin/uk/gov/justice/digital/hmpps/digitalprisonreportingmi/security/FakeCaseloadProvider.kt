@@ -6,7 +6,11 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.CaseloadP
 
 @Component
 class FakeCaseloadProvider : CaseloadProvider {
-  override fun getActiveCaseloadIds(jwt: Jwt): List<String> {
+  override fun getActiveCaseloadId(jwt: Jwt): String {
+    return "LWSTMC"
+  }
+
+  override fun getCaseloadIds(jwt: Jwt): List<String> {
     return listOf("LWSTMC")
   }
 }
