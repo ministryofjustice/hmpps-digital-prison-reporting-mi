@@ -15,7 +15,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: test
+          jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
 
 management.endpoint:
   health.cache.time-to-live: 0
@@ -35,3 +35,7 @@ dpr:
       database: REDSHIFT_DATA_DB
       s3location: dpr-working-development/reports
       athenaworkgroup: athenaWorkgroup
+
+hmpps:
+  auth:
+    url: http://localhost:9090/auth

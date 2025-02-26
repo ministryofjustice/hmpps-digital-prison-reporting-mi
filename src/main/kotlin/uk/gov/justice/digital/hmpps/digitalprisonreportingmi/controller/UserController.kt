@@ -21,6 +21,6 @@ class UserController {
   )
   fun definitions(authentication: Authentication): List<String> {
     val authToken = authentication as DprAuthAwareAuthenticationToken
-    return authToken.getCaseLoads()
+    return authToken.getActiveCaseLoadId()?.let { listOf(it) }.orEmpty()
   }
 }
