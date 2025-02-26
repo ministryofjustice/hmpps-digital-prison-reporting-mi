@@ -47,20 +47,19 @@ class JwtAuthHelper {
     roles: List<String> = listOf(),
     expiryTime: Duration = Duration.ofHours(1),
     jwtId: String = UUID.randomUUID().toString(),
-  ): String =
-    mapOf(
-      "user_name" to subject,
-      "client_id" to "prison-reporting-mi-client",
-      "authorities" to roles,
-      "scope" to scope,
-    )
-      .let {
-        Jwts.builder()
-          .setId(jwtId)
-          .setSubject(subject)
-          .addClaims(it.toMap())
-          .setExpiration(Date(System.currentTimeMillis() + expiryTime.toMillis()))
-          .signWith(SignatureAlgorithm.RS256, keyPair.private)
-          .compact()
-      }
+  ): String = mapOf(
+    "user_name" to subject,
+    "client_id" to "prison-reporting-mi-client",
+    "authorities" to roles,
+    "scope" to scope,
+  )
+    .let {
+      Jwts.builder()
+        .setId(jwtId)
+        .setSubject(subject)
+        .addClaims(it.toMap())
+        .setExpiration(Date(System.currentTimeMillis() + expiryTime.toMillis()))
+        .signWith(SignatureAlgorithm.RS256, keyPair.private)
+        .compact()
+    }
 }

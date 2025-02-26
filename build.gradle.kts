@@ -1,8 +1,8 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "6.1.2"
-  kotlin("jvm") version "2.0.21"
-  kotlin("plugin.spring") version "2.0.21"
-  kotlin("plugin.jpa") version "2.0.21"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "7.1.2"
+  kotlin("jvm") version "2.1.10"
+  kotlin("plugin.spring") version "2.1.10"
+  kotlin("plugin.jpa") version "2.1.10"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "3.1.0"
 }
@@ -15,7 +15,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:7.9.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:7.10.3")
 
   // Security
   implementation("org.springframework.boot:spring-boot-starter-security")
