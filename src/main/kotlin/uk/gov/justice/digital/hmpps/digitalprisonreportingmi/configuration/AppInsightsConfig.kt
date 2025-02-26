@@ -68,6 +68,5 @@ class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionSer
     }
   }
 
-  private fun matchExists(productId: String?, reportVariantId: String?) =
-    !productId.isNullOrBlank() && !reportVariantId.isNullOrBlank()
+  private fun matchExists(productId: String?, reportVariantId: String?) = !productId.isNullOrBlank() && !reportVariantId.isNullOrBlank()
 }

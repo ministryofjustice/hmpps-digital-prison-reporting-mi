@@ -12,7 +12,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAw
 @Validated
 @RestController
 @Tag(name = "User API")
-class UserController() {
+class UserController {
 
   @GetMapping("/user/caseload/active")
   @Operation(
