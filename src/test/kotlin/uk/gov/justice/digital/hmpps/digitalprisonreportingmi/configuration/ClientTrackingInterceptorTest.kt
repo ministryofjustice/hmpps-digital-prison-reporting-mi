@@ -39,7 +39,8 @@ class ClientTrackingInterceptorTest {
         mapOf("Authentication" to "Bearer token"),
         mapOf("sub" to "userA"),
       ),
-      aPrincipal = "principal",
+      clientId = "clientId",
+      userName = "userA",
       authorities = emptyList(),
       caseloadProvider = FakeCaseloadProvider(),
     )

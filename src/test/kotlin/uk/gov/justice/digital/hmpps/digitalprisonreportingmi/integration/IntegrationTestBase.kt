@@ -12,15 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.AuthenticationHelper
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
+import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
+import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
@@ -55,16 +56,21 @@ abstract class IntegrationTestBase {
   lateinit var webTestClient: WebTestClient
 
   @Autowired
-  lateinit var jwtAuthHelper: JwtAuthHelper
+  protected lateinit var jwtAuthorisationHelper: JwtAuthorisationHelper
 
-  @MockBean
-  lateinit var authenticationHelper: AuthenticationHelper
+  @MockitoBean
+  lateinit var authenticationHelper: HmppsAuthenticationHolder
 
-  internal fun setAuthorisation(
-    user: String = "AUTH_ADM",
-    roles: List<String> = listOf(),
-    scopes: List<String> = listOf(),
-  ): (HttpHeaders) -> Unit = jwtAuthHelper.setAuthorisation(user, roles, scopes)
+  protected fun setAuthorisation(
+    user: String = "request-user",
+    roles: List<String> = emptyList(),
+    scopes: List<String> = emptyList(),
+  ): (HttpHeaders) -> Unit = jwtAuthorisationHelper.setAuthorisationHeader(
+    clientId = "hmpps-digital-prison-reporting-api",
+    username = user,
+    scope = scopes,
+    roles = roles,
+  )
 
   protected fun stubDefinitionsResponse() {
     val externalMovementsDefinitionJson = this::class.java.classLoader.getResource("external-movements.json")?.readText()
@@ -74,7 +80,7 @@ abstract class IntegrationTestBase {
     val authentication = Mockito.mock<DprAuthAwareAuthenticationToken>()
     whenever(jwt.tokenValue).then { TEST_TOKEN }
     whenever(authentication.jwt).then { jwt }
-    whenever(authenticationHelper.getCurrentAuthentication()).then { authentication }
+    whenever(authenticationHelper.authentication).then { authentication }
 
     wireMockServer.stubFor(
       WireMock.get("/definitions/prisons/orphanage")

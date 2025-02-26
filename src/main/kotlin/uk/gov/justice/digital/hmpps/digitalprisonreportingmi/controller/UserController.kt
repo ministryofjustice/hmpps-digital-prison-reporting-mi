@@ -12,7 +12,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAw
 @Validated
 @RestController
 @Tag(name = "User API")
-class UserController() {
+class UserController {
 
   @GetMapping("/user/caseload/active")
   @Operation(
@@ -21,6 +21,6 @@ class UserController() {
   )
   fun definitions(authentication: Authentication): List<String> {
     val authToken = authentication as DprAuthAwareAuthenticationToken
-    return authToken.getCaseLoads()
+    return authToken.getActiveCaseLoadId()?.let { listOf(it) }.orEmpty()
   }
 }

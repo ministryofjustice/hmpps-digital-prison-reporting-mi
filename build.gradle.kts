@@ -1,8 +1,8 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "6.1.2"
-  kotlin("jvm") version "2.0.21"
-  kotlin("plugin.spring") version "2.0.21"
-  kotlin("plugin.jpa") version "2.0.21"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "7.1.2"
+  kotlin("jvm") version "2.1.10"
+  kotlin("plugin.spring") version "2.1.10"
+  kotlin("plugin.jpa") version "2.1.10"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "3.1.0"
 }
@@ -15,21 +15,19 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:7.9.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:7.10.3")
 
-  // Security
-  implementation("org.springframework.boot:spring-boot-starter-security")
-  implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-  implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.3.0")
 
   // Swagger
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
 
   // Testing
   testImplementation("com.h2database:h2")
   testImplementation("io.jsonwebtoken:jjwt:0.12.6")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   testImplementation("com.marcinziolo:kotlin-wiremock:2.1.1")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.3.0")
 }
 
 java {
