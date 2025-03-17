@@ -12,7 +12,7 @@ generic-service:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
     HMPPS_AUTH_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth
     AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
-    ME_CASELOADS_API_HOST: https://nomis-user-roles-api-preprod.prison.service.justice.gov.uk
+    ME_CASELOADS_API_HOST: https://manage-users-api-preprod.hmpps.service.justice.gov.uk
     REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-preproduction
     REDSHIFT_DATA_DB: datamart
     REDSHIFT_DATA_S3_LOCATION: dpr-working-preproduction/reports
