@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprUserAuthAwareAuthenticationToken
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
@@ -77,7 +77,7 @@ abstract class IntegrationTestBase {
     val courtDefinitionJson = this::class.java.classLoader.getResource("dpd001-court-hospital-movements.json")?.readText()
 
     val jwt = Mockito.mock<Jwt>()
-    val authentication = Mockito.mock<DprAuthAwareAuthenticationToken>()
+    val authentication = Mockito.mock<DprUserAuthAwareAuthenticationToken>()
     whenever(jwt.tokenValue).then { TEST_TOKEN }
     whenever(authentication.jwt).then { jwt }
     whenever(authenticationHelper.authentication).then { authentication }
