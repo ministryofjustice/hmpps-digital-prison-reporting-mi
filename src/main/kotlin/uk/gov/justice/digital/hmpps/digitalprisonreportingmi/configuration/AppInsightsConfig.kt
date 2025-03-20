@@ -37,7 +37,7 @@ class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionSer
   override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
     if (SecurityContextHolder.getContext().authentication is DprAuthAwareAuthenticationToken) {
       val token = SecurityContextHolder.getContext().authentication as DprAuthAwareAuthenticationToken
-      val user = token.jwt.subject
+      val user = token.getUsername()
       Span.current().setAttribute("username", user) // username in customDimensions
       token.getActiveCaseLoadId()?.let { Span.current().setAttribute("activeCaseLoadId", it) }
       captureDpdAndPageDetails(request, token)

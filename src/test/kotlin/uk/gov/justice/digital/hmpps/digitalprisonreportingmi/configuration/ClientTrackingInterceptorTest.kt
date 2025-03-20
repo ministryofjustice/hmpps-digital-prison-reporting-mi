@@ -24,14 +24,14 @@ import org.springframework.security.oauth2.jwt.Jwt
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController.Companion.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.SingleVariantReportDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.VariantDefinition
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprUserAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.ReportDefinitionService
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security.FakeCaseloadProvider
 import java.time.Instant
 
 class ClientTrackingInterceptorTest {
   companion object {
-    val token = DprAuthAwareAuthenticationToken(
+    val token = DprUserAuthAwareAuthenticationToken(
       jwt = Jwt(
         "abc",
         Instant.now(),
