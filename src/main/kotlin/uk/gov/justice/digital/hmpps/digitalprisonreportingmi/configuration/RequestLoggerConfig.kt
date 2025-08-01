@@ -18,7 +18,7 @@ class RequestLoggerConfig : Filter {
     val requestURI = httpRequest.requestURI
     val isNotHealthRequest = !requestURI.startsWith("/health")
     if (isNotHealthRequest) {
-      log.info("Http Request: ${httpRequest.method} $requestURI")
+      log.debug("Http Request: ${httpRequest.method} $requestURI")
     }
     chain.doFilter(request, response)
   }
