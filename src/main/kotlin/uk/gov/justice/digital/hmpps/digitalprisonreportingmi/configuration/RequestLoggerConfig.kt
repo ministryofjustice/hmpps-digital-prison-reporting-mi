@@ -10,11 +10,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class RequestLoggerConfig : Filter {
-  private val logger = LoggerFactory.getLogger(RequestLoggerConfig::class.java)
-  override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
-    // log requests
+  companion object {
+    private val log = LoggerFactory.getLogger(this::class.java)
+  }
+  override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
     val httpRequest = request as HttpServletRequest
-    logger.info("Http Request: ${httpRequest.method} ${httpRequest.requestURI}")
-    chain?.doFilter(request, response)
+    val requestURI = httpRequest.requestURI
+    val isNotHealthRequest = !requestURI.startsWith("/health")
+    if (isNotHealthRequest) {
+      log.info("Http Request: ${httpRequest.method} $requestURI")
+    }
+    chain.doFilter(request, response)
   }
 }
