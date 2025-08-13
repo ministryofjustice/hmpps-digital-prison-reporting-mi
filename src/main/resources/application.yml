@@ -28,9 +28,9 @@ spring:
     driver-class-name: com.amazon.redshift.jdbc.Driver
     missingreport:
       driver-class-name: org.postgresql.Driver
-      url: jdbc:postgresql://${MISSING_REPORT_CLUSTER_URL}:{MISSING_REPORT_CLUSTER_PORT}/missingreportsubmissions
-      username: ${MISSING_REPORT_USERNAME}
-      password: ${MISSING_REPORT_PASSWORD}
+      url: jdbc:postgresql://${AURORA_MISSING_REPORT_JDBC_URL}:${AURORA_MISSING_REPORT_PORT}/missingreportsubmissions
+      username: ${AURORA_MISSING_REPORT_JDBC_USER}
+      password: ${AURORA_MISSING_REPORT_JDBC_PASSWORD}
       hikari:
         maximum-pool-size: 10
         minimum-idle: 5
