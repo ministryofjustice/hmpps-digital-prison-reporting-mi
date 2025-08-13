@@ -20,10 +20,10 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprUserAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.TestFlywayConfig
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
