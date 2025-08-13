@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
+package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -15,8 +15,6 @@ class PrisonerEntity(
   val firstName: String,
   @Column(name = "lastname")
   val lastName: String,
-  @Column(name = "name")
-  val name: String,
   @Column(name = "living_unit_reference")
   val livingUnitReference: Long?,
 )

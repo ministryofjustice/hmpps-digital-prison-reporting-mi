@@ -1,5 +1,6 @@
-package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data
+package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.model
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
@@ -13,10 +14,14 @@ data class ExternalMovementEntity(
   val date: LocalDateTime,
   val time: LocalDateTime,
   val origin: String?,
+  @Column(name = "origin_code")
   val originCode: String?,
   val destination: String?,
+  @Column(name = "destination_code")
   val destinationCode: String?,
   val direction: String?,
-  val type: String,
+  val type: String?,
   val reason: String,
+  @Column(name = "IS_CLOSED")
+  val isClosed: Boolean? = null,
 )
