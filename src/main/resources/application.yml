@@ -3,6 +3,8 @@ info.app:
   version: 1.0
 
 spring:
+  flyway:
+    enabled: false
   application:
     name: hmpps-digital-prison-reporting-mi
   codec:
@@ -24,6 +26,15 @@ spring:
     username: ${REDSHIFT_JDBC_USER}
     password: ${REDSHIFT_JDBC_PASSWORD}
     driver-class-name: com.amazon.redshift.jdbc.Driver
+    missingreport:
+      driver-class-name: org.postgresql.Driver
+      url: jdbc:postgresql://${AURORA_MISSING_REPORT_JDBC_URL}:${AURORA_MISSING_REPORT_PORT}/missingreportsubmissions
+      username: ${AURORA_MISSING_REPORT_JDBC_USER}
+      password: ${AURORA_MISSING_REPORT_JDBC_PASSWORD}
+      hikari:
+        maximum-pool-size: 10
+        minimum-idle: 5
+        pool-name: missing-report
 
   security:
     oauth2:

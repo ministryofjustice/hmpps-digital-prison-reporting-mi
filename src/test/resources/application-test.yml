@@ -4,13 +4,23 @@ server:
 spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
   datasource:
     url: jdbc:h2:mem:datamart;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS domain\;
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
+    missingreport:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:foobar;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS domain\;
+      username: sa
+      password: sa
+      hikari:
+        maximum-pool-size: 10
+        minimum-idle: 5
+        pool-name: missing-report
+  flyway:
+    enabled: false
+
   security:
     oauth2:
       resourceserver:
