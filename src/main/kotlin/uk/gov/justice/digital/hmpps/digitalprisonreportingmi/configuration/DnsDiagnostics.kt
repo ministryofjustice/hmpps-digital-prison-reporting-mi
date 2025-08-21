@@ -9,7 +9,7 @@ import javax.sql.DataSource
 
 @Component
 class DnsDiagnostics(
-  private val missingReportDataSource: DataSource
+  private val missingReportDataSource: DataSource,
 
 ) {
   companion object {

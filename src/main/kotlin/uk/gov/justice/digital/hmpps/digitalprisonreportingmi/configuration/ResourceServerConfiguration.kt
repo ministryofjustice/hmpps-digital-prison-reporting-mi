@@ -1,7 +1,5 @@
 package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration
 
-import com.zaxxer.hikari.HikariDataSource
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -12,8 +10,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.CaseloadP
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DefaultDprAuthAwareTokenConverter
 import uk.gov.justice.hmpps.kotlin.auth.HmppsResourceServerConfiguration
 import uk.gov.justice.hmpps.kotlin.auth.dsl.ResourceServerConfigurationCustomizer
-import java.net.InetAddress
-import javax.sql.DataSource
 
 @Configuration
 @ConditionalOnProperty(name = ["dpr.lib.user.role", "spring.security.oauth2.resourceserver.jwt.jwk-set-uri"])
