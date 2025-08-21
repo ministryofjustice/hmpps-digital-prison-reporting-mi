@@ -3,8 +3,8 @@ info.app:
   version: 1.0
 
 spring:
-#  flyway:
-#    enabled: false
+  flyway:
+    enabled: false
   application:
     name: hmpps-digital-prison-reporting-mi
   codec:
