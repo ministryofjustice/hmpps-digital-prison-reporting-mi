@@ -8,7 +8,7 @@ import java.net.InetAddress
 class DigitalPrisonReportingMi
 
 fun main(args: Array<String>) {
-  val host = System.getenv("REDSHIFT_JDBC_URL").substring(15, 87)
+  val host = System.getenv("REDSHIFT_JDBC_URL").substring(16, 86)
   println("Early DNS Debug: Host = $host")
   try {
     val addr = InetAddress.getByName(host)
