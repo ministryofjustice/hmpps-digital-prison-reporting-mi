@@ -15,8 +15,6 @@ ENV BUILD_NUMBER ${BUILD_NUMBER:-1_0_0}
 
 RUN apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y dnsutils iputils-ping netcat && \
-    apt-get install -y postgresql-client && \
     rm -rf /var/lib/apt/lists/*
 
 ENV TZ=Europe/London
