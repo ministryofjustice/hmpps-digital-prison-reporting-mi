@@ -16,9 +16,11 @@ class RequestLoggerConfig : Filter {
   override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
     val httpRequest = request as HttpServletRequest
     val requestURI = httpRequest.requestURI
+    val queryString = httpRequest.queryString
+    val fullUrl = queryString?.let { "$requestURI?$it" } ?: requestURI
     val isNotHealthRequest = !requestURI.startsWith("/health")
     if (isNotHealthRequest) {
-      log.debug("Http Request: ${httpRequest.method} $requestURI")
+      log.debug("Http Request: ${httpRequest.method} $fullUrl")
     }
     chain.doFilter(request, response)
   }
