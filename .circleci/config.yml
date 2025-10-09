@@ -26,10 +26,6 @@ jobs:
       tag: "21.0"
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - gradle-{{ checksum "build.gradle.kts" }}
-            - gradle-
       - run:
           command: ./gradlew check
       - save_cache:
