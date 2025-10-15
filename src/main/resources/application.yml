@@ -77,6 +77,8 @@ management:
 springdoc:
   default-produces-media-type: application/json
 
+sentry:
+  exception-resolver-order: -2147483647
 
 dpr:
   lib:
