@@ -22,6 +22,9 @@ generic-service:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
     DPR_LIB_AWS_STS_ENABLED: true
     DPR_LIB_AWS_DYNAMODB_ENABLED: true
+    SENTRY_TRACES_SAMPLE_RATE: '0.05'
+    SENTRY_IGNORED_EXCEPTIONS_FOR_TYPE: "org.apache.catalina.connector.ClientAbortException"
+
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -44,6 +47,9 @@ generic-service:
       AURORA_MISSING_REPORT_JDBC_USER: "user"
       AURORA_MISSING_REPORT_JDBC_PASSWORD: "password"
       AURORA_MISSING_REPORT_JDBC_URL: "url"
+    hmpps-digital-prison-reporting-mi-ui-sentry:
+      SENTRY_DSN: SENTRY_DSN
+      SENTRY_AUTH_TOKEN: SENTRY_AUTH_TOKEN
 
   allowlist:
     cloudplatform-live1-1: 35.178.209.113/32
