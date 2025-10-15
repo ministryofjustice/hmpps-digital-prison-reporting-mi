@@ -15,6 +15,7 @@ generic-service:
     REDSHIFT_DATA_S3_LOCATION: dpr-working-production/reports
     DPR_LIB_AWS_ACCOUNTID: "004723187462"
     AURORA_MISSING_REPORT_PORT: 5432
+    SENTRY_ENVIRONMENT: prod
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
