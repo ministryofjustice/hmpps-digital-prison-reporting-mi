@@ -17,6 +17,7 @@ generic-service:
     REDSHIFT_DATA_S3_LOCATION: dpr-working-test/reports
     DPR_LIB_AWS_ACCOUNTID: "203591025782"
     AURORA_MISSING_REPORT_PORT: 5432
+    SENTRY_ENVIRONMENT: test
 
   allowlist:
     groups:
