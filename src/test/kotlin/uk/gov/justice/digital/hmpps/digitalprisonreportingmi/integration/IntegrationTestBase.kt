@@ -21,6 +21,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprUserAuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.JpaRepositoryConfigurationApp
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.TestFlywayConfig
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
@@ -29,7 +30,7 @@ import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
-@Import(TestFlywayConfig::class)
+@Import(value = [TestFlywayConfig::class, JpaRepositoryConfigurationApp::class])
 abstract class IntegrationTestBase {
 
   @Autowired
