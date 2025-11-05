@@ -12,6 +12,5 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.config.JpaReposito
 @EntityScan(
   basePackages = ["uk.gov.justice.digital.hmpps.digitalprisonreportingmi"]
 )
-@Import(value = [JpaRepositoryConfiguration::class])
 @TestConfiguration
 class JpaRepositoryConfigurationApp
