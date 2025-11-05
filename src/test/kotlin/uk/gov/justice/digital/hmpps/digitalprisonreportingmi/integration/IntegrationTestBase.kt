@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.productCollection.ProductCollectionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprUserAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.JpaRepositoryConfigurationApp
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.TestFlywayConfig
@@ -38,6 +39,9 @@ abstract class IntegrationTestBase {
 
   @Autowired
   lateinit var prisonerRepository: PrisonerRepository
+
+  @Autowired
+  lateinit var productCollectionRepository: ProductCollectionRepository
 
   companion object {
 
