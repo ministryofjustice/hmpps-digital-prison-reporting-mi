@@ -13,7 +13,7 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.productCollection.
 /**
  * Just ensure that product collections works - smoke test
  */
-class ProductCollectionIntegrationTest: IntegrationTestBase() {
+class ProductCollectionIntegrationTest : IntegrationTestBase() {
   companion object {
     @JvmStatic
     @DynamicPropertySource
