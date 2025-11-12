@@ -18,11 +18,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.productCollection.ProductCollectionRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprUserAuthAwareAuthenticationToken
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.JpaRepositoryConfigurationApp
+import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.PostgresContainer
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.TestFlywayConfig
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
@@ -31,7 +33,7 @@ import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
-@Import(value = [TestFlywayConfig::class, JpaRepositoryConfigurationApp::class])
+@Import(value = [TestFlywayConfig::class])
 abstract class IntegrationTestBase {
 
   @Autowired
@@ -46,6 +48,7 @@ abstract class IntegrationTestBase {
   companion object {
 
     lateinit var wireMockServer: WireMockServer
+    val pgContainer = PostgresContainer.instance
 
     @BeforeAll
     @JvmStatic
@@ -54,6 +57,19 @@ abstract class IntegrationTestBase {
         WireMockConfiguration.wireMockConfig().port(9999),
       )
       wireMockServer.start()
+    }
+
+    @JvmStatic
+    @DynamicPropertySource
+    fun setupClass(registry: DynamicPropertyRegistry) {
+      pgContainer?.run {
+        registry.add("spring.datasource.url", pgContainer::getJdbcUrl)
+        registry.add("spring.datasource.username", pgContainer::getUsername)
+        registry.add("spring.datasource.password", pgContainer::getPassword)
+        registry.add("spring.datasource.missingreport.url", pgContainer::getJdbcUrl)
+        registry.add("spring.datasource.missingreport.username", pgContainer::getUsername)
+        registry.add("spring.datasource.missingreport.password", pgContainer::getPassword)
+      }
     }
 
     @AfterAll
