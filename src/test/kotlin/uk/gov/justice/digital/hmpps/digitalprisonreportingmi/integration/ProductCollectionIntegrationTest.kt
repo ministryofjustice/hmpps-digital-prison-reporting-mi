@@ -25,7 +25,7 @@ class ProductCollectionIntegrationTest : IntegrationTestBase() {
   @BeforeEach
   override fun setup() {
     super.setup()
-    productCollectionRepository.save(ProductCollection("col1", "", "", emptySet(), emptySet()))
+    productCollectionRepository.save(ProductCollection("col1", "", "", mutableSetOf(), mutableSetOf()))
   }
 
   @Test
