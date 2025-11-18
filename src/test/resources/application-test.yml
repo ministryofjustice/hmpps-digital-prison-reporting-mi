@@ -37,7 +37,6 @@ dpr:
     user:
       role: ROLE_PRISONS_REPORTING_USER
     dataProductDefinitions:
-      host: http://localhost:9999
     redshiftdataapi:
       secretarn: REDSHIFT_DATA_SECRETARN
       clusterid: REDSHIFT_DATA_CLUSTER_ID
