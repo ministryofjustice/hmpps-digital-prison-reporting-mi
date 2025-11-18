@@ -11,14 +11,6 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.R
 
 class ReportDefinitionIntegrationTest : IntegrationTestBase() {
 
-  companion object {
-    @JvmStatic
-    @DynamicPropertySource
-    fun registerProperties(registry: DynamicPropertyRegistry) {
-      registry.add("dpr.lib.definition.locations") { "external-movements.json,dpd001-court-hospital-movements.json" }
-    }
-  }
-
   @BeforeEach
   fun setUp() {
     super.setup()
