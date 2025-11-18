@@ -62,6 +62,7 @@ abstract class IntegrationTestBase {
     @JvmStatic
     @DynamicPropertySource
     fun setupClass(registry: DynamicPropertyRegistry) {
+      registry.add("dpr.lib.definition.locations") { "external-movements.json,dpd001-court-hospital-movements.json" }
       pgContainer?.run {
         registry.add("spring.datasource.url", pgContainer::getJdbcUrl)
         registry.add("spring.datasource.username", pgContainer::getUsername)
