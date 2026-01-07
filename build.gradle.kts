@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "8.0.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "9.1.4"
   kotlin("jvm") version "2.1.10"
   kotlin("plugin.spring") version "2.1.20"
   kotlin("plugin.jpa") version "2.1.10"
@@ -17,9 +17,9 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:9.8.7")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:9.10.0")
 
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.4.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.8.1")
 
   implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.11.0")
 
@@ -32,7 +32,7 @@ dependencies {
   testImplementation("io.jsonwebtoken:jjwt:0.12.6")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   testImplementation("com.marcinziolo:kotlin-wiremock:2.1.1")
-  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.4.2")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.8.1")
   testImplementation("org.postgresql:postgresql:42.7.5")
   testImplementation("org.testcontainers:postgresql:$testContainersVersion")
   testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
