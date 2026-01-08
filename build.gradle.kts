@@ -11,7 +11,7 @@ configurations {
   testImplementation { exclude(group = "org.junit.vintage") }
 }
 
-val testContainersVersion = "1.20.6"
+val testContainersVersion = "1.21.4"
 
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
