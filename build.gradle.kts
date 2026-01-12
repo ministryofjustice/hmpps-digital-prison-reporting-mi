@@ -24,7 +24,7 @@ dependencies {
   implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.11.0")
 
   // Swagger
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1")
 
   // Testing
   testImplementation("org.flywaydb:flyway-core")
