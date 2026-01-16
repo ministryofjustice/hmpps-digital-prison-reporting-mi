@@ -21,7 +21,7 @@ dependencies {
 
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.8.2")
 
-  implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.11.0")
+  implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.30.0")
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
