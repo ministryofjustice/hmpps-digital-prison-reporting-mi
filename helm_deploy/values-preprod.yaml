@@ -19,6 +19,7 @@ generic-service:
     DPR_LIB_AWS_ACCOUNTID: "972272129531"
     AURORA_MISSING_REPORT_PORT: 5432
     SENTRY_ENVIRONMENT: preprod
+    URL_ENV_SUFFIX: preprod
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
