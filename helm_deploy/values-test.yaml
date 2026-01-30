@@ -18,6 +18,7 @@ generic-service:
     DPR_LIB_AWS_ACCOUNTID: "203591025782"
     AURORA_MISSING_REPORT_PORT: 5432
     SENTRY_ENVIRONMENT: test
+    URL_ENV_SUFFIX: test
 
   allowlist:
     groups:
