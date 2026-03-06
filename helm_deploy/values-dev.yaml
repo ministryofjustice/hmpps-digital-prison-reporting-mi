@@ -19,6 +19,7 @@ generic-service:
     AURORA_MISSING_REPORT_PORT: 5432
     SENTRY_ENVIRONMENT: development
     URL_ENV_SUFFIX: dev
+    SYSTEM_TOKEN_ENABLED: true
 
   allowlist:
     groups:

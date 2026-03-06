@@ -24,6 +24,7 @@ generic-service:
     DPR_LIB_AWS_DYNAMODB_ENABLED: true
     SENTRY_TRACES_SAMPLE_RATE: '0.05'
     SENTRY_IGNORED_EXCEPTIONS_FOR_TYPE: "org.apache.catalina.connector.ClientAbortException"
+    SYSTEM_TOKEN_ENABLED: false
 
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
@@ -39,8 +40,8 @@ generic-service:
       REDSHIFT_JDBC_PASSWORD: "password"
       REDSHIFT_JDBC_URL: "url"
     hmpps-auth:
-      SYSTEM_CLIENT_ID: "system_client_id"
-      SYSTEM_CLIENT_SECRET: "system_client_secret"
+      API_CLIENT_CREDENTIALS_ID: "api_client_credentials_id"
+      API_CLIENT_CREDENTIALS_SECRET: "api_client_credentials_secret"
     redshift-data:
       REDSHIFT_DATA_SECRETARN: "secretarn"
     aurora-missing-report-jdbc:
