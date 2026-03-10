@@ -79,7 +79,7 @@ abstract class IntegrationTestBase {
       wireMockServer.stop()
     }
 
-    const val TEST_TOKEN = "TestToken"
+    const val TEST_TOKEN = "eyJraWQiOiJobXBwcy1hdXRoLWRldi0yMDIzMDMwNiIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJURVNUX1VTRVIiLCJuYmYiOjE3NzMxNDIxODMsImdyYW50X3R5cGUiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJ1c2VyX25hbWUiOiJURVNUX1VTRVIiLCJhdXRoX3NvdXJjZSI6Im5vbmUiLCJzY29wZSI6WyJyZWFkIl0sImlzcyI6Imh0dHBzOi8vc2lnbi1pbi1kZXYuaG1wcHMuc2VydmljZS5qdXN0aWNlLmdvdi51ay9hdXRoL2lzc3VlciIsImV4cCI6MTc3MzE0NTc4MywiaWF0IjoxNzczMTQyMTgzLCJqdGkiOiJaZEl2TVplWEhuV2N1VFdVSWNCeWtVTGFJMjgiLCJhdXRob3JpdGllcyI6WyJST0xFX1JPTEVTX0FETUlOIiwiUk9MRV9VU0VSX1BFUk1JU1NJT05TX19STyIsIlJPTEVfUFJJU09OU19SRVBPUlRJTkdfVE9PTFNfVVNFUiJdLCJjbGllbnRfaWQiOiJobXBwcy1kcHItdG9vbHMtYXBpLTIifQ.iyg3GL9LpK0bQbz-KGh9-lQC7oJ_6JpiEtiBwe9NmdeS0EUxuaWYjGf1WbZLrxBfLQqldwxjCgyNOZm0s4ub6HzuM5OJhJkxltOcxwfkqwo5f3xHchi9HdINcbMatr6yIIVWdcsy6i_7l1U9Bd1AHlJTpTaB0qteyTlcO4iyRYNf9zPFb8SuPZCEiqc0ldKL4JjFHENb2ROim16fohf5idnBdjYrHQXjAju8gbCup4XqPAUA3xvgq9hKPKsEmVHt_3JKMfM8SttNEKYIzfqfWz90ES-CwY2x29OsZSFREJSJ2ERyajkVM8dj0r6nwt-_Vj4IX4dV5106UGiVgCWosg"
   }
 
   @Value("\${dpr.lib.user.role}")
@@ -127,9 +127,76 @@ abstract class IntegrationTestBase {
     )
   }
 
+  protected fun stubAccessTokenResponse() {
+    wireMockServer.stubFor(
+      WireMock.post("/auth/oauth/token")
+        .willReturn(
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody("""
+              {
+                "access_token": "$TEST_TOKEN",
+                 "expires_in": 3599,
+                 "token_type": "Bearer",
+                 "scope": "read",
+                 "sub": "request-user",
+                 "user_name": "request-user",
+                 "auth_source": "none"
+               }
+              """.trimIndent()),
+        ),
+    )
+  }
+
+  protected fun stubPrisonerCaseloadResponse() {
+    wireMockServer.stubFor(
+      WireMock.get("/prisonusers/request-user/caseloads")
+        .willReturn(
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody(
+              """
+              {
+                "username":"request-user",
+                "active":"true",
+                "accountType":"GENERAL",
+                "activeCaseload": {"id":"LWSTMC","name":"Lowestoft (North East Suffolk) Magistrat"},
+                "caseloads":[
+                  {"id":"LWSTMC","name":"Lowestoft (North East Suffolk) Magistrat"}
+                ]
+              }
+              """.trimIndent(),
+            ),
+        ),
+    )
+  }
+
+  protected fun stubUserRolesResponse() {
+    wireMockServer.stubFor(
+      WireMock.get("/users/request-user/roles")
+        .willReturn(
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody(
+              """
+               [
+                {"roleCode":"$authorisedRole"}
+               ]
+              """.trimIndent(),
+            ),
+        ),
+    )
+  }
+
   @BeforeEach
   fun setup() {
     wireMockServer.resetAll()
     stubDefinitionsResponse()
+    stubAccessTokenResponse()
+    stubPrisonerCaseloadResponse()
+    stubUserRolesResponse()
   }
 }
