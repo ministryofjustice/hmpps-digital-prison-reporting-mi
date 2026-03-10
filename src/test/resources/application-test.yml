@@ -51,7 +51,7 @@ dpr:
     system:
       role: ROLE_PRISONS_REPORTING_USER
       token:
-        enabled: true
+        enabled: false
     dataProductDefinitions:
     redshiftdataapi:
       secretarn: REDSHIFT_DATA_SECRETARN
