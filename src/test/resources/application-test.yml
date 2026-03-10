@@ -44,8 +44,14 @@ dpr:
   lib:
     caseloads:
       host: http://localhost:9999
+    manage-users:
+      host: http://localhost:9999
     user:
       role: ROLE_PRISONS_REPORTING_USER
+    system:
+      role: ROLE_PRISONS_REPORTING_USER
+      token:
+        enabled: false
     dataProductDefinitions:
     redshiftdataapi:
       secretarn: REDSHIFT_DATA_SECRETARN

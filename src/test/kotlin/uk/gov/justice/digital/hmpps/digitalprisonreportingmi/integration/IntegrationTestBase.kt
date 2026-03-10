@@ -31,9 +31,9 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerReposi
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = ["spring.main.allow-bean-definition-overriding=true"])
 @ActiveProfiles("test")
-@Import(value = [TestFlywayConfig::class])
+@Import(value = [TestFlywayConfig::class, TestWebClientConfiguration::class])
 abstract class IntegrationTestBase {
 
   @Autowired
