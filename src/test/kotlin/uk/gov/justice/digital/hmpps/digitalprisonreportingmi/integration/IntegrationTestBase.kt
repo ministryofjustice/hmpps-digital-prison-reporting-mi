@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.digitalprisonreportingmi.integration
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import org.hibernate.internal.util.collections.CollectionHelper.listOf
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
