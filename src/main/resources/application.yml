@@ -38,6 +38,16 @@ spring:
 
   security:
     oauth2:
+      client:
+        registration:
+          DPR_LIB_API:
+            provider: hmpps-auth
+            authorization-grant-type: client_credentials
+            client-id: ${API_CLIENT_CREDENTIALS_ID}
+            client-secret: ${API_CLIENT_CREDENTIALS_SECRET}
+        provider:
+          hmpps-auth:
+            token-uri: ${hmpps.auth.url}/oauth/token
       resourceserver:
         jwt:
           jwk-set-uri: ${hmpps.auth.url}/.well-known/jwks.json
@@ -84,8 +94,14 @@ dpr:
   lib:
     caseloads:
       host: ${ME_CASELOADS_API_HOST}
+    manageUsers:
+      host: ${ME_CASELOADS_API_HOST}
     user:
       role: ${AUTHORISED_ROLES}
+    system:
+      role: ${AUTHORISED_ROLES}
+      token:
+        enabled: ${SYSTEM_TOKEN_ENABLED}
     dataProductDefinitions:
       host: ${DEFINITIONS_HOST:}
       cache:

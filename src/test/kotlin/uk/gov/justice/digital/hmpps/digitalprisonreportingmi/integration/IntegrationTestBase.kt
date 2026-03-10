@@ -31,9 +31,9 @@ import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerReposi
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = ["spring.main.allow-bean-definition-overriding=true"])
 @ActiveProfiles("test")
-@Import(value = [TestFlywayConfig::class])
+@Import(value = [TestFlywayConfig::class, TestWebClientConfiguration::class])
 abstract class IntegrationTestBase {
 
   @Autowired
@@ -127,9 +127,78 @@ abstract class IntegrationTestBase {
     )
   }
 
+  protected fun stubAccessTokenResponse() {
+    wireMockServer.stubFor(
+      WireMock.post("/auth/oauth/token")
+        .willReturn(
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody(
+              """
+              {
+                "access_token": "${setAuthorisation(roles = listOf(authorisedRole))}",
+                 "expires_in": 3599,
+                 "token_type": "Bearer",
+                 "scope": "read",
+                 "sub": "request-user",
+                 "user_name": "request-user",
+                 "auth_source": "none"
+               }
+              """.trimIndent(),
+            ),
+        ),
+    )
+  }
+
+  protected fun stubPrisonerCaseloadResponse() {
+    wireMockServer.stubFor(
+      WireMock.get("/prisonusers/request-user/caseloads")
+        .willReturn(
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody(
+              """
+              {
+                "username":"request-user",
+                "active":"true",
+                "accountType":"GENERAL",
+                "activeCaseload": {"id":"LWSTMC","name":"Lowestoft (North East Suffolk) Magistrat"},
+                "caseloads":[
+                  {"id":"LWSTMC","name":"Lowestoft (North East Suffolk) Magistrat"}
+                ]
+              }
+              """.trimIndent(),
+            ),
+        ),
+    )
+  }
+
+  protected fun stubUserRolesResponse() {
+    wireMockServer.stubFor(
+      WireMock.get("/users/request-user/roles")
+        .willReturn(
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody(
+              """
+               [
+                {"roleCode":"$authorisedRole"}
+               ]
+              """.trimIndent(),
+            ),
+        ),
+    )
+  }
+
   @BeforeEach
   fun setup() {
     wireMockServer.resetAll()
     stubDefinitionsResponse()
+    stubAccessTokenResponse()
+    stubPrisonerCaseloadResponse()
+    stubUserRolesResponse()
   }
 }
