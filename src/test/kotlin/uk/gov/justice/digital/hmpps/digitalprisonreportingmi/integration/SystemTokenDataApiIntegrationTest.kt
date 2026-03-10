@@ -10,7 +10,7 @@ class SystemTokenDataApiIntegrationTest : DataApiIntegrationTest() {
     @DynamicPropertySource
     fun registerProperties(registry: DynamicPropertyRegistry) {
       registry.add("dpr.lib.definition.locations") { "dpd001-court-hospital-movements.json,external-movements.json" }
-      //override system token enabled
+      // override system token enabled
       registry.add("dpr.lib.system.token.enabled") { "true" }
     }
   }
