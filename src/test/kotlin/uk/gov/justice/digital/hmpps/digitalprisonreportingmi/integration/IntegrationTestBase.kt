@@ -135,7 +135,8 @@ abstract class IntegrationTestBase {
           WireMock.aResponse()
             .withStatus(HttpStatus.OK.value())
             .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .withBody("""
+            .withBody(
+              """
               {
                 "access_token": "${setAuthorisation(roles = listOf(authorisedRole))}",
                  "expires_in": 3599,
@@ -145,7 +146,8 @@ abstract class IntegrationTestBase {
                  "user_name": "request-user",
                  "auth_source": "none"
                }
-              """.trimIndent()),
+              """.trimIndent(),
+            ),
         ),
     )
   }
