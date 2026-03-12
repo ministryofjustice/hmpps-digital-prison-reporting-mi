@@ -27,7 +27,7 @@ class ResourceServerConfiguration(
   @Bean
   fun resourceServerCustomizer() = ResourceServerConfigurationCustomizer {
     oauth2 { tokenConverter = DefaultDprAuthAwareTokenConverter(caseloadProvider) }
-    securityMatcher { paths = listOf("/user/caseload/active") }
+    securityMatcher { paths = listOf("/user/caseload/active", "/testing/oom") }
     anyRequestRole { defaultRole = removeRolePrefix(authorisedRole) }
   }
 
