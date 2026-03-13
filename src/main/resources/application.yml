@@ -71,7 +71,10 @@ management:
     web:
       base-path: /
       exposure:
-        include: 'info, health'
+        include: 'info, health, prometheus'
+  metrics:
+    tags:
+      application: ${spring.application.name}
   endpoint:
     health:
       cache:
