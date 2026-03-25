@@ -89,6 +89,9 @@ springdoc:
 
 sentry:
   exception-resolver-order: -2147483647
+  traces:
+    web-client:
+      enabled: false
 
 dpr:
   lib:
