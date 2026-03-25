@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -33,7 +34,8 @@ import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = ["spring.main.allow-bean-definition-overriding=true"])
 @ActiveProfiles("test")
-@Import(value = [TestFlywayConfig::class, TestWebClientConfiguration::class])
+@Import(value = [TestFlywayConfig::class])
+@AutoConfigureWebTestClient
 abstract class IntegrationTestBase {
 
   @Autowired
