@@ -18,10 +18,6 @@ spring:
       test:
         - "stdout"
 
-  autoconfigure:
-    exclude:
-      - io.sentry.spring.boot.jakarta.SentryAutoConfiguration$HubConfiguration$SentryPerformanceWebClientConfiguration
-
   datasource:
     url: ${REDSHIFT_JDBC_URL}
     username: ${REDSHIFT_JDBC_USER}
