@@ -17,7 +17,7 @@ spring:
     group:
       test:
         - "stdout"
-        -
+
   autoconfigure:
     exclude:
       - io.sentry.spring.boot.jakarta.SentryAutoConfiguration$HubConfiguration$SentryPerformanceWebClientConfiguration
