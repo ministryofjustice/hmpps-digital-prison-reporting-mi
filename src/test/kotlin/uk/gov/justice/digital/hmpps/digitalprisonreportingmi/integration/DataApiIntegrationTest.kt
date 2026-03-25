@@ -93,7 +93,7 @@ class DataApiIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/reports/external-movements/last-month/count")
-          .queryParam("filters.direction", direction ?: "")
+          .queryParam("filters.direction", direction?.lowercase() ?: "")
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
