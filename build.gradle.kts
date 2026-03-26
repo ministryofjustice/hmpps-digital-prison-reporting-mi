@@ -62,5 +62,5 @@ tasks.jacocoTestReport {
 }
 
 tasks.bootJar {
-  mainClass.set("uk.gov.justice.digital.hmpps.digitalprisonreportingmi.DigitalPrisonReportingMiKt")
+  mainClass.set("uk.gov.justice.digital.hmpps.digitalprisonreportingmi.DigitalPrisonReportingMi")
 }
