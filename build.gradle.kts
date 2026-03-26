@@ -60,7 +60,3 @@ tasks.test {
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
 }
-
-tasks.bootJar {
-  mainClass.set("uk.gov.justice.digital.hmpps.digitalprisonreportingmi.DigitalPrisonReportingMi")
-}

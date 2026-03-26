@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class DigitalPrisonReportingMi {
-  fun main(args: Array<String>) {
-    runApplication<DigitalPrisonReportingMi>(*args)
-  }
+class DigitalPrisonReportingMi
+
+fun main(args: Array<String>) {
+  runApplication<DigitalPrisonReportingMi>(*args)
 }
