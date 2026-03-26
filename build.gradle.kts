@@ -20,7 +20,7 @@ dependencies {
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
   implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:13.0.0")
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:2.0.2")
-  implementation("io.sentry:sentry-spring-boot-4:8.36.0")
+  implementation("io.sentry:sentry-spring-boot-starter-jakarta:8.37.0")
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
@@ -59,4 +59,8 @@ tasks.test {
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
+}
+
+tasks.bootJar {
+  mainClass.set("uk.gov.justice.digital.hmpps.digitalprisonreportingmi.DigitalPrisonReportingMiKt")
 }
