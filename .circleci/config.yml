@@ -157,7 +157,7 @@ workflows:
           release_name: hmpps-probation-mi-api
           context:
             - hmpps-common-vars
-            - hmpps-probation-mi-ui-dev
+            - hmpps-probation-mi-api
           filters:
             branches:
               only:
