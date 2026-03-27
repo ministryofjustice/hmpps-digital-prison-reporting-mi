@@ -1,0 +1,34 @@
+# Per environment values which override defaults in hmpps-probation-mi-ui/values.yaml
+
+generic-service:
+  replicaCount: 2
+  serviceAccountName: "dpr-reporting-mi-development-cross-iam"
+
+  ingress:
+    host: hmpps-probation-mi-api-dev.hmpps.service.justice.gov.uk
+    
+
+  env:
+    APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
+    HMPPS_AUTH_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth
+    AUTHORISED_ROLES: ROLE_PRISONS_REPORTING_USER
+    ME_CASELOADS_API_HOST: https://manage-users-api-dev.hmpps.service.justice.gov.uk
+    REDSHIFT_DATA_CLUSTER_ID: dpr-redshift-development
+    REDSHIFT_DATA_DB: datamart
+    REDSHIFT_DATA_S3_LOCATION: dpr-working-development/reports
+    DPR_LIB_AWS_ACCOUNTID: "771283872747"
+    AURORA_MISSING_REPORT_PORT: 5432
+    SENTRY_ENVIRONMENT: development
+    URL_ENV_SUFFIX: dev
+    SYSTEM_TOKEN_ENABLED: true
+
+  allowlist:
+    groups:
+      - circleci
+      - internal
+
+# CloudPlatform AlertManager receiver to route prometheus alerts to slack
+# See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
+generic-prometheus-alerts:
+  alertSeverity: hmpps-digital-prison-reporting-dev
+
