@@ -1,10 +1,11 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "9.3.0"
-  kotlin("jvm") version "2.3.10"
-  kotlin("plugin.spring") version "2.3.10"
-  kotlin("plugin.jpa") version "2.3.10"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.0.5"
+  kotlin("jvm") version "2.3.20"
+  kotlin("plugin.spring") version "2.3.20"
+  kotlin("plugin.jpa") version "2.3.20"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "4.0.1"
+  id("io.sentry.jvm.gradle") version "6.2.0"
 }
 
 configurations {
@@ -14,17 +15,15 @@ configurations {
 val testContainersVersion = "1.21.4"
 
 dependencies {
-  implementation("org.springframework.boot:spring-boot-starter-webflux")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("io.micrometer:micrometer-registry-prometheus")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:12.0.0")
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:1.8.2")
-  implementation("io.sentry:sentry-spring-boot-starter-jakarta:7.22.6")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:14.2.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:2.1.0")
 
   // Swagger
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
 
   // Testing
   testImplementation("org.flywaydb:flyway-core")
@@ -32,10 +31,12 @@ dependencies {
   testImplementation("io.jsonwebtoken:jjwt:0.13.0")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   testImplementation("com.marcinziolo:kotlin-wiremock:2.1.1")
-  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:1.8.2")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:2.1.0")
   testImplementation("org.postgresql:postgresql:42.7.10")
   testImplementation("org.testcontainers:postgresql:$testContainersVersion")
   testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
+  testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
+  testImplementation("org.springframework.boot:spring-boot-starter-webflux-test")
 }
 
 java {

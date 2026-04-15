@@ -119,7 +119,10 @@ workflows:
               ignore: /.*/
       - hmpps/helm_lint:
           name: helm_lint
-      - build_multiplatform_docker_job:  
+      - hmpps/helm_lint:
+          name: helm_lint_probation
+          chart_name: hmpps-probation-mi-api
+      - build_multiplatform_docker_job:
           name: build_docker
           filters:
             branches:
@@ -127,6 +130,7 @@ workflows:
                 - main
           requires:
             - helm_lint
+            - helm_lint_probation
             - validate
       - hmpps/deploy_env:
           name: deploy_dev
@@ -144,6 +148,24 @@ workflows:
             - validate
             - build_docker
             - helm_lint
+          helm_timeout: 5m
+      # Probation API deployment to dev (shares namespace with probation UI)
+      - hmpps/deploy_env:
+          name: deploy_probation_dev
+          env: "probation-dev"
+          chart_name: hmpps-probation-mi-api
+          release_name: hmpps-probation-mi-api
+          context:
+            - hmpps-common-vars
+            - hmpps-probation-mi-api
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - validate
+            - build_docker
+            - helm_lint_probation
           helm_timeout: 5m
       - request-test-approval:
           type: approval

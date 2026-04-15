@@ -93,7 +93,7 @@ class DataApiIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/reports/external-movements/last-month/count")
-          .queryParam("filters.direction", direction?.lowercase())
+          .queryParam("filters.direction", direction?.lowercase() ?: "")
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
@@ -163,7 +163,7 @@ class DataApiIntegrationTest : IntegrationTestBase() {
       .uri { uriBuilder: UriBuilder ->
         uriBuilder
           .path("/reports/external-movements/last-month")
-          .queryParam("${FILTERS_PREFIX}direction", direction)
+          .queryParam("${FILTERS_PREFIX}direction", direction ?: "")
           .build()
       }
       .headers(setAuthorisation(roles = listOf(authorisedRole)))
