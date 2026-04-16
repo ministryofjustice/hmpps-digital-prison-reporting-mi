@@ -4,7 +4,7 @@ plugins {
   kotlin("plugin.spring") version "2.3.20"
   kotlin("plugin.jpa") version "2.3.20"
   id("jacoco")
-  id("org.barfuin.gradle.jacocolog") version "4.0.1"
+  id("org.barfuin.gradle.jacocolog") version "4.0.2"
   id("io.sentry.jvm.gradle") version "6.2.0"
 }
 
