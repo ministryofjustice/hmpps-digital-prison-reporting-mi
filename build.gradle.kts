@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.0.5"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "10.2.1"
   kotlin("jvm") version "2.3.20"
   kotlin("plugin.spring") version "2.3.20"
   kotlin("plugin.jpa") version "2.3.20"
@@ -19,7 +19,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("io.micrometer:micrometer-registry-prometheus")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:14.2.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:14.3.0")
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:2.1.0")
 
   // Swagger
