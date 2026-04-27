@@ -24,11 +24,12 @@ import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.productCollection.ProductCollectionRepository
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprUserAuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprSystemAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.PostgresContainer
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.configuration.TestFlywayConfig
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.ExternalMovementRepository
 import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.data.PrisonerRepository
+import uk.gov.justice.hmpps.kotlin.auth.AuthSource
 import uk.gov.justice.hmpps.kotlin.auth.HmppsAuthenticationHolder
 import uk.gov.justice.hmpps.test.kotlin.auth.JwtAuthorisationHelper
 
@@ -112,7 +113,7 @@ abstract class IntegrationTestBase {
     val courtDefinitionJson = this::class.java.classLoader.getResource("dpd001-court-hospital-movements.json")?.readText()
 
     val jwt = Mockito.mock<Jwt>()
-    val authentication = Mockito.mock<DprUserAuthAwareAuthenticationToken>()
+    val authentication = Mockito.mock<DprSystemAuthAwareAuthenticationToken>()
     whenever(jwt.tokenValue).then { TEST_TOKEN }
     whenever(authentication.jwt).then { jwt }
     whenever(authenticationHelper.authentication).then { authentication }
@@ -177,6 +178,29 @@ abstract class IntegrationTestBase {
     )
   }
 
+  protected fun stubPrisonerInfoResponse() {
+    wireMockServer.stubFor(
+      WireMock.get("/users/request-user")
+        .willReturn(
+          WireMock.aResponse()
+            .withStatus(HttpStatus.OK.value())
+            .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .withBody(
+              """
+              {
+                "username":"request-user",
+                "active":true,
+                "name":"request-user",
+                "authSource":"${AuthSource.NOMIS.name}",
+                "userId":"abc123",
+                "uuid":"989q-2f3f-2g3-g34",
+              }
+              """.trimIndent(),
+            ),
+        ),
+    )
+  }
+
   protected fun stubUserRolesResponse() {
     wireMockServer.stubFor(
       WireMock.get("/users/request-user/roles")
@@ -201,6 +225,7 @@ abstract class IntegrationTestBase {
     stubDefinitionsResponse()
     stubAccessTokenResponse()
     stubPrisonerCaseloadResponse()
+    stubPrisonerInfoResponse()
     stubUserRolesResponse()
   }
 }

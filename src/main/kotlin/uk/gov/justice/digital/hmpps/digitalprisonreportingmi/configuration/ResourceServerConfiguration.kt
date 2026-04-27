@@ -6,15 +6,15 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.CaseloadProvider
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DefaultDprAuthAwareTokenConverter
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprSystemAuthAwareTokenConverter
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.UserPermissionProvider
 import uk.gov.justice.hmpps.kotlin.auth.HmppsResourceServerConfiguration
 import uk.gov.justice.hmpps.kotlin.auth.dsl.ResourceServerConfigurationCustomizer
 
 @Configuration
 @ConditionalOnProperty(name = ["dpr.lib.user.role", "spring.security.oauth2.resourceserver.jwt.jwk-set-uri"])
 class ResourceServerConfiguration(
-  private val caseloadProvider: CaseloadProvider,
+  private val caseloadProvider: UserPermissionProvider,
   @Value("\${dpr.lib.user.role}") private val authorisedRole: String,
 ) {
 
@@ -26,7 +26,7 @@ class ResourceServerConfiguration(
 
   @Bean
   fun resourceServerCustomizer() = ResourceServerConfigurationCustomizer {
-    oauth2 { tokenConverter = DefaultDprAuthAwareTokenConverter(caseloadProvider) }
+    oauth2 { tokenConverter = DprSystemAuthAwareTokenConverter(caseloadProvider) }
     securityMatcher { paths = listOf("/user/caseload/active") }
     anyRequestRole { defaultRole = removeRolePrefix(authorisedRole) }
   }
