@@ -32,7 +32,7 @@ dependencies {
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   testImplementation("com.marcinziolo:kotlin-wiremock:2.1.1")
   testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:2.1.0")
-  testImplementation("org.postgresql:postgresql:42.7.10")
+  testImplementation("org.postgresql:postgresql:42.7.11")
   testImplementation("org.testcontainers:postgresql:$testContainersVersion")
   testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
   testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
