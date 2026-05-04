@@ -1,0 +1,2 @@
+redshift-jdbc-secret.yaml:kubernetes-secret-yaml:3
+redshift-jdbc-secret.yaml:generic-api-key:9
