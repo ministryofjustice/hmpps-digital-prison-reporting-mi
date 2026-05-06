@@ -127,6 +127,10 @@ workflows:
           name: helm_lint_probation_test
           chart_name: hmpps-probation-mi-api
           env: probation-test
+      - hmpps/helm_lint:
+          name: helm_lint_probation_preprod
+          chart_name: hmpps-probation-mi-api
+          env: probation-preprod
       - build_multiplatform_docker_job:
           name: build_docker
           filters:
@@ -137,6 +141,7 @@ workflows:
             - helm_lint
             - helm_lint_probation
             - helm_lint_probation_test
+            - helm_lint_probation_preprod
             - validate
       - hmpps/deploy_env:
           name: deploy_dev
@@ -239,6 +244,27 @@ workflows:
             - hmpps-digital-prison-reporting-mi-preprod
           requires:
             - remember-version-for-preprod
+          helm_timeout: 5m
+      - request-probation-preprod-approval:
+          type: approval
+          requires:
+            - deploy_probation_dev
+      - remember-app-version:
+          name: remember-version-for-probation-preprod
+          requires:
+            - request-probation-preprod-approval
+      - hmpps/deploy_env:
+          name: deploy_probation_preprod
+          env: "probation-preprod"
+          chart_name: hmpps-probation-mi-api
+          release_name: hmpps-probation-mi-api
+          jira_update: true
+          jira_env_type: staging
+          context:
+            - hmpps-common-vars
+            - hmpps-probation-mi-api-preprod
+          requires:
+            - remember-version-for-probation-preprod
           helm_timeout: 5m
       - request-prod-approval:
           type: approval
