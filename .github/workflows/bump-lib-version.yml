@@ -14,6 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
+      - name: SLSA - supply chain attack mitigation
+        uses: ministryofjustice/devsecops-actions/sca/slsa@8c77d3a65a46d1d4b5416eafae5b84371ecd797d
+        with:
+          security-patch-package-exclusion: "@ministryofjustice/hmpps-digital-prison-reporting-lib"
+
       - name: Get library version
         id: get-version
         run: |
