@@ -133,10 +133,10 @@ workflows:
           env: probation-preprod
       - build_multiplatform_docker_job:
           name: build_docker
-          filters:
-            branches:
-              only:
-                - main
+#          filters:
+#            branches:
+#              only:
+#                - main
           requires:
             - helm_lint
             - helm_lint_probation
@@ -151,10 +151,10 @@ workflows:
           context:
             - hmpps-common-vars
             - hmpps-digital-prison-reporting-mi-dev
-          filters:
-            branches:
-              only:
-                - main
+#          filters:
+#            branches:
+#              only:
+#                - main
           requires:
             - validate
             - build_docker
