@@ -2,7 +2,7 @@
 
 generic-service:
   replicaCount: 2
-  serviceAccountName: "dpr-reporting-mi-production-cross-iam"
+  serviceAccountName: "dpr-reporting-mi-prod-cross-iam"
 
   ingress:
     host: hmpps-probation-mi-api.hmpps.service.justice.gov.uk
