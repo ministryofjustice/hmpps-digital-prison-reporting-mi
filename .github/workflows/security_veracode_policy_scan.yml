@@ -7,7 +7,7 @@ on:
 jobs:
   create-artifact:
     name: Build the artifact for veracode to scan
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/gradle_verify.yml@e7db1568006ed68b8238ec1ded2a6c175d6b78a6
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/gradle_verify.yml@c2a23fcb9a0ce8f98145230d4fe930bd9008d12b
     with:
       gradle-command: "BUILD_NUMBER=veracode ./gradlew assemble"
       upload-build-artifacts: true
