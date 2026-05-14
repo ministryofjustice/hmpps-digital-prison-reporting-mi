@@ -90,17 +90,24 @@ class ClientTrackingInterceptorTest {
     val reportDefinitionService = mock<ReportDefinitionService>()
     val manageUsersClient: ManageUsersClient = mock<ManageUsersClient>()
     whenever(manageUsersClient.getUsersRoles("userA")).thenReturn(listOf("ROLE_PRISONS_REPORTING_USER"))
-    whenever(manageUsersClient.getUserInfo("userA")).thenReturn(AuthUser(
-      "userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431",
-    ))
+    whenever(manageUsersClient.getUserInfo("userA")).thenReturn(
+      AuthUser(
+        "userA",
+        true,
+        "userA",
+        AuthSource.NOMIS,
+        "userA",
+        "abc234-abc123-abc3431",
+      ),
+    )
     whenever(manageUsersClient.getCaseloads("userA")).thenReturn(
       CaseloadResponse(
         "userA",
         true,
         "GENERAL",
         Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"),
-        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"))
-      )
+        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
+      ),
     )
     val executionContext = ExecutionContext(
       CaseloadResponse(
@@ -108,10 +115,10 @@ class ClientTrackingInterceptorTest {
         true,
         "GENERAL",
         Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"),
-        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"))
+        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
       ),
       listOf("ROLE_PRISONS_REPORTING_USER"),
-      AuthUser("userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431",)
+      AuthUser("userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431"),
     )
     val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient)
     val request = MockHttpServletRequest("GET", uri)
@@ -161,17 +168,24 @@ class ClientTrackingInterceptorTest {
   fun `should not call app insights with product name, variant name and selected page for non matching uris`(uri: String) {
     val manageUsersClient: ManageUsersClient = mock<ManageUsersClient>()
     whenever(manageUsersClient.getUsersRoles("userA")).thenReturn(listOf("ROLE_PRISONS_REPORTING_USER"))
-    whenever(manageUsersClient.getUserInfo("userA")).thenReturn(AuthUser(
-      "userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431",
-    ))
+    whenever(manageUsersClient.getUserInfo("userA")).thenReturn(
+      AuthUser(
+        "userA",
+        true,
+        "userA",
+        AuthSource.NOMIS,
+        "userA",
+        "abc234-abc123-abc3431",
+      ),
+    )
     whenever(manageUsersClient.getCaseloads("userA")).thenReturn(
       CaseloadResponse(
         "userA",
         true,
         "GENERAL",
         Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"),
-        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"))
-      )
+        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
+      ),
     )
     val reportDefinitionService = mock<ReportDefinitionService>()
     val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient)
