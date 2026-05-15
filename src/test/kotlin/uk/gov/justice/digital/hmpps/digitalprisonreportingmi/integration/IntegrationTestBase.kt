@@ -193,7 +193,7 @@ abstract class IntegrationTestBase {
                 "name":"request-user",
                 "authSource":"${AuthSource.NOMIS.name}",
                 "userId":"abc123",
-                "uuid":"989q-2f3f-2g3-g34",
+                "uuid":"989q-2f3f-2g3-g34"
               }
               """.trimIndent(),
             ),

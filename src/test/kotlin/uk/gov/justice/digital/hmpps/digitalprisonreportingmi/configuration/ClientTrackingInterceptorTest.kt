@@ -21,12 +21,17 @@ import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.ExecutionContext
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController.Companion.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.SingleVariantReportDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.VariantDefinition
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.CaseloadResponse
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprSystemAuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.ManageUsersClient
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.authentication.AuthUser
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.ReportDefinitionService
-import uk.gov.justice.digital.hmpps.digitalprisonreportingmi.security.FakeCaseloadProvider
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.model.Caseload
+import uk.gov.justice.hmpps.kotlin.auth.AuthSource
 import java.time.Instant
 
 class ClientTrackingInterceptorTest {
@@ -42,7 +47,6 @@ class ClientTrackingInterceptorTest {
       clientId = "clientId",
       userName = "userA",
       authorities = emptyList(),
-      userPermissionProvider = FakeCaseloadProvider(),
     )
     private val staticSecurityContextHolderMockUtil: MockedStatic<SecurityContextHolder> = Mockito.mockStatic(SecurityContextHolder::class.java)
     val span: Span = mock()
@@ -84,7 +88,39 @@ class ClientTrackingInterceptorTest {
   )
   fun `should call app insights with product name, variant name and selected page`(uri: String) {
     val reportDefinitionService = mock<ReportDefinitionService>()
-    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService)
+    val manageUsersClient: ManageUsersClient = mock<ManageUsersClient>()
+    whenever(manageUsersClient.getUsersRoles("userA")).thenReturn(listOf("ROLE_PRISONS_REPORTING_USER"))
+    whenever(manageUsersClient.getUserInfo("userA")).thenReturn(
+      AuthUser(
+        "userA",
+        true,
+        "userA",
+        AuthSource.NOMIS,
+        "userA",
+        "abc234-abc123-abc3431",
+      ),
+    )
+    whenever(manageUsersClient.getCaseloads("userA")).thenReturn(
+      CaseloadResponse(
+        "userA",
+        true,
+        "GENERAL",
+        Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"),
+        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
+      ),
+    )
+    val executionContext = ExecutionContext(
+      CaseloadResponse(
+        "userA",
+        true,
+        "GENERAL",
+        Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"),
+        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
+      ),
+      listOf("ROLE_PRISONS_REPORTING_USER"),
+      AuthUser("userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431"),
+    )
+    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient)
     val request = MockHttpServletRequest("GET", uri)
     request.setParameter("selectedPage", "1")
     val response = MockHttpServletResponse()
@@ -102,13 +138,13 @@ class ClientTrackingInterceptorTest {
       ),
     )
     whenever(
-      reportDefinitionService.getDefinition(productId, variantId, token, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE),
+      reportDefinitionService.getDefinition(productId, variantId, executionContext, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE),
     ).thenReturn(definition)
 
     clientTrackingInterceptor.preHandle(request, response, mock())
 
     verify(reportDefinitionService, times(1))
-      .getDefinition(productId, variantId, token, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE)
+      .getDefinition(productId, variantId, executionContext, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE)
     verify(span, times(1))
       .setAttribute("username", "userA")
     verify(span, times(1))
@@ -130,8 +166,29 @@ class ClientTrackingInterceptorTest {
     ],
   )
   fun `should not call app insights with product name, variant name and selected page for non matching uris`(uri: String) {
+    val manageUsersClient: ManageUsersClient = mock<ManageUsersClient>()
+    whenever(manageUsersClient.getUsersRoles("userA")).thenReturn(listOf("ROLE_PRISONS_REPORTING_USER"))
+    whenever(manageUsersClient.getUserInfo("userA")).thenReturn(
+      AuthUser(
+        "userA",
+        true,
+        "userA",
+        AuthSource.NOMIS,
+        "userA",
+        "abc234-abc123-abc3431",
+      ),
+    )
+    whenever(manageUsersClient.getCaseloads("userA")).thenReturn(
+      CaseloadResponse(
+        "userA",
+        true,
+        "GENERAL",
+        Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat"),
+        listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
+      ),
+    )
     val reportDefinitionService = mock<ReportDefinitionService>()
-    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService)
+    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient)
     val request = MockHttpServletRequest("GET", uri)
     val response = MockHttpServletResponse()
 

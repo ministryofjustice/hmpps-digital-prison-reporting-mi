@@ -9,8 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.config.getUserContext
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.ExecutionContext
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprAuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprSystemAuthAwareAuthenticationToken
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.ManageUsersClient
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.ReportDefinitionService
 
 @Configuration
@@ -28,26 +31,30 @@ class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInt
 }
 
 @Configuration
-class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionService) : HandlerInterceptor {
+class ClientTrackingInterceptor(
+  val reportDefinitionService: ReportDefinitionService,
+  val manageUsersClient: ManageUsersClient,
+) : HandlerInterceptor {
 
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
   }
 
   override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-    if (SecurityContextHolder.getContext().authentication is DprAuthAwareAuthenticationToken) {
-      val token = SecurityContextHolder.getContext().authentication as DprAuthAwareAuthenticationToken
-      val user = token.getUsername()
+    if (SecurityContextHolder.getContext().authentication is DprSystemAuthAwareAuthenticationToken) {
+      val token = SecurityContextHolder.getContext().authentication as DprSystemAuthAwareAuthenticationToken
+      val user = token.userName
       Span.current().setAttribute("username", user) // username in customDimensions
-      token.getActiveCaseLoadId()?.let { Span.current().setAttribute("activeCaseLoadId", it) }
-      captureDpdAndPageDetails(request, token)
+      val executionContext = request.getUserContext(manageUsersClient)
+      executionContext.getActiveCaseLoadId()?.let { Span.current().setAttribute("activeCaseLoadId", it) }
+      captureDpdAndPageDetails(request, executionContext)
     }
     return true
   }
 
   private fun captureDpdAndPageDetails(
     request: HttpServletRequest,
-    token: DprAuthAwareAuthenticationToken,
+    executionContext: ExecutionContext,
   ) {
     try {
       val regex = Regex("""/reports/([^/]+)/(?!metrics(/|$))([^/]+)""")
@@ -58,7 +65,7 @@ class ClientTrackingInterceptor(val reportDefinitionService: ReportDefinitionSer
         val dataProductDefinitionsPath = request.parameterMap["dataProductDefinitionsPath"]?.get(0)
           ?: ReportDefinitionController.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
         val pageNumber = request.parameterMap["selectedPage"]?.get(0)
-        val definition = reportDefinitionService.getDefinition(productId!!, reportVariantId!!, token, dataProductDefinitionsPath)
+        val definition = reportDefinitionService.getDefinition(productId!!, reportVariantId!!, executionContext, dataProductDefinitionsPath)
         Span.current().setAttribute("product", definition.name) // product name in customDimensions
         Span.current().setAttribute("reportName", definition.variant.name) // variant name in customDimensions
         pageNumber?.let { Span.current().setAttribute("page", pageNumber) } // page number in customDimensions
