@@ -28,7 +28,6 @@ class ResourceServerConfiguration(
     oauth2 { tokenConverter = DprSystemAuthAwareTokenConverter(requiredAuthSources.split(',').filter { it.isNotBlank() }) }
     securityMatcher { paths = listOf("/user/caseload/active") }
     anyRequestRole { defaultRole = removeRolePrefix(authorisedRole) }
-
   }
 
   private fun removeRolePrefix(role: String) = role.replace("ROLE_", "")

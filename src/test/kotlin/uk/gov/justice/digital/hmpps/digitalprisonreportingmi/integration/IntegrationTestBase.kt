@@ -106,7 +106,7 @@ abstract class IntegrationTestBase {
     username = user,
     scope = scopes,
     roles = roles,
-    authSource = AuthSource.NOMIS
+    authSource = AuthSource.NOMIS,
   )
 
   protected fun stubDefinitionsResponse() {
