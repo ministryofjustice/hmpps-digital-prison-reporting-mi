@@ -14,6 +14,7 @@ import uk.gov.justice.hmpps.kotlin.auth.dsl.ResourceServerConfigurationCustomize
 @ConditionalOnProperty(name = ["dpr.lib.user.role", "spring.security.oauth2.resourceserver.jwt.jwk-set-uri"])
 class ResourceServerConfiguration(
   @Value("\${dpr.lib.user.role}") private val authorisedRole: String,
+  @Value("#{'\${dpr.lib.user.requiredAuthSources:nomis}'.empty ? 'nomis' : '\${dpr.lib.user.requiredAuthSources:nomis}' }") private val requiredAuthSources: String,
 ) {
 
   @Bean
@@ -24,9 +25,10 @@ class ResourceServerConfiguration(
 
   @Bean
   fun resourceServerCustomizer() = ResourceServerConfigurationCustomizer {
-    oauth2 { tokenConverter = DprSystemAuthAwareTokenConverter() }
+    oauth2 { tokenConverter = DprSystemAuthAwareTokenConverter(requiredAuthSources.split(',').filter { it.isNotBlank() }) }
     securityMatcher { paths = listOf("/user/caseload/active") }
     anyRequestRole { defaultRole = removeRolePrefix(authorisedRole) }
+
   }
 
   private fun removeRolePrefix(role: String) = role.replace("ROLE_", "")

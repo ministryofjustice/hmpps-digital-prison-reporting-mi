@@ -101,6 +101,7 @@ dpr:
     manageUsers:
       host: ${ME_CASELOADS_API_HOST}
     user:
+      requiredAuthSources: ${REQUIRED_AUTH_SOURCES:}
       role: ${AUTHORISED_ROLES}
     system:
       role: ${AUTHORISED_ROLES}
