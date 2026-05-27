@@ -25,6 +25,7 @@ generic-service:
     SENTRY_TRACES_SAMPLE_RATE: '0.05'
     SENTRY_IGNORED_EXCEPTIONS_FOR_TYPE: "org.apache.catalina.connector.ClientAbortException"
     SYSTEM_TOKEN_ENABLED: false
+    REQUIRED_AUTH_SOURCES: DELIUS
 
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
