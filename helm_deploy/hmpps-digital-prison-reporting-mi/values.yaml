@@ -27,12 +27,6 @@ generic-service:
     SYSTEM_TOKEN_ENABLED: false
     REQUIRED_AUTH_SOURCES: NOMIS
 
-
-  # Pre-existing kubernetes secrets to load as environment variables in the deployment.
-  # namespace_secrets:
-  #   [name of kubernetes secret]:
-  #     [name of environment variable as seen by app]: [key of kubernetes secret to load]
-
   namespace_secrets:
     hmpps-digital-prison-reporting-mi:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
