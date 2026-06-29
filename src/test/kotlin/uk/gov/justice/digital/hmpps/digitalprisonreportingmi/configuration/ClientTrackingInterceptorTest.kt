@@ -119,8 +119,9 @@ class ClientTrackingInterceptorTest {
       ),
       listOf("ROLE_PRISONS_REPORTING_USER"),
       AuthUser("userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431"),
+      false,
     )
-    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient)
+    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient, false)
     val request = MockHttpServletRequest("GET", uri)
     request.setParameter("selectedPage", "1")
     val response = MockHttpServletResponse()
@@ -188,7 +189,7 @@ class ClientTrackingInterceptorTest {
       ),
     )
     val reportDefinitionService = mock<ReportDefinitionService>()
-    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient)
+    val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient, false)
     val request = MockHttpServletRequest("GET", uri)
     val response = MockHttpServletResponse()
 
