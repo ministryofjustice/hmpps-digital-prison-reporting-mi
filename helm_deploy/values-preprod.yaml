@@ -21,6 +21,7 @@ generic-service:
     SENTRY_ENVIRONMENT: preprod
     URL_ENV_SUFFIX: preprod
     SYSTEM_TOKEN_ENABLED: true
+    DEFINITIONS_S3_BUCKET: dpr-data-product-definitions-preproduction
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
