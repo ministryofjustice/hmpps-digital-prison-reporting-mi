@@ -27,6 +27,7 @@ generic-service:
     SYSTEM_TOKEN_ENABLED: false
     REQUIRED_AUTH_SOURCES: DELIUS
     HAS_PROBATION_DATASOURCES: true
+    DEFINITIONS_S3_ENABLED: false
 
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.

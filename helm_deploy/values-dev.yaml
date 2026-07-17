@@ -20,6 +20,8 @@ generic-service:
     SENTRY_ENVIRONMENT: development
     URL_ENV_SUFFIX: dev
     SYSTEM_TOKEN_ENABLED: true
+    DEFINITIONS_S3_ENABLED: true
+    DEFINITIONS_S3_BUCKET: dpr-data-product-definitions-development
 
   scheduledDowntime:
     enabled: true

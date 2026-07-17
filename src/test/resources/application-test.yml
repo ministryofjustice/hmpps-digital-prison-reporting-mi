@@ -53,6 +53,9 @@ dpr:
       token:
         enabled: true
     dataProductDefinitions:
+      s3:
+        enabled: true
+        bucket: dpr-data-product-definitions-development
     redshiftdataapi:
       secretarn: REDSHIFT_DATA_SECRETARN
       clusterid: REDSHIFT_DATA_CLUSTER_ID

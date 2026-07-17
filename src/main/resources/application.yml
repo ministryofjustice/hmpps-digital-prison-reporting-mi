@@ -113,6 +113,9 @@ dpr:
       cache:
         enabled: true
         durationMinutes: 10
+      s3:
+        enabled: ${DEFINITIONS_S3_ENABLED}
+        bucket: ${DEFINITIONS_S3_BUCKET}
     redshiftdataapi:
       secretarn: ${REDSHIFT_DATA_SECRETARN}
       clusterid: ${REDSHIFT_DATA_CLUSTER_ID}
