@@ -19,6 +19,7 @@ generic-service:
     SENTRY_ENVIRONMENT: production
     URL_ENV_SUFFIX: production
     SYSTEM_TOKEN_ENABLED: true
+    DEFINITIONS_S3_BUCKET: dpr-data-product-definitions-production
 
   allowlist:
     groups:
@@ -28,5 +29,5 @@ generic-service:
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
 generic-prometheus-alerts:
-  alertSeverity: hmpps-digital-prison-reporting-prod
+  alertSeverity: probation-frontend-alerts-prod
 

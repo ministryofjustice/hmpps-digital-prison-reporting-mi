@@ -4,6 +4,7 @@ import io.opentelemetry.api.trace.Span
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.servlet.HandlerInterceptor
@@ -34,6 +35,8 @@ class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInt
 class ClientTrackingInterceptor(
   val reportDefinitionService: ReportDefinitionService,
   val manageUsersClient: ManageUsersClient,
+  @Value("\${dpr.lib.hasProbationDatasources}")
+  val hasProbationDatasources: Boolean,
 ) : HandlerInterceptor {
 
   companion object {
@@ -45,7 +48,7 @@ class ClientTrackingInterceptor(
       val token = SecurityContextHolder.getContext().authentication as DprSystemAuthAwareAuthenticationToken
       val user = token.userName
       Span.current().setAttribute("username", user) // username in customDimensions
-      val executionContext = request.getUserContext(manageUsersClient)
+      val executionContext = request.getUserContext(manageUsersClient, hasProbationDatasources)
       executionContext.getActiveCaseLoadId()?.let { Span.current().setAttribute("activeCaseLoadId", it) }
       captureDpdAndPageDetails(request, executionContext)
     }
