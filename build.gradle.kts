@@ -20,7 +20,7 @@ dependencies {
   implementation("io.micrometer:micrometer-registry-prometheus")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
   implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:17.3.0")
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.0-beta")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.0")
 
   // Swagger
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
@@ -31,7 +31,7 @@ dependencies {
   testImplementation("io.jsonwebtoken:jjwt:0.13.0")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   testImplementation("com.marcinziolo:kotlin-wiremock:2.1.1")
-  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.0.0-beta")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.0.0")
   testImplementation("org.postgresql:postgresql:42.7.11")
   testImplementation("org.testcontainers:postgresql:$testContainersVersion")
   testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
