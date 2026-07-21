@@ -6,6 +6,7 @@ generic-service:
 
   ingress:
     host: hmpps-probation-mi-api-dev.hmpps.service.justice.gov.uk
+    
 
   env:
     APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
@@ -25,8 +26,8 @@ generic-service:
 
   scheduledDowntime:
     enabled: true
-    startupOverride: "40 7 * * 1-5" # Start at 7.40am UTC Monday-Friday
-    shutdown: "20 20 * * 1-5" # Stop at 8.20pm UTC Monday-Friday
+    startupOverride: '40 7 * * 1-5' # Start at 7.40am UTC Monday-Friday
+    shutdown: '20 20 * * 1-5' # Stop at 8.20pm UTC Monday-Friday
 
   allowlist:
     groups:
@@ -38,3 +39,4 @@ generic-service:
 generic-prometheus-alerts:
   businessHoursOnly: true
   alertSeverity: probation-frontend-alerts-dev
+
