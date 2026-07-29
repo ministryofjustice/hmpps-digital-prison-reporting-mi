@@ -41,10 +41,10 @@ jobs:
           path: build/test-results
       - store_artifacts:
           path: build/reports/tests
-      - persist_to_workspace:
-          root: << pipeline.parameters.workingdir >>
-          paths:
-            - .     
+#      - persist_to_workspace:
+#          root: << pipeline.parameters.workingdir >>
+#          paths:
+#            - .
 
   build_multiplatform_docker_job:
     docker:
@@ -54,9 +54,8 @@ jobs:
       image_name:
         type: string
         default: "quay.io/hmpps/${CIRCLE_PROJECT_REPONAME}"
-    steps:   
-      - attach_workspace:
-          at: .    
+    steps:
+      - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - mem/remember:
@@ -316,41 +315,3 @@ workflows:
           requires:
             - remember-version-for-probation-prod
           helm_timeout: 5m
-
-  security:
-    triggers:
-      - schedule:
-          cron: "00 5 * * 1-5"
-          filters:
-            branches:
-              only:
-                - main
-    jobs:
-      - hmpps/gradle_owasp_dependency_check:
-          jdk_tag: "21.0"
-          slack_channel: << pipeline.parameters.alerts-slack-channel >>
-          context:
-            - hmpps-common-vars
-      - hmpps/trivy_latest_scan:
-          slack_channel: << pipeline.parameters.alerts-slack-channel >>
-          context:
-            - hmpps-common-vars
-      - hmpps/veracode_pipeline_scan:
-          slack_channel: << pipeline.parameters.alerts-slack-channel >>
-          context:
-            - veracode-credentials
-            - hmpps-common-vars
-  security-weekly:
-    triggers:
-      - schedule:
-          cron: "00 5 * * 1"
-          filters:
-            branches:
-              only:
-                - main
-    jobs:
-      - hmpps/veracode_policy_scan:
-          slack_channel: << pipeline.parameters.alerts-slack-channel >>
-          context:
-            - veracode-credentials
-            - hmpps-common-vars

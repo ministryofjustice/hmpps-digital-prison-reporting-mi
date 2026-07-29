@@ -15,7 +15,7 @@ generic-service:
 
   # Environment variables to load into the deployment
   env:
-    JAVA_OPTS: "-Xmx512m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp"
+    JAVA_OPTS: "-Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp"
     SERVER_PORT: "8080"
     SPRING_PROFILES_ACTIVE: "logstash"
     APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY)"
@@ -25,8 +25,9 @@ generic-service:
     SENTRY_TRACES_SAMPLE_RATE: '0.05'
     SENTRY_IGNORED_EXCEPTIONS_FOR_TYPE: "org.apache.catalina.connector.ClientAbortException"
     SYSTEM_TOKEN_ENABLED: false
-    REQUIRED_AUTH_SOURCES: DELIUS
+    REQUIRED_AUTH_SOURCES: DELIUS,AUTH
     HAS_PROBATION_DATASOURCES: true
+    DEFINITIONS_S3_ENABLED: false
 
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
