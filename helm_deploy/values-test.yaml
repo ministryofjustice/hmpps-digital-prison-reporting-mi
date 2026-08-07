@@ -25,8 +25,8 @@ generic-service:
 
   scheduledDowntime:
     enabled: true
-    startup: '40 7 * * 1-5' # Start at 7.40am UTC Monday-Friday
-    shutdown: '20 20 * * 1-5' # Stop at 8.20pm UTC Monday-Friday
+    startupOverride: '40 7 * * 1-5' # Start at 7.40am UTC Monday-Friday
+    shutdownOverride: '20 20 * * 1-5' # Stop at 8.20pm UTC Monday-Friday
 
   allowlist:
     groups:
@@ -37,4 +37,6 @@ generic-service:
 # See https://user-guide.cloud-platform.service.justice.gov.uk/documentation/monitoring-an-app/how-to-create-alarms.html#creating-your-own-custom-alerts
 generic-prometheus-alerts:
   businessHoursOnly: true
+  businessHours:
+    startHour: 9
   alertSeverity: digital-prison-reporting-test
