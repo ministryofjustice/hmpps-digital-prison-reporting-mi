@@ -61,4 +61,4 @@ jobs:
       environment: dev
       app-version: ${{ needs.app_version.outputs.version }}
       helm-timeout: 5m
-      slack-notification: 'false'
+      slack-notification: 'false' 
