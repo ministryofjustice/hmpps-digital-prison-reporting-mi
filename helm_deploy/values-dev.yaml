@@ -30,7 +30,7 @@ generic-service:
 
   allowlist:
     groups:
-      - circleci
+      - github-actions
       - internal
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack

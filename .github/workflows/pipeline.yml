@@ -1,0 +1,64 @@
+name: Pipeline [validate -> build -> deploy]
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+
+  app_version:
+    name: Set app version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set.outputs.version }}
+    steps:
+      - id: set
+        run: echo "version=Build.${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+  gradle_validate:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/gradle_validate.yml@main
+    secrets: inherit
+    with:
+      java-version: '21'
+      gradle-check-command: 'check'
+      cache-key-file: 'build.gradle.kts'
+      test-results-path: 'build/test-results'
+      reports-path: 'build/reports/tests'
+
+  helm_lint:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/helm_lint.yml@main
+    with:
+      environment: dev
+
+  build_docker:
+    if: github.ref == 'refs/heads/main'
+    needs: [gradle_validate, helm_lint, app_version]
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/docker_build.yml@main
+    secrets: inherit
+    with:
+      dockerfile-dir: '.'
+      docker-registry: 'ghcr.io'
+      registry-org: 'ministryofjustice'
+      push: true
+
+  deploy_dev:
+    if: github.ref == 'refs/heads/main'
+    needs: [build_docker, app_version]
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/deploy_env.yml@main
+    secrets: inherit
+    with:
+      environment: dev
+      app-version: ${{ needs.app_version.outputs.version }}
+      helm-timeout: 5m
+      slack-notification: 'false'
