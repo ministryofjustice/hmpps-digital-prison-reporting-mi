@@ -66,7 +66,7 @@ class ClientTrackingInterceptor(
       executionContext = request.getUserContext(
         manageUsersClient,
         hasProbationDatasources,
-        DataProductReportableInformation(id = productId ?: "", variantId = reportVariantId?: "")
+        DataProductReportableInformation(id = productId ?: "", variantId = reportVariantId ?: ""),
       )
       if (matchExists(productId, reportVariantId)) {
         val dataProductDefinitionsPath = request.parameterMap["dataProductDefinitionsPath"]?.get(0)
