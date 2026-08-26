@@ -21,6 +21,7 @@ import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.DataProductReportableInformation
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.ExecutionContext
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController.Companion.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.SingleVariantReportDefinition
@@ -109,6 +110,8 @@ class ClientTrackingInterceptorTest {
         listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
       ),
     )
+    val productId = "external-movements"
+    val variantId = "last-month"
     val executionContext = ExecutionContext(
       CaseloadResponse(
         "userA",
@@ -120,15 +123,14 @@ class ClientTrackingInterceptorTest {
       listOf("ROLE_PRISONS_REPORTING_USER"),
       AuthUser("userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431"),
       false,
+      DataProductReportableInformation(id = productId, variantId = variantId),
     )
+    val productName = "External Movements"
+    val variantName = "Last Month"
     val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient, false)
     val request = MockHttpServletRequest("GET", uri)
     request.setParameter("selectedPage", "1")
     val response = MockHttpServletResponse()
-    val productId = "external-movements"
-    val variantId = "last-month"
-    val productName = "External Movements"
-    val variantName = "Last Month"
     val definition = SingleVariantReportDefinition(
       id = productId,
       name = productName,
