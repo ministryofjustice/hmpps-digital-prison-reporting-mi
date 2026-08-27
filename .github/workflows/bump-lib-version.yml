@@ -14,28 +14,17 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
 
-      - name: Get library version
+      - name: Get current library version
         id: get-version
         run: |
           CURRENT_VERSION=$(curl -s --request GET https://repo1.maven.org/maven2/uk/gov/justice/service/hmpps/hmpps-digital-prison-reporting-lib/maven-metadata.xml | grep -oP '(?<=<version>)[^<]+' | grep -v -e '2024-02-27' -e '2024-02-28' | tail -n1)
-          echo "Current version: $CURRENT_VERSION"
           echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
-      - name: Find and replace library version
-        run: >-
-          perl -pi -e 's|implementation\("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:\d+\.\d+\.\d+"\)|implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:${{ steps.get-version.outputs.current_version }}")|' build.gradle.kts
 
-      - name: Commit version bump
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git checkout -b feature/bump-lib-to-v${{ steps.get-version.outputs.current_version }}
-          git add build.gradle.kts
-          git commit -m "Bump library version to ${{ steps.get-version.outputs.current_version }}"
-          git push origin feature/bump-lib-to-v${{ steps.get-version.outputs.current_version }}
-          git tag -a Lib-v${{ steps.get-version.outputs.current_version }} -m Lib-v${{ steps.get-version.outputs.current_version }}
-          git push origin Lib-v${{ steps.get-version.outputs.current_version }}
-
-      - name: Create pull request
-        run: gh pr create -B main -H 'feature/bump-lib-to-v${{ steps.get-version.outputs.current_version }}' --title 'Bump library version to ${{ steps.get-version.outputs.current_version }}' --body ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Bump library version
+        uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/actions/bump-lib-version@v1
+        with:
+          current-version: ${{ steps.get-version.outputs.current_version }}
+          apply-command: >-
+            perl -pi -e 's|implementation\("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:\d+\.\d+\.\d+"\)|implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:${{ steps.get-version.outputs.current_version }}")|' build.gradle.kts
+          files-to-commit: build.gradle.kts
+          github-token: ${{ secrets.GITHUB_TOKEN }}

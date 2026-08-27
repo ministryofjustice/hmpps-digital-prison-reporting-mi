@@ -1,0 +1,88 @@
+name: Scheduled security scans
+
+# Consolidates all 4 security scan triggers into a single file. GitHub
+# Actions triggers are per-file, not per-job, but a single workflow can
+# declare multiple `schedule:` entries and each job can tell which cron
+# fired via `github.event.schedule`, so the 4 previously separate
+# security_*.yml caller files collapse into this one without changing
+# cadence. Actual scan logic stays centralized and split by scan type in
+# hmpps-reporting-workflows (see docs/versioning.md there for why those
+# stay separate files).
+
+on:
+  workflow_dispatch:
+    inputs:
+      scan:
+        description: Which scan to run
+        type: choice
+        default: all
+        options:
+          - all
+          - codeql
+          - owasp
+          - veracode-pipeline
+          - veracode-policy
+  schedule:
+    - cron: "19 6 * * MON-FRI" # codeql + owasp + veracode-pipeline, every weekday
+    - cron: "34 6 * * 1"       # veracode-policy, every Monday
+
+jobs:
+  codeql:
+    name: Project security CodeQL actions scan
+    if: |
+      github.event.schedule == '19 6 * * MON-FRI' ||
+      (github.event_name == 'workflow_dispatch' && contains(fromJSON('["all","codeql"]'), inputs.scan))
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_codeql_actions.yml@v1
+    with:
+      channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
+    secrets: inherit
+
+  owasp:
+    name: Kotlin security OWASP dependency check
+    if: |
+      github.event.schedule == '19 6 * * MON-FRI' ||
+      (github.event_name == 'workflow_dispatch' && contains(fromJSON('["all","owasp"]'), inputs.scan))
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_owasp.yml@v1
+    with:
+      channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
+      nvd_feed_version: "2"
+      java_version: "21"
+    secrets: inherit
+
+  veracode-pipeline:
+    name: Project security veracode pipeline scan
+    if: |
+      github.event.schedule == '19 6 * * MON-FRI' ||
+      (github.event_name == 'workflow_dispatch' && contains(fromJSON('["all","veracode-pipeline"]'), inputs.scan))
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_veracode_pipeline_scan.yml@v1
+    with:
+      channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
+      java_version: "21"
+    secrets: inherit
+
+  veracode-policy:
+    name: Project security veracode policy scan
+    if: |
+      github.event.schedule == '34 6 * * 1' ||
+      (github.event_name == 'workflow_dispatch' && contains(fromJSON('["all","veracode-policy"]'), inputs.scan))
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_veracode_policy_scan.yml@v1
+    with:
+      channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
+      java_version: "21"
+    secrets: inherit
