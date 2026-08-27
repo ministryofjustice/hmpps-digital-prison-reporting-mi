@@ -8,7 +8,7 @@ on:
 
 jobs:
   checks:
-    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/pr_checks.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/pr_checks.yml@v1
     secrets: inherit
     with:
       java-version: '21'

@@ -18,7 +18,7 @@ concurrency:
 jobs:
 
   pipeline:
-    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/reporting_pipeline.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/reporting_pipeline.yml@v1
     secrets: inherit
     with:
       java-version: '21'

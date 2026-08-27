@@ -21,7 +21,7 @@ jobs:
           echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Bump library version
-        uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/actions/bump-lib-version@v1
+        uses: ministryofjustice/hmpps-reporting-workflows/actions/bump-lib-version@v1
         with:
           current-version: ${{ steps.get-version.outputs.current_version }}
           apply-command: >-

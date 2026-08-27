@@ -36,7 +36,7 @@ jobs:
       contents: read
       actions: read
       security-events: write
-    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_codeql_actions.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/security_codeql_actions.yml@v1
     with:
       channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
     secrets: inherit
@@ -50,7 +50,7 @@ jobs:
       contents: read
       actions: read
       security-events: write
-    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_owasp.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/security_owasp.yml@v1
     with:
       channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       nvd_feed_version: "2"
@@ -66,7 +66,7 @@ jobs:
       contents: read
       actions: read
       security-events: write
-    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_veracode_pipeline_scan.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/security_veracode_pipeline_scan.yml@v1
     with:
       channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       java_version: "21"
@@ -81,7 +81,7 @@ jobs:
       contents: read
       actions: read
       security-events: write
-    uses: ministryofjustice/HMPPS-REPORTING-WORKFLOWS/.github/workflows/security_veracode_policy_scan.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/security_veracode_policy_scan.yml@v1
     with:
       channel_id: ${{ vars.SECURITY_ALERTS_SLACK_CHANNEL_ID || 'NO_SLACK' }}
       java_version: "21"
