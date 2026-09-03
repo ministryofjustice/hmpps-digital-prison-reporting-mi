@@ -21,6 +21,7 @@ jobs:
     uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/reporting_pipeline.yml@v1
     secrets: inherit
     with:
+      deploy-ref: refs/heads/DHS-705
       java-version: '21'
       gradle-check-command: 'check'
       cache-key-file: 'build.gradle.kts'
@@ -35,7 +36,7 @@ jobs:
       track1-release-name: ''
 
       # Track 2 — probation MI API chart
-      enable-track2: true
+      enable-track2: false
       track2-chart-name: 'hmpps-probation-mi-api'
       track2-release-name: 'hmpps-probation-mi-api'
 
