@@ -1,0 +1,43 @@
+name: Pipeline [validate -> build -> deploy]
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+
+  pipeline:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/reporting_pipeline.yml@feat/dhs-702-705
+    secrets: inherit
+    with:
+      deploy-ref: refs/heads/DHS-705
+      java-version: '21'
+      gradle-check-command: 'check'
+      cache-key-file: 'build.gradle.kts'
+      test-results-path: 'build/test-results'
+      reports-path: 'build/reports/tests'
+      dockerfile-dir: '.'
+      docker-registry: 'ghcr.io'
+      registry-org: 'ministryofjustice'
+
+      # Track 1 — main MI API chart (defaults to repo name when empty)
+      track1-chart-name: ''
+      track1-release-name: ''
+
+      # Track 2 — probation MI API chart
+      enable-track2: false
+      track2-chart-name: 'hmpps-probation-mi-api'
+      track2-release-name: 'hmpps-probation-mi-api'
+
+      slack-channel: 'dpr_cicd_approvals'

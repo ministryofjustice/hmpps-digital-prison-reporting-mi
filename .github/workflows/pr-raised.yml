@@ -7,32 +7,9 @@ on:
       - synchronize
 
 jobs:
-  preparation:
-    runs-on: ubuntu-latest
-
-    permissions:
-      pull-requests: write
-      contents: write
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-
-      - name: Set up JDK
-        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95
-        with:
-          java-version: "21"
-          distribution: "corretto"
-
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@a8f75513eafdebd8141bd1cd4e30fcd194af8dfa
-
-      - name: Add linting fixes
-        run: ./gradlew ktlintFormat
-
-      - name: Calculate test coverage
-        id: calculate-test-coverage
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ./gradlew jacocoTestReport > logs.txt
-          gh pr comment ${{ github.event.pull_request.number }} --body "$(grep 'Test Coverage:' logs.txt -A6)"
+  checks:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/pr_checks.yml@v1
+    secrets: inherit
+    with:
+      java-version: '21'
+      java-distribution: 'corretto'
