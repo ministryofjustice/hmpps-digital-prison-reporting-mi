@@ -1,11 +1,11 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.2"
-  kotlin("jvm") version "2.4.0"
-  kotlin("plugin.spring") version "2.4.0"
-  kotlin("plugin.jpa") version "2.4.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.7"
+  kotlin("jvm") version "2.4.10"
+  kotlin("plugin.spring") version "2.4.10"
+  kotlin("plugin.jpa") version "2.4.10"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "4.0.2"
-  id("io.sentry.jvm.gradle") version "6.9.0"
+  id("io.sentry.jvm.gradle") version "6.21.0"
 }
 
 configurations {
@@ -19,11 +19,11 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("io.micrometer:micrometer-registry-prometheus")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:17.7.2")
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:17.9.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.1")
 
   // Swagger
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0")
 
   // Testing
   testImplementation("org.flywaydb:flyway-core")
@@ -31,8 +31,8 @@ dependencies {
   testImplementation("io.jsonwebtoken:jjwt:0.13.0")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   testImplementation("com.marcinziolo:kotlin-wiremock:2.1.1")
-  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.0.0-beta")
-  testImplementation("org.postgresql:postgresql:42.7.11")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.0.1")
+  testImplementation("org.postgresql:postgresql:42.7.13")
   testImplementation("org.testcontainers:postgresql:$testContainersVersion")
   testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
   testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
