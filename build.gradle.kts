@@ -5,7 +5,7 @@ plugins {
   kotlin("plugin.jpa") version "2.4.10"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "4.0.2"
-  id("io.sentry.jvm.gradle") version "6.9.0"
+  id("io.sentry.jvm.gradle") version "6.21.0"
 }
 
 configurations {
