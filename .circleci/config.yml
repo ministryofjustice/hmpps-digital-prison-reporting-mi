@@ -41,10 +41,10 @@ jobs:
           path: build/test-results
       - store_artifacts:
           path: build/reports/tests
-      - persist_to_workspace:
-          root: << pipeline.parameters.workingdir >>
-          paths:
-            - .     
+#      - persist_to_workspace:
+#          root: << pipeline.parameters.workingdir >>
+#          paths:
+#            - .
 
   build_multiplatform_docker_job:
     docker:
@@ -54,9 +54,8 @@ jobs:
       image_name:
         type: string
         default: "quay.io/hmpps/${CIRCLE_PROJECT_REPONAME}"
-    steps:   
-      - attach_workspace:
-          at: .    
+    steps:
+      - checkout
       - setup_remote_docker:
           docker_layer_caching: true
       - mem/remember:

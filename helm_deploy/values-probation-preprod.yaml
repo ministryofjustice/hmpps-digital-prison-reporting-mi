@@ -21,6 +21,7 @@ generic-service:
     SENTRY_ENVIRONMENT: preprod
     URL_ENV_SUFFIX: preprod
     SYSTEM_TOKEN_ENABLED: true
+    DEFINITIONS_S3_ENABLED: true
     DEFINITIONS_S3_BUCKET: dpr-data-product-definitions-preproduction
 
   allowlist:
