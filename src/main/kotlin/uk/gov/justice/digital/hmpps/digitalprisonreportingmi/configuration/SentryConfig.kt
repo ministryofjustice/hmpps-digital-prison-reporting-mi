@@ -71,7 +71,7 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
     return filteredExceptionsEvent
   }
 
-  private fun filterSentryExceptions(event: SentryEvent): SentryEvent{
+  private fun filterSentryExceptions(event: SentryEvent): SentryEvent {
     val matchedExceptions =
       event.exceptions
         ?.filter { it.isIgnored() }
@@ -104,7 +104,6 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
     }
     return event
   }
-
 
   private fun SentryException.isIgnored(): Boolean {
     val patterns = ignoredExceptions[type] ?: return false
