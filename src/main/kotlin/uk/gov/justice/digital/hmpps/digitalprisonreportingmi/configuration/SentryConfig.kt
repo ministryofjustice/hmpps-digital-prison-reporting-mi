@@ -37,6 +37,8 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
 
   private val ignoredExceptions = mapOf(
     $$"WebClientResponseException$NotFound" to emptyList(),
+    "AsyncRequestNotUsableException" to listOf(Regex(".*flushBuffer.*", regexOptions), Regex(".*Broken pipe.*", regexOptions)),
+    "TableExpiredException" to emptyList(),
     "ValidationException" to listOf(
       Regex("Invalid report id provided.*", regexOptions),
       Regex("Could not retrieve the query result as it has expired after 24 hours", regexOptions),
@@ -66,18 +68,24 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
       Regex(".*404.*/users/.*", regexOptions),
     ),
   )
-  override fun execute(event: SentryEvent, hint: Hint): SentryEvent? {
-    val numExceptionsOriginal = event.exceptions?.size
-    val filteredExceptionsEvent = filterSentryExceptions(event)
-    if (filteredExceptionsEvent.exceptions?.isEmpty() == true && numExceptionsOriginal != null && numExceptionsOriginal > 0) {
-      return null
-    }
-    return filteredExceptionsEvent
+  override fun execute(event: SentryEvent, hint: Hint): SentryEvent? = event.filterSentryExceptions().enhanceSentryExceptions()
+
+  fun SentryEvent?.enhanceSentryExceptions(): SentryEvent? {
+    if (this == null) return this
+    val exceptions = exceptions
+    if (exceptions.isNullOrEmpty()) return this
+
+    exceptions.forEach { it.enhanceIfNeeded() }
+    return this
   }
 
-  private fun filterSentryExceptions(event: SentryEvent): SentryEvent {
+  private fun SentryEvent?.filterSentryExceptions(): SentryEvent? {
+    if (this == null) return this
+
+    val numExceptionsOriginal = exceptions?.size
+
     val matchedExceptions =
-      event.exceptions
+      exceptions
         ?.filter { it.isIgnored() }
         ?.toMutableSet()
         ?: mutableSetOf()
@@ -87,7 +95,7 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
     while (queue.isNotEmpty()) {
       val current = queue.removeFirst()
 
-      val related = event.exceptions
+      val related = exceptions
         ?.filterNot { it in matchedExceptions }
         ?.filter {
           it.mechanism?.exceptionId == current.mechanism?.parentId ||
@@ -101,12 +109,62 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
       }
     }
 
-    event.exceptions?.removeAll(matchedExceptions)
+    exceptions?.removeAll(matchedExceptions)
 
-    if (event.exceptions.isNullOrEmpty()) {
-      event.exceptions = null
+    if (exceptions.isNullOrEmpty()) {
+      exceptions = null
     }
-    return event
+
+    if (exceptions?.isEmpty() == true && numExceptionsOriginal != null && numExceptionsOriginal > 0) {
+      return null
+    }
+    return this
+  }
+
+  data class ExceptionToEnhance(
+    val exceptionName: String,
+    val valueRegexes: List<Regex>,
+    val valueEnhancement: String,
+  )
+
+  private val exceptionsToEnhance = listOf(
+    ExceptionToEnhance(
+      "UncategorizedSQLException",
+      listOf(Regex(".*EntityNotFoundException.*glue.*", regexOptions)),
+      "Potential contract violation - glue catalog or source table missing!\n"
+    ),
+    ExceptionToEnhance(
+      "UncategorizedSQLException",
+      listOf(Regex(".*WLM abort.*rule_query_execution.*", regexOptions)),
+      "Query timed out!\n"
+    ),
+    ExceptionToEnhance(
+      "UncategorizedSQLException",
+      listOf(Regex(".*DeltaManifest.*NoSuchKey.*", regexOptions)),
+      "DeltaLake table manifest is missing -- likely means ingestion missed it!\n"
+    ),
+    ExceptionToEnhance(
+      "BadSqlGrammarException",
+      listOf(Regex(".*Invalid operation.*", regexOptions)),
+      "Likely invalid SQL in query!\n"
+    ),
+  )
+
+  private fun SentryException.enhanceIfNeeded() {
+    val exception = exceptionsToEnhance.find {
+        it.exceptionName == type
+          && value != null
+          && it.valueRegexes.any { regex -> regex.matches(value!!) }
+      }
+
+    if (exception == null) return
+
+    value = """
+      === LIKELY CAUSE ===
+      ${exception.valueEnhancement}
+      === ORIGINAL ERROR ===
+      $value
+    """.trimIndent()
   }
 
   private fun SentryException.isIgnored(): Boolean {
