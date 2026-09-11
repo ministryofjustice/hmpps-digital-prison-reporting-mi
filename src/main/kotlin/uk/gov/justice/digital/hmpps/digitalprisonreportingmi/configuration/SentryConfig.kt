@@ -67,7 +67,11 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
     ),
   )
   override fun execute(event: SentryEvent, hint: Hint): SentryEvent? {
+    val numExceptionsOriginal = event.exceptions?.size
     val filteredExceptionsEvent = filterSentryExceptions(event)
+    if (filteredExceptionsEvent.exceptions?.isEmpty() == true && numExceptionsOriginal != null && numExceptionsOriginal > 0) {
+      return null
+    }
     return filteredExceptionsEvent
   }
 
