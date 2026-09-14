@@ -131,31 +131,31 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
     ExceptionToEnhance(
       "UncategorizedSQLException",
       listOf(Regex(".*EntityNotFoundException.*glue.*", regexOptions)),
-      "Potential contract violation - glue catalog or source table missing!\n"
+      "Potential contract violation - glue catalog or source table missing!\n",
     ),
     ExceptionToEnhance(
       "UncategorizedSQLException",
       listOf(Regex(".*WLM abort.*rule_query_execution.*", regexOptions)),
-      "Query timed out!\n"
+      "Query timed out!\n",
     ),
     ExceptionToEnhance(
       "UncategorizedSQLException",
       listOf(Regex(".*DeltaManifest.*NoSuchKey.*", regexOptions)),
-      "DeltaLake table manifest is missing -- likely means ingestion missed it!\n"
+      "DeltaLake table manifest is missing -- likely means ingestion missed it!\n",
     ),
     ExceptionToEnhance(
       "BadSqlGrammarException",
       listOf(Regex(".*Invalid operation.*", regexOptions)),
-      "Likely invalid SQL in query!\n"
+      "Likely invalid SQL in query!\n",
     ),
   )
 
   private fun SentryException.enhanceIfNeeded() {
     val exception = exceptionsToEnhance.find {
-        it.exceptionName == type
-          && value != null
-          && it.valueRegexes.any { regex -> regex.matches(value!!) }
-      }
+      it.exceptionName == type &&
+        value != null &&
+        it.valueRegexes.any { regex -> regex.matches(value!!) }
+    }
 
     if (exception == null) return
 
