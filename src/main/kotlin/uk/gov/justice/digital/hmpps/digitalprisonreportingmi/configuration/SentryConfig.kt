@@ -111,11 +111,7 @@ class CustomBeforeSendCallback : SentryOptions.BeforeSendCallback {
 
     exceptions?.removeAll(matchedExceptions)
 
-    if (exceptions.isNullOrEmpty()) {
-      exceptions = null
-    }
-
-    if (exceptions?.isEmpty() == true && numExceptionsOriginal != null && numExceptionsOriginal > 0) {
+    if (exceptions.isNullOrEmpty() && numExceptionsOriginal != null && numExceptionsOriginal > 0) {
       return null
     }
     return this
