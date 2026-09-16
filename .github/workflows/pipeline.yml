@@ -1,4 +1,4 @@
-name: Pipeline [validate -> build -> deploy]
+name: Pipeline
 
 on:
   push:
@@ -16,12 +16,11 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-
   pipeline:
-    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/reporting_pipeline.yml@feat/dhs-702-705
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/reporting_pipeline.yml@v1
     secrets: inherit
     with:
-      deploy-ref: refs/heads/DHS-705
+      deploy-ref: refs/heads/main
       java-version: '21'
       gradle-check-command: 'check'
       cache-key-file: 'build.gradle.kts'
@@ -31,12 +30,10 @@ jobs:
       docker-registry: 'ghcr.io'
       registry-org: 'ministryofjustice'
 
-      # Track 1 — main MI API chart (defaults to repo name when empty)
       track1-chart-name: ''
       track1-release-name: ''
 
-      # Track 2 — probation MI API chart
-      enable-track2: false
+      enable-track2: true
       track2-chart-name: 'hmpps-probation-mi-api'
       track2-release-name: 'hmpps-probation-mi-api'
 

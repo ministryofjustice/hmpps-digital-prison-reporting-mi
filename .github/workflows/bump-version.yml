@@ -20,8 +20,8 @@ jobs:
           CURRENT_VERSION=$(curl -s --request GET https://repo1.maven.org/maven2/uk/gov/justice/service/hmpps/hmpps-digital-prison-reporting-lib/maven-metadata.xml | grep -oP '(?<=<version>)[^<]+' | grep -v -e '2024-02-27' -e '2024-02-28' | tail -n1)
           echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Bump library version
-        uses: ministryofjustice/hmpps-reporting-workflows/actions/bump-lib-version@v1
+      - name: Bump version
+        uses: ministryofjustice/hmpps-reporting-workflows/actions/bump-version@v1
         with:
           current-version: ${{ steps.get-version.outputs.current_version }}
           apply-command: >-
