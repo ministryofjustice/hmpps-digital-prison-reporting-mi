@@ -37,7 +37,7 @@ jobs:
       track2-chart-name: 'hmpps-probation-mi-api'
       track2-release-name: 'hmpps-probation-mi-api'
 
-      # Build + deploy DEV on feature/PR branches; test/preprod/prod stay on main
+      # Build + deploy track1 DEV on feature/PR branches; probation + higher envs stay on main
       deploy-dev-on-feature-branches: true
 
       slack-channel: 'dpr_cicd_approvals'
