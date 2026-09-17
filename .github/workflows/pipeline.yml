@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   pipeline:
-    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/reporting_pipeline.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/frontend_java_pipeline.yml@v1
     secrets: inherit
     with:
       deploy-ref: refs/heads/main
