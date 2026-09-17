@@ -20,24 +20,9 @@ jobs:
     uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/frontend_java_pipeline.yml@v1
     secrets: inherit
     with:
-      deploy-ref: refs/heads/main
-      java-version: '21'
-      gradle-check-command: 'check'
-      cache-key-file: 'build.gradle.kts'
-      test-results-path: 'build/test-results'
-      reports-path: 'build/reports/tests'
-      dockerfile-dir: '.'
-      docker-registry: 'ghcr.io'
-      registry-org: 'ministryofjustice'
-
-      track1-chart-name: ''
-      track1-release-name: ''
-
-      enable-track2: true
-      track2-chart-name: 'hmpps-probation-mi-api'
-      track2-release-name: 'hmpps-probation-mi-api'
-
-      # Build + deploy track1 DEV on feature/PR branches; probation + higher envs stay on main
+      enable-probation: true
       deploy-dev-on-feature-branches: true
-
       slack-channel: 'dpr_cicd_approvals'
+      # Optional overrides (defaults live in the workflow):
+      # probation-chart-name: hmpps-probation-mi-api
+      # primary-chart-name: ''
