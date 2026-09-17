@@ -4,27 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  bump-version:
-    runs-on: ubuntu-latest
-
-    permissions:
-      pull-requests: write
-      contents: write
-
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
-
-      - name: Get current library version
-        id: get-version
-        run: |
-          CURRENT_VERSION=$(curl -s --request GET https://repo1.maven.org/maven2/uk/gov/justice/service/hmpps/hmpps-digital-prison-reporting-lib/maven-metadata.xml | grep -oP '(?<=<version>)[^<]+' | grep -v -e '2024-02-27' -e '2024-02-28' | tail -n1)
-          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Bump version
-        uses: ministryofjustice/hmpps-reporting-actions/actions/bump-version@v1
-        with:
-          current-version: ${{ steps.get-version.outputs.current_version }}
-          apply-command: >-
-            perl -pi -e 's|implementation\("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:\d+\.\d+\.\d+"\)|implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:${{ steps.get-version.outputs.current_version }}")|' build.gradle.kts
-          files-to-commit: build.gradle.kts
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+  bump:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/bump_version.yml@v1
+    secrets: inherit
+    with:
+      stack: gradle
