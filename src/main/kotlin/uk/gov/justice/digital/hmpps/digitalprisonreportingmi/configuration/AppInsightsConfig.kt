@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.config.getUserContext
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.DataProductReportableInformation
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.ExecutionContext
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprSystemAuthAwareAuthenticationToken
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.ManageUsersClient
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.service.ReportDefinitionService
@@ -69,10 +68,8 @@ class ClientTrackingInterceptor(
         DataProductReportableInformation(id = productId ?: "", variantId = reportVariantId ?: ""),
       )
       if (matchExists(productId, reportVariantId)) {
-        val dataProductDefinitionsPath = request.parameterMap["dataProductDefinitionsPath"]?.get(0)
-          ?: ReportDefinitionController.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
         val pageNumber = request.parameterMap["selectedPage"]?.get(0)
-        val definition = reportDefinitionService.getDefinition(productId!!, reportVariantId!!, executionContext, dataProductDefinitionsPath)
+        val definition = reportDefinitionService.getDefinition(productId!!, reportVariantId!!, executionContext)
         Span.current().setAttribute("product", definition.name) // product name in customDimensions
         Span.current().setAttribute("reportName", definition.variant.name) // variant name in customDimensions
         pageNumber?.let { Span.current().setAttribute("page", pageNumber) } // page number in customDimensions
