@@ -23,7 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.DataProductReportableInformation
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.ExecutionContext
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController.Companion.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.SingleVariantReportDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.VariantDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.CaseloadResponse
@@ -141,13 +140,13 @@ class ClientTrackingInterceptorTest {
       ),
     )
     whenever(
-      reportDefinitionService.getDefinition(productId, variantId, executionContext, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE),
+      reportDefinitionService.getDefinition(productId, variantId, executionContext),
     ).thenReturn(definition)
 
     clientTrackingInterceptor.preHandle(request, response, mock())
 
     verify(reportDefinitionService, times(1))
-      .getDefinition(productId, variantId, executionContext, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE)
+      .getDefinition(productId, variantId, executionContext)
     verify(span, times(1))
       .setAttribute("username", "userA")
     verify(span, times(1))
