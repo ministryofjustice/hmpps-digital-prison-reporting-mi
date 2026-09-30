@@ -148,7 +148,7 @@ class ClientTrackingInterceptorTest {
     verify(reportDefinitionService, times(1))
       .getDefinition(productId, variantId, executionContext)
     verify(span, times(1))
-      .setAttribute("username", "userA")
+      .setAttribute("uuid", "abc234-abc123-abc3431")
     verify(span, times(1))
       .setAttribute("activeCaseLoadId", "LWSTMC")
     verify(span, times(1))
@@ -198,7 +198,7 @@ class ClientTrackingInterceptorTest {
 
     verifyNoInteractions(reportDefinitionService)
     verify(span, times(1))
-      .setAttribute("username", "userA")
+      .setAttribute("uuid", "abc234-abc123-abc3431")
     verify(span, times(1))
       .setAttribute("activeCaseLoadId", "LWSTMC")
     verify(span, times(0))
