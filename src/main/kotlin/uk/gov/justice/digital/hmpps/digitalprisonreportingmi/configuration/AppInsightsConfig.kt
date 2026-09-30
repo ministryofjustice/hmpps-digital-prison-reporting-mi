@@ -64,7 +64,7 @@ class ClientTrackingInterceptor(
     request: HttpServletRequest,
     executionContext: ExecutionContext,
     productId: String?,
-    reportVariantId: String?
+    reportVariantId: String?,
   ) {
     try {
       if (matchExists(productId, reportVariantId)) {
