@@ -35,7 +35,7 @@ class AppInsightsConfig(private val clientTrackingInterceptor: ClientTrackingInt
 class ClientTrackingInterceptor(
   val reportDefinitionService: ReportDefinitionService,
   val manageUsersClient: ManageUsersClient,
-  @Value("\${dpr.lib.hasProbationDatasources}")
+  @Value($$"${dpr.lib.hasProbationDatasources}")
   val hasProbationDatasources: Boolean,
 ) : HandlerInterceptor {
 
@@ -45,28 +45,28 @@ class ClientTrackingInterceptor(
 
   override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
     if (SecurityContextHolder.getContext().authentication is DprSystemAuthAwareAuthenticationToken) {
-      val token = SecurityContextHolder.getContext().authentication as DprSystemAuthAwareAuthenticationToken
-      val user = token.userName
-      Span.current().setAttribute("username", user) // username in customDimensions
-      captureDpdAndPageDetails(request)
+      val regex = Regex("""/reports/([^/]+)/(?!metrics(/|$))([^/]+)""")
+      val resultMatched = regex.find(request.requestURI)
+      val productId = resultMatched?.let { resultMatched.groupValues[1] }
+      val reportVariantId = resultMatched?.let { resultMatched.groupValues[3] }
+      val executionContext = request.getUserContext(
+        manageUsersClient,
+        hasProbationDatasources,
+        DataProductReportableInformation(id = productId ?: "", variantId = reportVariantId ?: ""),
+      )
+      Span.current().setAttribute("uuid", executionContext.userInfo.uuid)
+      captureDpdAndPageDetails(request, executionContext, productId, reportVariantId)
     }
     return true
   }
 
   private fun captureDpdAndPageDetails(
     request: HttpServletRequest,
+    executionContext: ExecutionContext,
+    productId: String?,
+    reportVariantId: String?
   ) {
-    var executionContext: ExecutionContext? = null
     try {
-      val regex = Regex("""/reports/([^/]+)/(?!metrics(/|$))([^/]+)""")
-      val resultMatched = regex.find(request.requestURI)
-      val productId = resultMatched?.let { resultMatched.groupValues[1] }
-      val reportVariantId = resultMatched?.let { resultMatched.groupValues[3] }
-      executionContext = request.getUserContext(
-        manageUsersClient,
-        hasProbationDatasources,
-        DataProductReportableInformation(id = productId ?: "", variantId = reportVariantId ?: ""),
-      )
       if (matchExists(productId, reportVariantId)) {
         val pageNumber = request.parameterMap["selectedPage"]?.get(0)
         val definition = reportDefinitionService.getDefinition(productId!!, reportVariantId!!, executionContext)
@@ -77,7 +77,7 @@ class ClientTrackingInterceptor(
     } catch (e: Exception) {
       log.error("Failed to log product name, variant name or selected page to App Insights: {}", e.message)
     } finally {
-      executionContext?.getActiveCaseLoadId()?.let { Span.current().setAttribute("activeCaseLoadId", it) }
+      executionContext.getActiveCaseLoadId()?.let { Span.current().setAttribute("activeCaseLoadId", it) }
     }
   }
 
