@@ -30,7 +30,6 @@ generic-service:
 
   allowlist:
     groups:
-      - github-actions
       - internal
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack

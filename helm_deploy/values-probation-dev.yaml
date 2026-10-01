@@ -31,7 +31,6 @@ generic-service:
 
   allowlist:
     groups:
-      - circleci
       - internal
 
 # CloudPlatform AlertManager receiver to route prometheus alerts to slack
