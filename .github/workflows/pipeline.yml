@@ -22,8 +22,9 @@ jobs:
     with:
       enable-probation: true
       deploy-dev-on-feature-branches: true
+      deploy-test-on-feature-branches: true
+      deploy-preprod-on-feature-branches: true
       slack-channel: 'dpr_cicd_approvals'
-      deploy-ref: 'refs/heads/DHS-705'   # ← add this temporarily
       # Optional overrides (defaults live in the workflow):
       # probation-chart-name: hmpps-probation-mi-api
       # primary-chart-name: ''
