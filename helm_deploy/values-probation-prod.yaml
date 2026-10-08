@@ -18,7 +18,6 @@ generic-service:
     AURORA_MISSING_REPORT_PORT: 5432
     SENTRY_ENVIRONMENT: production
     URL_ENV_SUFFIX: production
-    SYSTEM_TOKEN_ENABLED: true
     DEFINITIONS_S3_ENABLED: true
     DEFINITIONS_S3_BUCKET: dpr-data-product-definitions-production
 

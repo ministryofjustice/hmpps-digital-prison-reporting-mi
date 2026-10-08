@@ -106,8 +106,6 @@ dpr:
       role: ${AUTHORISED_ROLES}
     system:
       role: ${AUTHORISED_ROLES}
-      token:
-        enabled: ${SYSTEM_TOKEN_ENABLED}
     dataProductDefinitions:
       host: ${DEFINITIONS_HOST:}
       cache:
