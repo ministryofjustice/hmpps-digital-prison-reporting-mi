@@ -26,6 +26,7 @@ generic-service:
     SENTRY_IGNORED_EXCEPTIONS_FOR_TYPE: "org.apache.catalina.connector.ClientAbortException"
     REQUIRED_AUTH_SOURCES: NOMIS
     DEFINITIONS_S3_ENABLED: false
+    HMPPS_SQS_USE_WEB_TOKEN: "true"
 
   namespace_secrets:
     hmpps-digital-prison-reporting-mi:
@@ -46,6 +47,8 @@ generic-service:
     hmpps-digital-prison-reporting-mi-ui-sentry:
       SENTRY_DSN: SENTRY_DSN
       SENTRY_AUTH_TOKEN: SENTRY_AUTH_TOKEN
+    sqs-hmpps-audit-secret:
+      HMPPS_SQS_QUEUES_AUDIT_QUEUE_NAME: "sqs_queue_name"
 
   allowlist:
     cloudplatform-live1-1: 35.178.209.113/32
