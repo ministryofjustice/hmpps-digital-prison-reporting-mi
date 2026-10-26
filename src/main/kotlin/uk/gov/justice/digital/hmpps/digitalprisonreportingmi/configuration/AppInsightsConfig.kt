@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.config.getUserContext
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.config.getExecutionContext
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.DataProductReportableInformation
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.ExecutionContext
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.DprSystemAuthAwareAuthenticationToken
@@ -49,7 +49,7 @@ class ClientTrackingInterceptor(
       val resultMatched = regex.find(request.requestURI)
       val productId = resultMatched?.let { resultMatched.groupValues[1] }
       val reportVariantId = resultMatched?.let { resultMatched.groupValues[3] }
-      val executionContext = request.getUserContext(
+      val executionContext = request.getExecutionContext(
         manageUsersClient,
         hasProbationDatasources,
         DataProductReportableInformation(id = productId ?: "", variantId = reportVariantId ?: ""),
