@@ -136,10 +136,10 @@ workflows:
           env: probation-prod
       - build_multiplatform_docker_job:
           name: build_docker
-          filters:
-            branches:
-              only:
-                - main
+#          filters:
+#            branches:
+#              only:
+#                - main
           requires:
             - helm_lint
             - helm_lint_probation
