@@ -28,7 +28,6 @@ generic-service:
     DEFINITIONS_S3_ENABLED: false
     HMPPS_SQS_USE_WEB_TOKEN: "true"
     DPR_LIB_SERVICENAME: hmpps-digital-prison-reporting-mi
-    HMPPS_SQS_QUEUES_AUDIT_QUEUE_NAME: audit
 
   namespace_secrets:
     hmpps-digital-prison-reporting-mi:
