@@ -5,7 +5,7 @@ plugins {
   kotlin("plugin.jpa") version "2.4.21"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "4.0.3"
-  id("io.sentry.jvm.gradle") version "6.23.0"
+  id("io.sentry.jvm.gradle") version "6.24.0"
 }
 
 configurations {
@@ -19,7 +19,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("io.micrometer:micrometer-registry-prometheus")
   implementation("com.amazon.redshift:redshift-jdbc4-no-awssdk:1.2.45.1069")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:18.2.5")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:18.3.0")
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.3")
 
   // Swagger
