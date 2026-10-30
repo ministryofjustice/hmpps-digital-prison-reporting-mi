@@ -3,6 +3,8 @@ info.app:
   version: 1.0
 
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     enabled: false
   application:
