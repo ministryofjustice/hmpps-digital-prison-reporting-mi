@@ -101,11 +101,13 @@ abstract class IntegrationTestBase {
     user: String = "request-user",
     roles: List<String> = emptyList(),
     scopes: List<String> = emptyList(),
+    authSource: AuthSource = AuthSource.NOMIS,
   ): (HttpHeaders) -> Unit = jwtAuthorisationHelper.setAuthorisationHeader(
     clientId = "hmpps-digital-prison-reporting-api",
     username = user,
     scope = scopes,
     roles = roles,
+    authSource = authSource,
   )
 
   protected fun stubDefinitionsResponse() {
