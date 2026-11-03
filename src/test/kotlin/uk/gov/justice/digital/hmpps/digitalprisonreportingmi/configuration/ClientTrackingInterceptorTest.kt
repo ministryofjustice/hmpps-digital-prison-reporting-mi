@@ -47,6 +47,7 @@ class ClientTrackingInterceptorTest {
       clientId = "clientId",
       userName = "userA",
       authorities = emptyList(),
+      authSource = AuthSource.NOMIS,
     )
     private val staticSecurityContextHolderMockUtil: MockedStatic<SecurityContextHolder> = Mockito.mockStatic(SecurityContextHolder::class.java)
     val span: Span = mock()
