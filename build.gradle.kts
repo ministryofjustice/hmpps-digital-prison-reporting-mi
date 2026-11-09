@@ -19,7 +19,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("io.micrometer:micrometer-registry-prometheus")
   implementation("com.amazon.redshift:redshift-jdbc42:2.3.0")
-  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:18.6.0")
+  implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:18.6.1")
   implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.3")
 
   // Swagger
