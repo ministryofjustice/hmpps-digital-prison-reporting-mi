@@ -3,6 +3,8 @@ info.app:
   version: 1.0
 
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     enabled: false
   application:
@@ -106,8 +108,6 @@ dpr:
       role: ${AUTHORISED_ROLES}
     system:
       role: ${AUTHORISED_ROLES}
-      token:
-        enabled: ${SYSTEM_TOKEN_ENABLED}
     dataProductDefinitions:
       host: ${DEFINITIONS_HOST:}
       cache:

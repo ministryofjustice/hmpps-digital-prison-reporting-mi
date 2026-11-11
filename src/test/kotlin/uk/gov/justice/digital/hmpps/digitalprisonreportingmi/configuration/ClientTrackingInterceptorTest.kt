@@ -21,8 +21,8 @@ import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.jwt.Jwt
+import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.DataProductReportableInformation
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.context.ExecutionContext
-import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.ReportDefinitionController.Companion.DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.SingleVariantReportDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.controller.model.VariantDefinition
 import uk.gov.justice.digital.hmpps.digitalprisonreportinglib.security.CaseloadResponse
@@ -47,6 +47,7 @@ class ClientTrackingInterceptorTest {
       clientId = "clientId",
       userName = "userA",
       authorities = emptyList(),
+      authSource = AuthSource.NOMIS,
     )
     private val staticSecurityContextHolderMockUtil: MockedStatic<SecurityContextHolder> = Mockito.mockStatic(SecurityContextHolder::class.java)
     val span: Span = mock()
@@ -109,6 +110,8 @@ class ClientTrackingInterceptorTest {
         listOf(Caseload(id = "LWSTMC", name = "Lowestoft (North East Suffolk) Magistrat")),
       ),
     )
+    val productId = "external-movements"
+    val variantId = "last-month"
     val executionContext = ExecutionContext(
       CaseloadResponse(
         "userA",
@@ -120,15 +123,14 @@ class ClientTrackingInterceptorTest {
       listOf("ROLE_PRISONS_REPORTING_USER"),
       AuthUser("userA", true, "userA", AuthSource.NOMIS, "userA", "abc234-abc123-abc3431"),
       false,
+      DataProductReportableInformation(id = productId, variantId = variantId),
     )
+    val productName = "External Movements"
+    val variantName = "Last Month"
     val clientTrackingInterceptor = ClientTrackingInterceptor(reportDefinitionService, manageUsersClient, false)
     val request = MockHttpServletRequest("GET", uri)
     request.setParameter("selectedPage", "1")
     val response = MockHttpServletResponse()
-    val productId = "external-movements"
-    val variantId = "last-month"
-    val productName = "External Movements"
-    val variantName = "Last Month"
     val definition = SingleVariantReportDefinition(
       id = productId,
       name = productName,
@@ -139,15 +141,15 @@ class ClientTrackingInterceptorTest {
       ),
     )
     whenever(
-      reportDefinitionService.getDefinition(productId, variantId, executionContext, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE),
+      reportDefinitionService.getDefinition(productId, variantId, executionContext),
     ).thenReturn(definition)
 
     clientTrackingInterceptor.preHandle(request, response, mock())
 
     verify(reportDefinitionService, times(1))
-      .getDefinition(productId, variantId, executionContext, DATA_PRODUCT_DEFINITIONS_PATH_EXAMPLE)
+      .getDefinition(productId, variantId, executionContext)
     verify(span, times(1))
-      .setAttribute("username", "userA")
+      .setAttribute("uuid", "abc234-abc123-abc3431")
     verify(span, times(1))
       .setAttribute("activeCaseLoadId", "LWSTMC")
     verify(span, times(1))
@@ -197,7 +199,7 @@ class ClientTrackingInterceptorTest {
 
     verifyNoInteractions(reportDefinitionService)
     verify(span, times(1))
-      .setAttribute("username", "userA")
+      .setAttribute("uuid", "abc234-abc123-abc3431")
     verify(span, times(1))
       .setAttribute("activeCaseLoadId", "LWSTMC")
     verify(span, times(0))
