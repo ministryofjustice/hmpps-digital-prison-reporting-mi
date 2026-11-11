@@ -1,12 +1,20 @@
 name: Pipeline
 
+# TEST BRANCH ONLY (DHS-705) — DO NOT MERGE.
+# Same tag contract as MI UI DHS-704-tag-test:
+# hmpps-reporting-workflows@test/tag-based-releases.
+# deploy-ref is this branch, so a push here creates vX.Y.Z, image :vX.Y.Z
+# and a GitHub Release. Other branches get an rc-<branch>-<run> image label.
+# Preprod and prod stay off. Dev and test still deploy.
+
 on:
   push:
+    # BEFORE MERGE TO MAIN: branches: [main]
     branches: ['**']
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write # release tag + GitHub Release (enable-release-tag)
   packages: write
   id-token: write
   attestations: write
@@ -17,14 +25,17 @@ concurrency:
 
 jobs:
   pipeline:
-    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/frontend_java_pipeline.yml@v1
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/frontend_java_pipeline.yml@test/tag-based-releases
     secrets: inherit
     with:
-      enable-probation: true
+      # BEFORE MERGE TO MAIN: deploy-ref: refs/heads/main
+      deploy-ref: refs/heads/DHS-705
+      enable-release-tag: true
+      # BEFORE MERGE TO MAIN: keep false until the first planned preprod promotion.
+      deploy-preprod-prod: false
       deploy-dev-on-feature-branches: true
       deploy-test-on-feature-branches: true
-      deploy-preprod-on-feature-branches: true
+      deploy-preprod-on-feature-branches: false
+      enable-probation: true
       slack-channel: 'dpr_cicd_approvals'
-      # Optional overrides (defaults live in the workflow):
-      # probation-chart-name: hmpps-probation-mi-api
-      # primary-chart-name: ''
+      # probation-chart-name defaults to hmpps-probation-mi-api

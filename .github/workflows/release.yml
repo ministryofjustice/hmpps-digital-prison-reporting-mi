@@ -1,0 +1,85 @@
+name: Release
+
+# TEST BRANCH ONLY (DHS-705) — DO NOT MERGE.
+# Helm-only release of an existing tag. Does not rebuild the image.
+# hmpps-reporting-releases dispatches environment, release-tag, verify-image,
+# and optional release-values-yaml.
+
+on:
+  # Push trigger only registers this workflow so it can be dispatched before
+  # release.yml exists on main (the job is skipped on push).
+  push:
+    # BEFORE MERGE TO MAIN: branches: [main]
+    branches: [DHS-705]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment (must match a GitHub Environment)
+        type: choice
+        options:
+          - dev
+          - test
+          - preprod
+          - prod
+          - probation-dev
+          - probation-test
+          - probation-preprod
+          - probation-prod
+        required: true
+      release-tag:
+        description: Stable app release tag (e.g. v1.0.1)
+        type: string
+        required: false
+        default: ''
+      app-version:
+        description: dev/test only, instead of release-tag (rc-* label or Build.<sha>)
+        type: string
+        required: false
+        default: ''
+      checkout-ref:
+        description: dev/test only, with app-version (commit SHA for chart + values)
+        type: string
+        required: false
+        default: ''
+      helm-chart-name:
+        description: Chart to deploy (default hmpps-digital-prison-reporting-mi; probation = hmpps-probation-mi-api)
+        type: string
+        required: false
+        default: ''
+      release-name:
+        description: Helm release name (default = chart-name-environment)
+        type: string
+        required: false
+        default: ''
+      release-values-yaml:
+        description: Optional extra Helm values YAML (from releases config/)
+        type: string
+        required: false
+        default: ''
+      verify-image:
+        description: Verify GHCR image exists before deploy
+        type: boolean
+        required: false
+        default: true
+
+permissions:
+  contents: read
+  packages: read
+  id-token: write
+
+jobs:
+  release:
+    if: github.event_name == 'workflow_dispatch'
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/generic_release_pipeline.yml@test/tag-based-releases
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      release-tag: ${{ inputs.release-tag }}
+      app-version: ${{ inputs.app-version }}
+      checkout-ref: ${{ inputs.checkout-ref }}
+      helm-chart-name: ${{ inputs.helm-chart-name }}
+      release-name: ${{ inputs.release-name }}
+      release-values-yaml: ${{ inputs.release-values-yaml }}
+      verify-image: ${{ inputs.verify-image == true || inputs.verify-image == 'true' }}
+      slack-notification: ${{ inputs.environment == 'prod' && 'true' || 'false' }}
+      slack-channel: 'dpr_cicd_approvals'
