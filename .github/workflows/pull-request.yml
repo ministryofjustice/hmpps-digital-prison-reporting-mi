@@ -1,0 +1,16 @@
+name: Pull request
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  checks:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/pr_checks.yml@v1
+    secrets: inherit
+    with:
+      stack: gradle
+      java-version: '21'
+      java-distribution: 'corretto'
