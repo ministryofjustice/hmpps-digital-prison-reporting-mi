@@ -1,6 +1,6 @@
 # helm_app_release.yml on hmpps-reporting-releases main may dispatch this repo.
 # MoJ OIDC subjects include owner id 2203574 and releases repo id 1446045442.
-# This file must be on this repo's main before a deploy can start release.yml.
+# Octo STS reads this file from the repository default branch only.
 issuer: https://token.actions.githubusercontent.com
 subject: repo:ministryofjustice@2203574/hmpps-reporting-releases@1446045442:ref:refs/heads/main
 claim_pattern:
