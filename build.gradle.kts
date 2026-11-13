@@ -1,11 +1,11 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.12"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "11.0.15"
   kotlin("jvm") version "2.4.21"
   kotlin("plugin.spring") version "2.4.21"
   kotlin("plugin.jpa") version "2.4.21"
   id("jacoco")
   id("org.barfuin.gradle.jacocolog") version "4.0.3"
-  id("io.sentry.jvm.gradle") version "6.23.0"
+  id("io.sentry.jvm.gradle") version "6.26.0"
 }
 
 configurations {
@@ -20,10 +20,10 @@ dependencies {
   implementation("io.micrometer:micrometer-registry-prometheus")
   implementation("com.amazon.redshift:redshift-jdbc42:2.3.0")
   implementation("uk.gov.justice.service.hmpps:hmpps-digital-prison-reporting-lib:18.6.2")
-  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.0.3")
+  implementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter:3.1.0")
 
   // Swagger
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0")
 
   // Testing
   testImplementation("org.flywaydb:flyway-core")
@@ -31,7 +31,7 @@ dependencies {
   testImplementation("io.jsonwebtoken:jjwt:0.13.0")
   testImplementation("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
   testImplementation("com.marcinziolo:kotlin-wiremock:2.1.1")
-  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.0.3")
+  testImplementation("uk.gov.justice.service.hmpps:hmpps-kotlin-spring-boot-starter-test:3.1.0")
   testImplementation("org.postgresql:postgresql:42.7.14")
   testImplementation("org.testcontainers:postgresql:$testContainersVersion")
   testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
