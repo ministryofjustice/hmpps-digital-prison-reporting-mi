@@ -1,16 +1,13 @@
 name: Release
 
-# TEST BRANCH ONLY (DHS-705) — DO NOT MERGE.
-# Helm-only release of an existing tag. Does not rebuild the image.
-# hmpps-reporting-releases dispatches environment, release-tag, verify-image,
-# and optional release-values-yaml.
+# Helm-only release of a stable app tag (vX.Y.Z). One dispatch deploys the
+# prison chart and the probation chart. preprod and prod need a published,
+# non-prerelease GitHub Release. Dev and test may also use app-version
+# plus checkout-ref.
 
 on:
-  # Push trigger only registers this workflow so it can be dispatched before
-  # release.yml exists on main (the job is skipped on push).
-  push:
-    # BEFORE MERGE TO MAIN: branches: [main]
-    branches: [DHS-705]
+  # Promote only via workflow_dispatch (Actions UI or hmpps-reporting-releases).
+  # Do not trigger on push to main — that produced empty skipped runs.
   workflow_dispatch:
     inputs:
       environment:
@@ -21,13 +18,9 @@ on:
           - test
           - preprod
           - prod
-          - probation-dev
-          - probation-test
-          - probation-preprod
-          - probation-prod
         required: true
       release-tag:
-        description: Stable app release tag (e.g. v1.0.1)
+        description: Stable app release tag (e.g. v1.0.0)
         type: string
         required: false
         default: ''
@@ -42,12 +35,12 @@ on:
         required: false
         default: ''
       helm-chart-name:
-        description: Chart to deploy (default hmpps-digital-prison-reporting-mi; probation = hmpps-probation-mi-api)
+        description: Chart to deploy (default hmpps-digital-prison-reporting-mi)
         type: string
         required: false
         default: ''
       release-name:
-        description: Helm release name (default = chart-name-environment)
+        description: Helm release name (default = chart name)
         type: string
         required: false
         default: ''
@@ -68,7 +61,7 @@ permissions:
   id-token: write
 
 jobs:
-  release:
+  prison:
     if: github.event_name == 'workflow_dispatch'
     uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/generic_release_pipeline.yml@test/tag-based-releases
     secrets: inherit
@@ -77,9 +70,29 @@ jobs:
       release-tag: ${{ inputs.release-tag }}
       app-version: ${{ inputs.app-version }}
       checkout-ref: ${{ inputs.checkout-ref }}
-      helm-chart-name: ${{ inputs.helm-chart-name }}
-      release-name: ${{ inputs.release-name }}
+      helm-chart-name: ${{ inputs.helm-chart-name != '' && inputs.helm-chart-name || 'hmpps-digital-prison-reporting-mi' }}
+      # CircleCI used PROJECT_NAME_ENV_NAME (e.g. …-preprod). Keep that so
+      # Helm upgrades the existing release instead of conflicting on CRDs.
+      release-name: ${{ inputs.release-name != '' && inputs.release-name || format('hmpps-digital-prison-reporting-mi-{0}', inputs.environment) }}
       release-values-yaml: ${{ inputs.release-values-yaml }}
       verify-image: ${{ inputs.verify-image == true || inputs.verify-image == 'true' }}
       slack-notification: ${{ inputs.environment == 'prod' && 'true' || 'false' }}
       slack-channel: 'dpr_cicd_approvals'
+      enable-sentry: false
+
+  probation:
+    if: github.event_name == 'workflow_dispatch'
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/generic_release_pipeline.yml@test/tag-based-releases
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment == 'dev' && 'probation-dev' || inputs.environment == 'test' && 'probation-test' || inputs.environment == 'preprod' && 'probation-preprod' || 'probation-prod' }}
+      release-tag: ${{ inputs.release-tag }}
+      app-version: ${{ inputs.app-version }}
+      checkout-ref: ${{ inputs.checkout-ref }}
+      helm-chart-name: hmpps-probation-mi-api
+      release-name: hmpps-probation-mi-api
+      release-values-yaml: ${{ inputs.release-values-yaml }}
+      verify-image: ${{ inputs.verify-image == true || inputs.verify-image == 'true' }}
+      slack-notification: 'false'
+      slack-channel: 'dpr_cicd_approvals'
+      enable-sentry: false
