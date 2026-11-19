@@ -1,0 +1,98 @@
+name: Release
+
+# Helm-only release of a stable app tag (vX.Y.Z). One dispatch deploys the
+# prison chart and the probation chart. preprod and prod need a published,
+# non-prerelease GitHub Release. Dev and test may also use app-version
+# plus checkout-ref.
+
+on:
+  # Promote only via workflow_dispatch (Actions UI or hmpps-reporting-releases).
+  # Do not trigger on push to main — that produced empty skipped runs.
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment (must match a GitHub Environment)
+        type: choice
+        options:
+          - dev
+          - test
+          - preprod
+          - prod
+        required: true
+      release-tag:
+        description: Stable app release tag (e.g. v1.0.0)
+        type: string
+        required: false
+        default: ''
+      app-version:
+        description: dev/test only, instead of release-tag (rc-* label or Build.<sha>)
+        type: string
+        required: false
+        default: ''
+      checkout-ref:
+        description: dev/test only, with app-version (commit SHA for chart + values)
+        type: string
+        required: false
+        default: ''
+      helm-chart-name:
+        description: Chart to deploy (default hmpps-digital-prison-reporting-mi)
+        type: string
+        required: false
+        default: ''
+      release-name:
+        description: Helm release name (default = chart name)
+        type: string
+        required: false
+        default: ''
+      release-values-yaml:
+        description: Optional extra Helm values YAML (from releases config/)
+        type: string
+        required: false
+        default: ''
+      verify-image:
+        description: Verify GHCR image exists before deploy
+        type: boolean
+        required: false
+        default: true
+
+permissions:
+  contents: read
+  packages: read
+  id-token: write
+
+jobs:
+  prison:
+    if: github.event_name == 'workflow_dispatch'
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/generic_release_pipeline.yml@test/tag-based-releases
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      release-tag: ${{ inputs.release-tag }}
+      app-version: ${{ inputs.app-version }}
+      checkout-ref: ${{ inputs.checkout-ref }}
+      helm-chart-name: ${{ inputs.helm-chart-name != '' && inputs.helm-chart-name || 'hmpps-digital-prison-reporting-mi' }}
+      # CircleCI used PROJECT_NAME_ENV_NAME (e.g. …-preprod). Keep that so
+      # Helm upgrades the existing release instead of conflicting on CRDs.
+      release-name: ${{ inputs.release-name != '' && inputs.release-name || format('hmpps-digital-prison-reporting-mi-{0}', inputs.environment) }}
+      release-values-yaml: ${{ inputs.release-values-yaml }}
+      verify-image: ${{ inputs.verify-image == true || inputs.verify-image == 'true' }}
+      slack-notification: ${{ inputs.environment == 'prod' && 'true' || 'false' }}
+      slack-channel: 'dpr_cicd_approvals'
+      enable-sentry: false
+
+  probation:
+    if: github.event_name == 'workflow_dispatch'
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/generic_release_pipeline.yml@test/tag-based-releases
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment == 'dev' && 'probation-dev' || inputs.environment == 'test' && 'probation-test' || inputs.environment == 'preprod' && 'probation-preprod' || 'probation-prod' }}
+      release-tag: ${{ inputs.release-tag }}
+      app-version: ${{ inputs.app-version }}
+      checkout-ref: ${{ inputs.checkout-ref }}
+      helm-chart-name: hmpps-probation-mi-api
+      release-name: hmpps-probation-mi-api
+      release-values-yaml: ${{ inputs.release-values-yaml }}
+      verify-image: ${{ inputs.verify-image == true || inputs.verify-image == 'true' }}
+      slack-notification: 'false'
+      slack-channel: 'dpr_cicd_approvals'
+      enable-sentry: false
