@@ -1,0 +1,39 @@
+name: Pipeline
+
+# Opening or updating a pull request into main builds an rc-<branch>-<run>
+# image and deploys prison to dev and probation to probation-dev.
+# Merging to main creates vX.Y.Z, publishes the image, and deploys
+# prison and probation to dev and test.
+# Preprod and prod are promoted from hmpps-reporting-releases, not by this push.
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write # release tag + GitHub Release (enable-release-tag)
+  packages: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || (github.ref == 'refs/heads/main' && github.sha || github.ref) }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  pipeline:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/frontend_java_pipeline.yml@test/tag-based-releases
+    secrets: inherit
+    with:
+      deploy-ref: refs/heads/main
+      enable-release-tag: true
+      deploy-preprod-prod: false
+      deploy-dev-on-feature-branches: true
+      enable-probation: true
+      probation-chart-name: hmpps-probation-mi-api
+      probation-release-name: hmpps-probation-mi-api
+      slack-channel: 'dpr_cicd_approvals'

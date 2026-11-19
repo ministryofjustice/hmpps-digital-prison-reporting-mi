@@ -1,0 +1,11 @@
+name: Bump library version
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bump:
+    uses: ministryofjustice/hmpps-reporting-workflows/.github/workflows/bump_version.yml@v1
+    secrets: inherit
+    with:
+      stack: gradle
