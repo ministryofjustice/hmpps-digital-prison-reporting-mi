@@ -1,7 +1,6 @@
 name: Pipeline
 
-# Opening or updating a pull request into main builds an rc-<branch>-<run>
-# image and deploys prison to dev and probation to probation-dev.
+# Opening or updating a pull request into main runs checks only (no DEV deploy).
 # Merging to main creates vX.Y.Z, publishes the image, and deploys
 # prison and probation to dev and test.
 # Preprod and prod are promoted from hmpps-reporting-releases, not by this push.
@@ -32,7 +31,7 @@ jobs:
       deploy-ref: refs/heads/main
       enable-release-tag: true
       deploy-preprod-prod: false
-      deploy-dev-on-feature-branches: true
+      deploy-dev-on-feature-branches: false
       enable-probation: true
       probation-chart-name: hmpps-probation-mi-api
       probation-release-name: hmpps-probation-mi-api
