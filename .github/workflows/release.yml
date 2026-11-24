@@ -45,7 +45,12 @@ on:
         required: false
         default: ''
       release-values-yaml:
-        description: Optional extra Helm values YAML (from releases config/)
+        description: Optional prison Helm values YAML (releases config/values-<env>.yaml)
+        type: string
+        required: false
+        default: ''
+      probation-release-values-yaml:
+        description: Optional probation Helm values YAML (releases config/values-probation-<env>.yaml)
         type: string
         required: false
         default: ''
@@ -91,7 +96,7 @@ jobs:
       checkout-ref: ${{ inputs.checkout-ref }}
       helm-chart-name: hmpps-probation-mi-api
       release-name: hmpps-probation-mi-api
-      release-values-yaml: ${{ inputs.release-values-yaml }}
+      release-values-yaml: ${{ inputs.probation-release-values-yaml }}
       verify-image: ${{ inputs.verify-image == true || inputs.verify-image == 'true' }}
       slack-notification: 'false'
       slack-channel: 'dpr_cicd_approvals'
